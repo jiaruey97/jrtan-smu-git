@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+
+<body>
+  <div id="app">
+
+    <v-app>
+      <v-navigation-drawer clipped app>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title class="text-h6">
+              Questions list
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-divider></v-divider>
+
+        <v-list dense nav>
+          <v-list-item v-for="question in questions_store" :key="question.question_name" link>
+
+            <v-list-item-content @click="edit_question(question.question_no)">
+              <v-list-item-title>{{question.question}}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+      <v-app-bar color="deep-purple accent-4" dark app>
+        <v-toolbar-title>Quiz Builder</v-toolbar-title>
+      </v-app-bar>
+
+
+      <v-main>
+        <v-container>
+          <v-row style="margin-bottom: 3px">
+            <!-- Button grouping to specify if users want to see results by Market of Protection/ -->
+            <v-col cols="12" md="12">
+
+              <v-card>
+                <v-card-title class="text-h6">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon v-bind="attrs" v-on="on">
+                        <v-icon color="grey lighten-1">
+                          mdi-cloud-question
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>You can select two types of questions.
+                      <ul>
+                        <li>MCQ</li>
+                        <li>True/False</li>
+                      </ul>
+                    </span>
+                  </v-tooltip>
+                  Choose Question Type:
+                  <v-btn-toggle v-model='q_type_top' style="margin-left: 10px" mandatory tile color="deep-purple accent-3" group>
+                    <v-btn value="MCQ" v-on:click='switch_mcq'>
+                      MCQ
+                    </v-btn>
+                    <v-btn value="Binary" v-on:click='switch_binary'>
+                      True/False
+                    </v-btn>
+                  </v-btn-toggle>
+                </v-card-title>
+
+              </v-card>
+
+
+            </v-col>
+          </v-row>
+
+          <!-- This part is the MCQ portion -->
+          <v-card v-if='mcq' style='padding: 20px'>
+            <v-card-title>
+              Question:
+            </v-card-title>
+            <v-form>
+              <v-row>
+                <v-col>
+                  <v-text-field v-model="question_name" color="purple darken-2" label="Question to Ask" outlined
+                    required>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+
+              Provide the Options:
+              <v-text-field v-model="options[0]" label='Option 1' outlined></v-text-field>
+              <v-text-field v-model="options[1]" label='Option 2' outlined></v-text-field>
+              <v-text-field v-model="options[2]" label='Option 3' outlined></v-text-field>
+              <v-text-field v-model="options[3]" label='Option 4' outlined></v-text-field>
+
+              Pick the correct Answer:
+              <v-radio-group v-model="correct_option">
+                <v-radio value='1' :label='options[0]'></v-radio>
+                <v-radio value='2' :label='options[1]'></v-radio>
+                <v-radio value='3' :label='options[2]'></v-radio>
+                <v-radio value='4' :label='options[3]'></v-radio>
+              </v-radio-group>
+
+              <v-btn outlined color="indigo" onclick="mcq_question_submit()" block>
+                Submit Question
+              </v-btn>
+            </v-form>
+          </v-card>
+
+          <!-- True/False -->
+          <v-card v-if='binary'>
+            <v-card-title>
+              Question {{question_latest}}:
+            </v-card-title>
+            <v-form style='padding-left: 20px; padding-right: 20px'>
+              <v-row>
+                <v-col>
+                  <v-text-field v-model="question_name" color="purple darken-2" label="Question to Ask true/false"
+                    outlined required>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              Pick the correct Answer:
+              <v-radio-group v-model="correct_option_binary">
+                <v-radio value='true' label='True'></v-radio>
+                <v-radio value='false' label='False'></v-radio>
+              </v-radio-group>
+
+              <v-btn outlined color="indigo" onclick="binary_question_submit()" block>
+                Submit Question
+              </v-btn>
+            </v-form>
+          </v-card>
+
+        </v-container>
+
+      </v-main>
+    </v-app>
+
+  </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    const vueApp = new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: {
+        mcq: true,
+        binary: false,
+        q_type_top: 'MCQ',
+        questions_store: [],
+        question_name: '',
+        options: ['', '', '', ''],
+        correct_option: '',
+        correct_option_binary: 'true',
+        num_options: 4,
+        question_latest: 1,
+        question_edit: 1, //Keeps track if mode is edit, the question number. It MUST correspond with the index position in the question store
+        mode: 'new', //new or edit
+      },
+      methods: {
+        switch_mcq: function () {
+          this.mcq = true
+          this.binary = false
+          this.mode = 'new'
+          this.q_type_top = 'MCQ'
+          //wipe everything
+          this.question_name = ''
+          this.options = ['', '', '', '']
+          correct_option = ''
+          correct_option_binary = 'true'
+
+        },
+        switch_binary: function () {
+          this.binary = true
+          this.mcq = false
+          this.q_type_top = 'Binary'
+          //wipe everything
+          this.question_name = ''
+          this.options = ['', '', '', '']
+          correct_option = ''
+          correct_option_binary = 'true'
+        },
+
+        edit_question: function (question_number) {
+
+          question_obj = this.questions_store.find(({ question_no }) => question_no === question_number)
+
+          if (question_obj.type == 'mcq') {
+            this.mcq = true
+            this.binary = false
+            this.q_type_top = 'MCQ'
+
+            this.question_name = question_obj.question
+            this.options = question_obj.options
+            this.correct_option = question_obj.answer
+
+
+            this.mode = 'edit'
+            this.question_edit = question_obj.question_no
+          }
+          if (question_obj.type == 'binary'){
+            this.mcq = false
+            this.binary = true
+            this.q_type_top = 'Binary'
+            
+            this.question_name = question_obj.question
+            this.correct_option_binary = question_obj.answer
+
+            this.mode = 'edit'
+            this.question_edit = question_obj.question_no
+
+          }
+        }
+      }
+    })
+
+    function mcq_question_submit() {
+
+      if (vueApp.mode == 'new') {
+        question_number = vueApp.question_latest
+        question_name = vueApp.question_name
+        question_option = vueApp.options
+        question_answer = vueApp.correct_option
+
+        mcq_question = {
+          'question_no': question_number,
+          'question': question_name,
+          'options': question_option,
+          'answer': question_answer,
+          'type': 'mcq'
+        }
+
+        vueApp.questions_store.push(mcq_question)
+        vueApp.question_latest += 1
+        vueApp.mode = 'new' //Ensure that it is NEW!!
+
+        vueApp.question_name = ""
+        vueApp.options = ['', '', '', '']
+        vueApp.correct_option = ''
+
+
+      } else {
+        //Assume edit mode, we use the question number to track
+        question_index = vueApp.question_edit - 1
+
+        mcq_question = {
+          'question_no': vueApp.question_edit,
+          'question': vueApp.question_name,
+          'options': vueApp.options,
+          'answer': vueApp.correct_option,
+          'type': 'mcq'
+        }
+
+        //Modify the edited question
+        vueApp.questions_store[question_index] = mcq_question
+
+        vueApp.question_name = ""
+        vueApp.options = ['', '', '', '']
+        vueApp.correct_option = ''
+
+        vueApp.mode = 'new'
+
+      }
+
+    }
+
+    function binary_question_submit() {
+
+      if (vueApp.mode == 'new') {
+        question_number = vueApp.question_latest
+        question_name = vueApp.question_name
+        question_answer = vueApp.correct_option_binary
+
+        binary_question = {
+          'question_no': question_number,
+          'question': question_name,
+          'answer': question_answer,
+          'type': 'binary'
+        }
+
+        vueApp.questions_store.push(binary_question)
+        vueApp.question_latest += 1
+        vueApp.mode = 'new' //Ensure that it is NEW!!
+
+      } else {
+        //Assume edit mode, we use the question number to track
+        question_index = vueApp.question_edit - 1
+
+        binary_question = {
+          'question_no': vueApp.question_edit,
+          'question': vueApp.question_name,
+          'answer': vueApp.correct_option_binary,
+          'type': 'binary'
+        }
+
+        //Modify the edited question
+        vueApp.questions_store[question_index] = binary_question
+
+        vueApp.question_name = ""
+        vueApp.options = ['', '', '', '']
+        vueApp.correct_option = ''
+
+        vueApp.mode = 'new'
+
+      }
+
+    }
+  </script>
+</body>
+
+</html>

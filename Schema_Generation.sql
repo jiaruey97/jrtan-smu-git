@@ -73,35 +73,47 @@ create table if not EXISTS Quiz (
 /*Section will not be tag as Foreign Key*/
 
 create table if not EXISTS Quiz_Results(
+
+  Quiz_Results_ID int NOT NULL,
   Username varchar(50) NOT NULL,
   Quiz_ID int NOT NULL,
   Course_ID int  NOT NULL,
   Section int NOT NULL,
   Marks int NOT NULL,
   Pass BOOLEAN NOT NULL,
+  PRIMARY KEY (Quiz_Results_ID),
   FOREIGN KEY (Course_ID) REFERENCES Course(Course_ID),
   FOREIGN KEY (Quiz_ID) REFERENCES Quiz(Instructor_ID),
   FOREIGN KEY (Username) REFERENCES User_Database(Username)
 );
 
-/*Pass can be used in web page generation*/
+/*Pass can be used in web page generation
+Quiz_Results_ID needed for Flask
+*/
 
 create table if not EXISTS Tracker(
+  
+  Tracker_ID int NOT NULL,
   Username varchar(50) NOT NULL,
   Course_ID int  NOT NULL,
   Class_ID int NOT NULL,
   Section_Object varchar(255) NOT NULL,
+  PRIMARY KEY (Tracker_ID),
   FOREIGN KEY (Course_ID) REFERENCES Course(Course_ID),
   FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID),
   FOREIGN KEY (Username) REFERENCES User_Database(Username)
 );
 
-/*Track Lesson Progress*/
+/*Track Lesson Progress
+Tracker_ID needed for Flask
+*/
 
 create table if not EXISTS Lesson_Materials(
+  Lesson_Materials_ID int NOT NULL,
   Class_ID int NOT NULL,
   Section int NOT NULL,
   Lesson_Materials varchar(255) NOT NULL,
+  PRIMARY KEY (Lesson_Materials_ID),
   FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID)
 );
 

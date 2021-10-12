@@ -12,7 +12,7 @@ create table if not EXISTS Course (
   Prerequestic varchar(255)  NOT NULL, 
   Start_Time DATETIME  NOT NULL, 
   End_Time DATETIME  NOT NULL, 
-  Sections DATETIME NOT NULL, 
+  Sections int NOT NULL, 
   PRIMARY KEY (Course_ID)
 );
 

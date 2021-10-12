@@ -21,7 +21,7 @@ create table if not EXISTS Course (
 create table if not EXISTS Class (
   Class_ID int  NOT NULL,
   Class_Name varchar(255)  NOT NULL,
-  Course_Details varchar(255)  NOT NULL,
+  Class_Details varchar(255)  NOT NULL,
   Size int  NOT NULL,
   Current_Size int, 
   Course_ID int  NOT NULL, 

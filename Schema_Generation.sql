@@ -73,7 +73,7 @@ create table if not EXISTS Quiz (
 /*Section will not be tag as Foreign Key*/
 
 create table if not EXISTS Quiz_Results(
-  Username varchar(255) NOT NULL,
+  Username varchar(50) NOT NULL,
   Quiz_ID int NOT NULL,
   Course_ID int  NOT NULL,
   Section int NOT NULL,
@@ -87,7 +87,7 @@ create table if not EXISTS Quiz_Results(
 /*Pass can be used in web page generation*/
 
 create table if not EXISTS Tracker(
-  Username varchar(255) NOT NULL,
+  Username varchar(50) NOT NULL,
   Course_ID int  NOT NULL,
   Class_ID int NOT NULL,
   Section_Object varchar(255) NOT NULL,

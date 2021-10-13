@@ -7,6 +7,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+
+# DATABASE CLASS
+
 class Course(db.Model):
     __tablename__ = 'Course'
 
@@ -189,9 +192,13 @@ class Lesson_Materials(db.Model):
     def json(self):
         return {"Lesson_Materials_ID":self.Lesson_Materials_ID, "Class_ID": self.Class_ID, "Section": self.Section, "Lesson_Materials": self.Lesson_Materials}
 
+###################################################################################################################################################################################################################
+#FLASK METHODS below
+
+# Course Methods
 
 @app.route("/spm/course")
-def get_all():
+def get_all_course():
     course_list = Course.query.all()
     if len(course_list):
         return jsonify(
@@ -209,9 +216,12 @@ def get_all():
         }
     ), 404
 
+#No Create Course Methods as it is assume to be completed
+
+# Class Methods
 
 @app.route("/spm/class")
-def get_all():
+def get_all_class():
     class_list = Class.query.all()
     if len(class_list):
         return jsonify(
@@ -229,10 +239,36 @@ def get_all():
         }
     ), 404
 
+@app.route("/create_class", methods=['POST'])
+def create_class():
 
+    data = request.get_json()
+    results = Class(**data)
+
+    try:
+        db.session.add(results)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating the Class."
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": results.json()
+        }
+    ), 201
+
+
+
+#Instructor Methods
 
 @app.route("/spm/instructor")
-def get_all():
+def get_all_instructor():
     instructor_list = Instructor.query.all()
     if len(instructor_list):
         return jsonify(
@@ -250,11 +286,35 @@ def get_all():
         }
     ), 404
 
+@app.route("/create_instructor", methods=['POST'])
+def create_instructor():
+
+    data = request.get_json()
+    results = Instructor(**data)
+
+    try:
+        db.session.add(results)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating the Instructor."
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": results.json()
+        }
+    ), 201
 
 
+#User Database Methods
 
 @app.route("/spm/user_database")
-def get_all():
+def get_all_user():
     user_Database = User_Database.query.all()
     if len(user_Database):
         return jsonify(
@@ -272,67 +332,13 @@ def get_all():
         }
     ), 404
 
-@app.route("/spm/user_database")
-def get_all():
-    user_Database = User_Database.query.all()
-    if len(user_Database):
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    "course": [user.json() for user in user_Database]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no users."
-        }
-    ), 404
+#No Create USER DATABASE, it is assume to be Populated.
 
 
-@app.route("/spm/user_database")
-def get_all():
-    user_Database = User_Database.query.all()
-    if len(user_Database):
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    "course": [user.json() for user in user_Database]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no users."
-        }
-    ), 404
-
-
-@app.route("/spm/quiz")
-def get_all():
-    quiz = Quiz.query.all()
-    if len(quiz):
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    "course": [quiz_i.json() for quiz_i in quiz]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no quiz."
-        }
-    ), 404
+# RESULTS METHOD
 
 @app.route("/spm/results")
-def get_all():
+def get_all_results():
     results = Quiz_Results.query.all()
     if len(results):
         return jsonify(
@@ -350,8 +356,34 @@ def get_all():
         }
     ), 404
 
+@app.route("/create_results", methods=['POST'])
+def create_results():
+
+    data = request.get_json()
+    results = Quiz_Results(**data)
+
+    try:
+        db.session.add(results)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating the results."
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": results.json()
+        }
+    ), 201
+
+# LESSON MATERIAL METHODS
+
 @app.route("/spm/tracker")
-def get_all():
+def get_all_tracker():
     tracker = Tracker.query.all()
     if len(tracker):
         return jsonify(
@@ -369,8 +401,35 @@ def get_all():
         }
     ), 404
 
+@app.route("/create_tracker", methods=['POST'])
+def create_tracker():
+
+    data = request.get_json()
+    tracker = Tracker(**data)
+
+    try:
+        db.session.add(tracker)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating the tracker."
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": tracker.json()
+        }
+    ), 201
+
+
+# LESSON MATERIAL METHODS 
+
 @app.route("/spm/materials")
-def get_all():
+def get_all_materials():
     materia = Lesson_Materials.query.all()
     if len(materia):
         return jsonify(
@@ -387,6 +446,83 @@ def get_all():
             "message": "There are no results."
         }
     ), 404
+
+
+@app.route("/create_materials", methods=['POST'])
+def create_materials():
+
+    data = request.get_json()
+    materials = Lesson_Materials(**data)
+
+    try:
+        db.session.add(materials)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating the materials."
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": materials.json()
+        }
+    ), 201
+
+
+
+# QUIZ METHODS
+
+#Retrieve all Quiz
+@app.route("/spm/quiz")
+def get_all_quiz():
+    quiz = Quiz.query.all()
+    if len(quiz):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "course": [quiz_i.json() for quiz_i in quiz]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no quiz."
+        }
+    ), 404
+
+
+# Create Quiz
+@app.route("/create_quiz", methods=['POST'])
+def create_quiz():
+
+    data = request.get_json()
+    quiz = Quiz(**data)
+
+    try:
+        db.session.add(quiz)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating the Quiz."
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": quiz.json()
+        }
+    ), 201
+
+
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

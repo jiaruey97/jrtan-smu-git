@@ -17,6 +17,37 @@ const vueApp = new Vue({
     mode: true, //true == new or false == edit
   },
   methods: {
+
+    submit_database: function() {
+
+      console.log(this.questions_store)
+
+      if(this.questions_store.length != 0){
+              
+        axios.post("http://127.0.0.1:5000/create_quiz", {
+          'Course_ID': 1,
+          'Instructor_ID': 12,
+          'Section': 1,
+          'Question_Object': JSON.stringify(this.questions_store)
+        }) 
+
+        .then(function (response) {
+          console.log(response);
+          alert("Your Message have been save in teh database")
+
+          })
+        
+        .catch(function (error) {
+          console.log(error);
+          alert("It seems that something have went wrong")
+        });
+      } else {
+       alert("There is No Question Stored. Please submit a Question")
+      }
+
+    },
+
+
     switch_mcq: function () {
       this.mcq = true
       this.binary = false
@@ -92,53 +123,61 @@ const vueApp = new Vue({
 function mcq_question_submit() {
 
   if (vueApp.mode) {
+
     question_number = vueApp.question_latest
     question_title = vueApp.question_title
     question_name = vueApp.question_name
     question_option = vueApp.options
     question_answer = vueApp.correct_option
 
-    mcq_question = {
-      'question_no': question_number,
-      'question_title': question_title,
-      'question': question_name,
-      'options': question_option,
-      'answer': question_answer,
-      'type': 'mcq'
+    if (question_title != "" & question_name != "" & question_option.length != 0 & question_answer != ""){
+      mcq_question = {
+        'question_no': question_number,
+        'question_title': question_title,
+        'question': question_name,
+        'options': question_option,
+        'answer': question_answer,
+        'type': 'mcq'
+      }
+  
+      vueApp.questions_store.push(mcq_question)
+      vueApp.question_latest += 1
+      vueApp.mode = true //Ensure that it is NEW!!
+  
+      vueApp.question_title = ""
+      vueApp.question_name = ""
+      vueApp.options = ['', '', '', '']
+      vueApp.correct_option = ''   
+    } else {
+      alert("Sad Noises")
     }
-
-    vueApp.questions_store.push(mcq_question)
-    vueApp.question_latest += 1
-    vueApp.mode = true //Ensure that it is NEW!!
-
-    vueApp.question_title = ""
-    vueApp.question_name = ""
-    vueApp.options = ['', '', '', '']
-    vueApp.correct_option = ''
-
 
   } else {
     //Assume edit mode, we use the question number to track
     question_index = vueApp.question_edit - 1
-
-    mcq_question = {
-      'question_no': vueApp.question_edit,
-      'question_title': vueApp.question_title,
-      'question': vueApp.question_name,
-      'options': vueApp.options,
-      'answer': vueApp.correct_option,
-      'type': 'mcq'
+    if (question_title != "" & question_name != "" & question_option.length != 0 & question_answer != ""){
+      mcq_question = {
+        'question_no': vueApp.question_edit,
+        'question_title': vueApp.question_title,
+        'question': vueApp.question_name,
+        'options': vueApp.options,
+        'answer': vueApp.correct_option,
+        'type': 'mcq'
+      }
+  
+      //Modify the edited question
+      vueApp.questions_store[question_index] = mcq_question
+  
+      vueApp.question_title = ""
+      vueApp.question_name = ""
+      vueApp.options = ['', '', '', '']
+      vueApp.correct_option = ''
+  
+      vueApp.mode = true
+    } else {
+      alert("Birds Chirping")
     }
 
-    //Modify the edited question
-    vueApp.questions_store[question_index] = mcq_question
-
-    vueApp.question_title = ""
-    vueApp.question_name = ""
-    vueApp.options = ['', '', '', '']
-    vueApp.correct_option = ''
-
-    vueApp.mode = true
 
   }
 
@@ -152,45 +191,62 @@ function binary_question_submit() {
     question_name = vueApp.question_name
     question_answer = vueApp.correct_option_binary
 
-    binary_question = {
-      'question_no': question_number,
-      'question_title': question_title,
-      'question': question_name,
-      'answer': question_answer,
-      'type': 'binary'
+    if (question_answer != "" & question_title != "" & question_name != ""){
+      binary_question = {
+        'question_no': question_number,
+        'question_title': question_title,
+        'question': question_name,
+        'answer': question_answer,
+        'type': 'binary'
+      }
+  
+      vueApp.questions_store.push(binary_question)
+      vueApp.question_latest += 1
+      vueApp.mode = true //Ensure that it is NEW!!
+  
+      vueApp.question_title = ""
+      vueApp.question_name = ""
+      vueApp.options = ['', '', '', '']
+      vueApp.correct_option = ''
+
+    } else {
+
+      alert("Life is SaD!")
+
     }
 
-    vueApp.questions_store.push(binary_question)
-    vueApp.question_latest += 1
-    vueApp.mode = true //Ensure that it is NEW!!
 
-    vueApp.question_title = ""
-    vueApp.question_name = ""
-    vueApp.options = ['', '', '', '']
-    vueApp.correct_option = ''
+
 
   } else {
     //Assume edit mode, we use the question number to track
     question_index = vueApp.question_edit - 1
 
-    binary_question = {
+    if (uestion_answer != "" & question_title != "" & question_name != ""){
+      binary_question = {
       
-      'question_no': vueApp.question_edit,
-      'question_title': vueApp.question_title,
-      'question': vueApp.question_name,
-      'answer': vueApp.correct_option_binary,
-      'type': 'binary'
+        'question_no': vueApp.question_edit,
+        'question_title': vueApp.question_title,
+        'question': vueApp.question_name,
+        'answer': vueApp.correct_option_binary,
+        'type': 'binary'
+      }
+  
+      //Modify the edited question
+      vueApp.questions_store[question_index] = binary_question
+  
+      vueApp.question_title = ""
+      vueApp.question_name = ""
+      vueApp.options = ['', '', '', '']
+      vueApp.correct_option = ''
+  
+      vueApp.mode = true
+
+    } else {
+      alert("I is SaD!")
     }
 
-    //Modify the edited question
-    vueApp.questions_store[question_index] = binary_question
 
-    vueApp.question_title = ""
-    vueApp.question_name = ""
-    vueApp.options = ['', '', '', '']
-    vueApp.correct_option = ''
-
-    vueApp.mode = true
 
   }
 

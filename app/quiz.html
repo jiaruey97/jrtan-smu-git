@@ -1,0 +1,99 @@
+<!-- This page shouldn't be HTML, but it should be the basis of quiz -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+
+<body>
+    <div id="app">
+
+        <div id="app">
+
+            <v-app>
+                <v-navigation-drawer clipped app>
+                    <v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title class="text-h6">
+                                Questions list:
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-navigation-drawer>
+
+                <v-app-bar color="deep-purple accent-4" dark app>
+                    <v-toolbar-title>Quiz Title</v-toolbar-title>
+                    <v-col class="text-right">
+                        <!-- This is to commit to the Server the changes made-->
+                        <v-btn elevation="2" onclick='quiz_submit()'> Submit Quiz </v-btn>
+                    </v-col>
+
+                </v-app-bar>
+
+
+                <v-main>
+                    <v-container>
+
+                        <v-alert :value='banner_flag' prominent type="error">
+                            <!-- Error messages to be displayed here -->
+                            <v-row align="center">
+                                <v-col class="grow">
+                                    {{banner_flag_msg}}
+                                </v-col>
+                            </v-row>
+                        </v-alert>
+
+                        <!-- This portion is the quiz section -->
+                        <div id='quiz_section' v-if='quiz_section == true' v-for='(question, index) in questions'
+                            :key='question.question_no'>
+                            <div v-if="question.type == 'mcq'">
+                                <h2>{{question.question}}</h2>
+                                <v-radio-group v-model="answer_options[index]">
+                                    <v-radio value='1' :label='question.options[0]'></v-radio>
+                                    <v-radio value='2' :label='question.options[1]'></v-radio>
+                                    <v-radio value='3' :label='question.options[2]'></v-radio>
+                                    <v-radio value='4' :label='question.options[3]'></v-radio>
+                                </v-radio-group>
+                            </div>
+
+                            <div v-if="question.type == 'binary'">
+                                <h2>{{question.question}}</h2>
+                                <v-radio-group v-model="answer_options[index]">
+                                    <v-radio value='true' label='True'></v-radio>
+                                    <v-radio value='false' label='False'></v-radio>
+                                </v-radio-group>
+                            </div>
+                            {{answer_options}}
+                        </div>
+
+                        <!-- This portion is the end screen! -->
+                        <div id='submission' v-if='quiz_section == false'>
+                            {{submit_msg}}</br>
+                            Your score: {{score}} </br>
+                            <v-btn tile color="success">
+                                Return
+                            </v-btn>
+                        </div>
+                    </v-container>
+
+                </v-main>
+            </v-app>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="js/quiz.js"></script>
+
+</body>
+
+</html>

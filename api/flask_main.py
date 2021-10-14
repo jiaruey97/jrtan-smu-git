@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -118,8 +121,7 @@ class Quiz(db.Model):
 
 
 
-    def __init__(self, Quiz_ID, Course_ID, Instructor_ID, Section, Question_Object):
-        self.Quiz_ID = Quiz_ID
+    def __init__(self, Course_ID, Instructor_ID, Section, Question_Object):
         self.Course_ID = Course_ID
         self.Instructor_ID = Instructor_ID
         self.Section = Section

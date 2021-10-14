@@ -16,7 +16,7 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="text-h6">
-              Questions list
+              Questions list:
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -26,21 +26,31 @@
         <v-list dense nav>
           <v-list-item v-for="question in questions_store" :key="question.question_name" link>
 
-            <v-list-item-content @click="edit_question(question.question_no)">
-              <v-list-item-title>{{question.question}}
+            <v-list-item-content>
+              <v-list-item-title> {{question.question_title}}
               </v-list-item-title>
+              <v-btn depressed color="primary" @click="edit_question(question.question_no)"> Edit </v-btn>
+              <v-btn depressed color="error" @click="delete_question(question.question_no)"> Delete </v-btn>
+
             </v-list-item-content>
           </v-list-item>
         </v-list>
       </v-navigation-drawer>
+      
       <v-app-bar color="deep-purple accent-4" dark app>
         <v-toolbar-title>Quiz Builder</v-toolbar-title>
+        <v-col class="text-right">
+        <!-- This is to commit to the Server the changes made-->
+        <v-btn elevation="2"> Submit </v-btn>
+        </v-col>
+        
       </v-app-bar>
 
 
       <v-main>
         <v-container>
           <v-row style="margin-bottom: 3px">
+            <!-- Button grouping to specify if users want to see results by Market of Protection/ -->
             <v-col cols="12" md="12">
 
               <v-card>
@@ -79,12 +89,18 @@
 
           <!-- This part is the MCQ portion -->
           <v-card v-if='mcq' style='padding: 20px'>
-            <v-card-title>
-              Question:
+            <v-card-title v-if="mode">
+              New Question:
             </v-card-title>
-            <v-form>
+            
+            <v-card-title v-if="!mode">
+              Edit Question:
+            </v-card-title>
+
               <v-row>
                 <v-col>
+                  <v-text-field v-model="question_title" color="blue darken-2" label="Title" outlined
+                    required></v-text-field>
                   <v-text-field v-model="question_name" color="purple darken-2" label="Question to Ask" outlined
                     required>
                   </v-text-field>
@@ -99,26 +115,40 @@
 
               Pick the correct Answer:
               <v-radio-group v-model="correct_option">
-                <v-radio value='1' :label='options[0]'></v-radio>
-                <v-radio value='2' :label='options[1]'></v-radio>
-                <v-radio value='3' :label='options[2]'></v-radio>
-                <v-radio value='4' :label='options[3]'></v-radio>
+                <v-radio value='1' :label='options[0]'><template v-slot:label>Option 1</template></v-radio>
+                <v-radio value='2' :label='options[1]'><template v-slot:label>Option 2</template></v-radio>
+                <v-radio value='3' :label='options[2]'><template v-slot:label>Option 3</template></v-radio>
+                <v-radio value='4' :label='options[3]'><template v-slot:label>Option 4</template></v-radio>
               </v-radio-group>
 
-              <v-btn outlined color="indigo" onclick="mcq_question_submit()" block>
+              <v-btn v-if="mode" outlined color="indigo" onclick="mcq_question_submit()" block>
                 Submit Question
               </v-btn>
+
+              <v-btn v-if="!mode" outlined color="indigo" onclick="mcq_question_submit()" block>
+                Submit Question
+              </v-btn>
+
             </v-form>
           </v-card>
 
           <!-- True/False -->
           <v-card v-if='binary'>
-            <v-card-title>
-              Question {{question_latest}}:
+            <v-card-title v-if="mode">
+              New Question:
             </v-card-title>
+            
+            <v-card-title v-if="!mode">
+              Edit Question:
+            </v-card-title>
+
             <v-form style='padding-left: 20px; padding-right: 20px'>
+
+
               <v-row>
                 <v-col>
+                  <v-text-field v-model="question_title" color="blue darken-2" label="Title" outlined
+                    required></v-text-field>
                   <v-text-field v-model="question_name" color="purple darken-2" label="Question to Ask true/false"
                     outlined required>
                   </v-text-field>
@@ -130,9 +160,14 @@
                 <v-radio value='false' label='False'></v-radio>
               </v-radio-group>
 
-              <v-btn outlined color="indigo" onclick="binary_question_submit()" block>
+              <v-btn v-if="mode" outlined color="indigo" onclick="binary_question_submit()" block>
                 Submit Question
               </v-btn>
+
+              <v-btn v-if="!mode" outlined color="indigo" onclick="binary_question_submit()" block>
+                Edit Question
+              </v-btn>
+
             </v-form>
           </v-card>
 
@@ -147,8 +182,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script src="js/quiz_builder.js"></script>
-
 </body>
 
 </html>

@@ -50,9 +50,10 @@ class Class(db.Model):
     Instructor_ID = db.Column(db.Integer)
     Start_Time = db.Column(db.DateTime, nullable=False)
     End_Time = db.Column(db.DateTime, nullable=False)
+    Sections = db.Column(db.Integer, db.ForeignKey('Course.Sections'))
 
 
-    def __init__(self, Class_ID, Class_Name, Class_Details, Size, Current_Size, Course_ID,Instructor_ID,Start_Time, End_Time):
+    def __init__(self, Class_ID, Class_Name, Class_Details, Size, Current_Size, Course_ID,Instructor_ID,Start_Time, End_Time, Sections):
         self.Class_ID = Class_ID
         self.Class_Name = Class_Name
         self.Class_Details = Class_Details
@@ -62,10 +63,11 @@ class Class(db.Model):
         self.Instructor_ID = Instructor_ID
         self.Start_Time = Start_Time
         self.End_Time = End_Time
+        self.Sections = Sections
         
 
     def json(self):
-        return {"Class_ID": self.Class_ID, "Class_Name": self.Class_Name, "Class_Details": self.Class_Details, "Size": self.Size, "Current_Size": self.Current_Size, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID,"Start_Time": self.Start_Time, "End_Time": self.End_Time}
+        return {"Class_ID": self.Class_ID, "Class_Name": self.Class_Name, "Class_Details": self.Class_Details, "Size": self.Size, "Current_Size": self.Current_Size, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID,"Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections}
 
 
 class Instructor(db.Model):
@@ -118,10 +120,12 @@ class Quiz(db.Model):
     Instructor_ID = db.Column(db.Integer, db.ForeignKey('Instructor.Instructor_ID'))
     Section = db.Column(db.Integer, nullable=False)
     Question_Object = db.Column(db.String(255), nullable=False)
+    Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
 
 
 
-    def __init__(self, Course_ID, Instructor_ID, Section, Question_Object):
+    def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object):
+        self.Class_ID = Class_ID
         self.Course_ID = Course_ID
         self.Instructor_ID = Instructor_ID
         self.Section = Section
@@ -129,7 +133,7 @@ class Quiz(db.Model):
 
 
     def json(self):
-        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object}
+        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID}
 
 
 class Quiz_Results(db.Model):
@@ -265,7 +269,24 @@ def create_class():
         }
     ), 201
 
-
+@app.route("/spm/class/<string:Instructor_ID>")
+def find_by_instructor_class(Instructor_ID):
+    class_list = Class.query.filter_by(Instructor_ID=Instructor_ID).all()
+    if len(class_list):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "course": [class_i.json() for class_i in class_list]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Class Not Found not found."
+        }
+    ), 404
 
 #Instructor Methods
 
@@ -498,6 +519,43 @@ def get_all_quiz():
         }
     ), 404
 
+#
+@app.route("/spm/quiz/<string:Instructor_ID>")
+def find_by_isbn13(Instructor_ID):
+    quiz = Quiz.query.filter_by(Instructor_ID=Instructor_ID).all()
+    if len(quiz):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "course": [quiz_i.json() for quiz_i in quiz]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Quiz Not Found not found."
+        }
+    ), 404
+
+@app.route('/quiz/delete/<int:Quiz_ID>', methods=['DELETE'])
+def delete_quiz(Quiz_ID):
+    quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).delete()
+    if quiz:
+        return jsonify(
+            {
+                "code": 200,
+                "message": "We have successfully Delete the Quiz."
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Oops somethign went wrong"
+        }
+    ), 404
+    
 
 # Create Quiz
 @app.route("/create_quiz", methods=['POST'])

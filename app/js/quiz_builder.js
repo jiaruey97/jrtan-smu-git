@@ -5,6 +5,8 @@ const vueApp = new Vue({
     mcq: true,
     binary: false,
     q_type_top: 'MCQ',
+    Course_ID: "",
+    Section: "",
     questions_store: [],
     question_title:'',
     question_name: '',
@@ -15,32 +17,173 @@ const vueApp = new Vue({
     question_latest: 1,
     question_edit: 1, //Keeps track if mode is edit, the question number. It MUST correspond with the index position in the question store
     mode: true, //true == new or false == edit
+    show_quiz: false, //true means show quiz buildinng interface
+    question_id: "", //For storing purpose
+    items: [1, 2, 3, 5, 6, 7],
+    seclected_section:"",
+    Class_ID:"",
+
+    headers: [
+      {
+        text: 'Quiz ID',
+        align: 'start',
+        value: 'name',
+      },
+      { text: 'Course_ID', value: 'Course_ID' },
+      { text: 'Section', value: 'Section' },
+      { text: 'Actions', value: 'actions' },
+    ],
+
+    headers2: [
+      {
+        text: 'Class_ID',
+        align: 'start',
+        value: 'Class_ID',
+      },
+      { text: 'Class_Name', value: 'Class_Name' },
+      { text: 'Class_Details', value: 'Class_Details' },
+      { text: 'Course_ID', value: 'Course_ID' },
+      { text: 'Section', value: 'Section' },
+      { text: 'Selected_Section', value: 'act' },
+    ],
+
+    quiz_list: [],
+    course_list: [{
+      Class_ID: 1,
+      Class_Name: 2,
+      Course_ID: 3,
+      Sections: 4
+    }],
+
   },
+
+  created: function() {
+    this.initialize()
+  },
+  
   methods: {
+    
+    newQuiz: function(item){
+      if (this.seclected_section > item.Section){
+        alert("Please Selecte a Section Lower than the Section")
+      } else{
+        this.Course_ID = item.Course_ID
+        this.Section = item.seclected_section
+        this.Class_ID = item.Class_ID
+        this.show_quiz = true
+      }
+    },
+
+
+    editItem: function(item) {
+      console.log(item)
+      this.questions_store = item.Question_Object
+      this.Course_ID = item.Course_ID
+      this.Section = item.Section
+      this.name = item.question_id
+      this.show_quiz = true
+    },
+    
+    deleteItem: function (item) {
+      axios.delete('http://127.0.0.1:5000/quiz/delete/' + item.name)
+      .then(function (response) {
+        console.log(response)
+        alert("Your Quiz has been deleted")
+        window.location.reload()
+      })
+      .catch(function (error) {
+        alert("Something have went wrong")
+      });
+    },
+
+    initialize: function() {
+      typo = Array()
+      axios.get("http://127.0.0.1:5000/spm/quiz/12")
+      .then(function (response) {
+        quiz = response.data.data.course
+        for (let i = 0; i < quiz.length; i++) {
+          placehold = {
+            name:quiz[i].Quiz_ID,
+            Course_ID:quiz[i].Course_ID,
+            Section:quiz[i].Section,
+            Question_Object: quiz[i].Question_Object
+          }
+          typo.push(placehold)
+        }
+      })
+      
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      this.quiz_list = typo
+
+      typo2 = Array()
+
+      axios.get("http://127.0.0.1:5000/spm/class/12")
+      .then(function (response) {
+        console.log(response)
+        class_list = response.data.data.course
+        for (let i = 0; i < class_list.length; i++) {
+          placehold = {
+            Class_ID:class_list[i].Class_ID,
+            Class_Name:class_list[i].Class_Name,
+            Class_Details:class_list[i].Class_Details,
+            Course_ID:class_list[i].Course_ID,
+            Section:class_list[i].Sections,
+          }
+          typo2.push(placehold)
+        }
+      })
+      
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      this.course_list = typo2
+    },
+
 
     submit_database: function() {
 
       console.log(this.questions_store)
 
+      // To Purge the Database of the current one
       if(this.questions_store.length != 0){
-              
-        axios.post("http://127.0.0.1:5000/create_quiz", {
-          'Course_ID': 1,
+
+        if(this.question_id != ""){
+          axios.delete('http://127.0.0.1:5000/quiz/delete/' + this.question_id)
+          .then(function (response) {
+            console.log(response)
+            alert("Your Quiz has been deleted")
+            window.location.reload()
+          })
+          .catch(function (error) {
+            alert("Something have went wrong")
+          });
+        }
+
+        post_object = {
+          'Course_ID': this.Course_ID,
           'Instructor_ID': 12,
-          'Section': 1,
-          'Question_Object': JSON.stringify(this.questions_store)
-        }) 
+          'Section': this.Section_ID,
+          'Question_Object': JSON.stringify(this.questions_store),
+          'Class_ID': this.Class_ID 
+        } 
+              
+        axios.post("http://127.0.0.1:5000/create_quiz", post_object) 
 
         .then(function (response) {
           console.log(response);
           alert("Your Message have been save in teh database")
-
+          window.location.reload()
           })
         
         .catch(function (error) {
           console.log(error);
           alert("It seems that something have went wrong")
         });
+
       } else {
        alert("There is No Question Stored. Please submit a Question")
       }
@@ -251,3 +394,4 @@ function binary_question_submit() {
   }
 
 }
+

@@ -146,8 +146,9 @@
                       </v-card-text>
                       <v-file-input
                       multiple
-                      label="File input"
+                      label="File input" @change="onFileSelected"
                       ></v-file-input>
+                      <v-btn elevation="2" @click = "onUpload">Upload</v-btn>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -631,21 +632,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script>
-    const vueApp = new Vue({
-      el: '#app',
-      vuetify: new Vuetify(),
-      data: {
-
-      },
-      methods: {
-        
-
-        },
-        
-
-    })
-  </script>
+  <script src="js/course_page_trainer.js"></script>
 </body>
 
 </html>

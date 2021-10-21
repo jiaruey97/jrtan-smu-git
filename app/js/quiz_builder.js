@@ -365,7 +365,7 @@ function binary_question_submit() {
     //Assume edit mode, we use the question number to track
     question_index = vueApp.question_edit - 1
 
-    if (uestion_answer != "" & question_title != "" & question_name != ""){
+    if (question_answer != "" & question_title != "" & question_name != ""){
       binary_question = {
       
         'question_no': vueApp.question_edit,

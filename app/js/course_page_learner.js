@@ -1,4 +1,4 @@
-const couse_app = new Vue({
+const course_leaner_app = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: {

@@ -9,11 +9,12 @@
 </head>
 
 <body>
-        <div id="app">
-            <v-app id="inspire">
+    <div id="app">
+        <v-app id="inspire">
             <v-data-table
                 :headers="headers"
                 :items="courses"
+                item-key="Name"
                 sort-by="duration"
                 class="elevation-1"
             >
@@ -50,39 +51,40 @@
             
                         <v-card-text>
                         <v-container>
+
                             <v-row>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                                <v-text-field
-                                v-model="editedItem.name"
-                                label="Course name"
-                                ></v-text-field>
-                            </v-col>
-
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                                <v-text-field
-                                v-model="editedItem.duration"
-                                label="Duration"
-                                ></v-text-field>
-
                                 <v-col
                                 cols="12"
                                 sm="6"
                                 md="4"
-                            >
+                                >
                                 <v-text-field
-                                v-model="editedItem.details"
-                                label="Details"
+                                    v-model="editedItem.name"
+                                    label="Course name"
                                 ></v-text-field>
-                            </v-col>
+                                </v-col>
+                                <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                                >
+                                <v-text-field
+                                    v-model="editedItem.duration"
+                                    label="Duration"
+                                ></v-text-field>
+                                </v-col>
+                                <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                                >
+                                <v-text-field
+                                    v-model="editedItem.details"
+                                    label="Details"
+                                ></v-text-field>
+                                </v-col>
 
+                            </v-row>
                         </v-container>
                         </v-card-text>
             

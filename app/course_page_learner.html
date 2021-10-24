@@ -39,17 +39,334 @@
           </template>
         </v-app-bar>
       </div>
-
-
-      <v-main>
-        <v-container>  
+      
+      <!-- <div> -->
+      <div id='course_section' v-for='(section, index) in sections':key='section.section_no'>
+        <v-main>
+          <v-container>  
             <v-card>
               <v-toolbar
                 flat
                 color=#607D8B
                 dark
               >
-              <v-toolbar-title>Session 1</v-toolbar-title>
+              <v-toolbar-title>{{section.section_title}}</v-toolbar-title>
+              </v-toolbar>
+              <div id='lesson_section' v-for='(lesson, index) in lessons':key='lesson.lesson_no'>
+                <v-tabs vertical>
+                  <v-tab>
+                    <v-icon left>
+                      mdi-numeric-1-box
+                    </v-icon>
+                    {{lesson.lesson_title}}
+                  </v-tab>
+                  <!-- <v-tab>
+                    <v-icon left>
+                      mdi-numeric-2-box
+                    </v-icon>
+                    Lesson 2
+                  </v-tab>
+                  <v-tab>
+                    <v-icon left>
+                      mdi-numeric-3-box
+                    </v-icon>
+                    Lesson 3
+                  </v-tab> -->
+                  <v-tab>
+                    <v-icon left>
+                      mdi-comment-question-outline
+                    </v-icon>
+                    <v-badge
+                      color=#E57373
+                      content="1"
+                    >
+                      Quiz
+                    </v-badge>
+                  </v-tab>
+                <v-tab-item>
+                    <v-card flat>
+                      <v-card-title>
+                        Lesson 1 Material List
+                      </v-card-title>
+                      <v-list>
+                        <v-list-item>
+                          <v-list-item-action>
+                            <v-icon>mdi-numeric-1-box-multiple-outline</v-icon>
+                          </v-list-item-action>
+                          <v-list-item-content>
+                            <v-list-item-title>Material 1</v-list-item-title>
+                          </v-list-item-content>
+                          <v-list-item-action>
+                            <v-btn
+                              icon
+                            >
+                              <v-icon>mdi-download</v-icon>
+                            </v-btn>
+                          </v-list-item-action>
+                        </v-list-item>
+              
+                        <v-divider inset></v-divider>
+              
+                        <v-list-item>
+                          <v-list-item-action>
+                            <v-icon>mdi-numeric-2-box-multiple-outline</v-icon>
+                          </v-list-item-action>
+                          <v-list-item-content>
+                            <v-list-item-title>Material 2</v-list-item-title>
+                          </v-list-item-content>
+                          <v-list-item-action>
+                            <v-btn
+                              icon
+                            >
+                              <v-icon>mdi-download</v-icon>
+                            </v-btn>
+                          </v-list-item-action>
+                        </v-list-item>
+              
+                        <v-divider inset></v-divider>
+              
+                        <v-list-item>
+                          <v-list-item-action>
+                            <v-icon>mdi-numeric-3-box-multiple-outline</v-icon>
+                          </v-list-item-action>
+                          <v-list-item-content>
+                            <v-list-item-title>Material 3</v-list-item-title>
+                          </v-list-item-content>
+                          <v-list-item-action>
+                            <v-btn
+                              icon
+                            >
+                              <v-icon>mdi-download</v-icon>
+                            </v-btn>
+                          </v-list-item-action>
+                        </v-list-item>
+                        <v-spacer></v-spacer>
+                    </v-card>
+                  </v-tab-item>
+
+              </div>
+
+                
+          
+                <!-- <v-tab-item>
+                  <v-card flat>
+                    <v-card-title>
+                      Lesson 1 Material List
+                    </v-card-title>
+                    <v-list>
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-icon>mdi-numeric-1-box-multiple-outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Material 1</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn
+                            icon
+                          >
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+            
+                      <v-divider inset></v-divider>
+            
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-icon>mdi-numeric-2-box-multiple-outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Material 2</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn
+                            icon
+                          >
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+            
+                      <v-divider inset></v-divider>
+            
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-icon>mdi-numeric-3-box-multiple-outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Material 3</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn
+                            icon
+                          >
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+                      <v-spacer></v-spacer>
+                  </v-card>
+                </v-tab-item> -->
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-title>
+                      Lesson 2 Material List
+                    </v-card-title>
+                    <v-list>
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-icon>mdi-numeric-1-box-multiple-outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Material 1</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn
+                            icon
+                          >
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+            
+                      <v-divider inset></v-divider>
+            
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-icon>mdi-numeric-2-box-multiple-outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Material 2</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn
+                            icon
+                          >
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+            
+                      <v-divider inset></v-divider>
+            
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-icon>mdi-numeric-3-box-multiple-outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Material 3</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn
+                            icon
+                          >
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+                      <v-spacer></v-spacer>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-title>
+                      Lesson 3 Material List
+                    </v-card-title>
+                    <v-list>
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-icon>mdi-numeric-1-box-multiple-outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Material 1</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn
+                            icon
+                          >
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+            
+                      <v-divider inset></v-divider>
+            
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-icon>mdi-numeric-2-box-multiple-outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Material 2</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn
+                            icon
+                          >
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+            
+                      <v-divider inset></v-divider>
+            
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-icon>mdi-numeric-3-box-multiple-outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                          <v-list-item-title>Material 3</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn
+                            icon
+                          >
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+                      <v-spacer></v-spacer>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-title>
+                      Quiz List
+                    </v-card-title>
+                    <v-list>
+                      <v-list-item>
+                        <v-list-item-action>
+                          <v-btn
+                            depressed
+                            large
+                            class="ma-2"
+                            outlined
+                            color="indigo"
+                            href="quiz.html"
+                          >
+                              Quiz 1
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+
+                    </v-list>
+                  </v-card>
+                </v-tab-item>
+              </v-tabs>
+            </v-card>
+          </v-container>
+
+        </v-main>
+    </div>
+      <!-- <v-main> -->
+        <!-- <v-container>  
+            <v-card>
+              <v-toolbar
+                flat
+                color=#607D8B
+                dark
+              >
+              <v-toolbar-title>{{section.section_title}}</v-toolbar-title>
               </v-toolbar>
               <v-tabs vertical>
                 <v-tab>
@@ -289,8 +606,8 @@
               </v-tabs>
             </v-card>
         </v-container>
-        <v-container>
-          <v-card>
+        <v-container> -->
+          <!-- <v-card>
             <v-toolbar
               flat
               color=#607D8B
@@ -537,7 +854,7 @@
           </v-card>
         </v-container>
 
-      </v-main>
+      </v-main> -->
     </v-app>
 
   </div>
@@ -546,21 +863,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script>
-    const vueApp = new Vue({
-      el: '#app',
-      vuetify: new Vuetify(),
-      data: {
-
-      },
-      methods: {
-        
-
-        },
-        
-
-    })
-  </script>
+  <script src="js/course_page_learner.js"></script>
 </body>
 
 </html>

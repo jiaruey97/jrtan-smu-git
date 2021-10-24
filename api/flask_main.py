@@ -5,7 +5,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+#local flask
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
+
+#bitnami flask
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:t2AlF2wAibZH@127.0.0.1:3306/SPM'
+
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:8889/spm'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

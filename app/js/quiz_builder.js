@@ -98,7 +98,7 @@ const vueApp = new Vue({
 
     initialize: function() {
       typo = Array()
-      axios.get("http://127.0.0.1:5000/spm/quiz/12")
+      axios.get("http://3.131.65.207:5244/spm/quiz/12")
       .then(function (response) {
         quiz = response.data.data.course
         for (let i = 0; i < quiz.length; i++) {
@@ -120,7 +120,7 @@ const vueApp = new Vue({
 
       typo2 = Array()
 
-      axios.get("http://127.0.0.1:5000/spm/class/12")
+      axios.get("http://3.131.65.207:5244/spm/class/12")
       .then(function (response) {
         console.log(response)
         class_list = response.data.data.course
@@ -152,7 +152,7 @@ const vueApp = new Vue({
       if(this.questions_store.length != 0){
 
         if(this.question_id != ""){
-          axios.delete('http://127.0.0.1:5000/quiz/delete/' + this.question_id)
+          axios.delete('http://3.131.65.207:5244/quiz/delete/' + this.question_id)
           .then(function (response) {
             console.log(response)
             alert("Your Quiz has been deleted")
@@ -171,7 +171,7 @@ const vueApp = new Vue({
           'Class_ID': this.Class_ID 
         } 
               
-        axios.post("http://127.0.0.1:5000/create_quiz", post_object) 
+        axios.post("http://3.131.65.207:5244/create_quiz", post_object) 
 
         .then(function (response) {
           console.log(response);

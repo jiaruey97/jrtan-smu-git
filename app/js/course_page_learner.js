@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+// <<<<<<< HEAD
 const course_page = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
@@ -38,51 +38,51 @@ const course_page = new Vue({
         course_section: true,
     }
 })
-=======
-const course_leaner_app = new Vue({
-    el: '#app',
-    vuetify: new Vuetify(),
-    data: {
-      course: [{
-          'course_no': 1,
-          'session': [{
-              'session_no': [1, 2, 3],
-              'lesson': [{
-                  'lesson_no': [1, 2, 3],
-                  'quiz': 'Quiz 1',
-                  'material':[{
-                      'material_list': [1, 2, 3]
-                  }]
-                  }]
-              }]
-          },
-          {
-            'course_no': 2,
-            'session': [{
-                'session_no': [1, 2, 3],
-                'lesson': [{
-                    'lesson_no': [1, 2, 3],
-                    'quiz': 'Quiz 2',
-                    'material':[{
-                        'material_list': [1, 2, 3]
-                    }]
-                    }]
-                }]
-            },
-            {
-                'course_no': 3,
-                'session': [{
-                    'session_no': [1, 2, 3],
-                    'lesson': [{
-                        'lesson_no': [1, 2, 3],
-                        'quiz': 'Quiz 3',
-                        'material':[{
-                            'material_list': [1, 2, 3]
-                        }]
-                        }]
-                    }]
-                }]
-    }
-})
+// =======
+// const course_leaner_app = new Vue({
+//     el: '#app',
+//     vuetify: new Vuetify(),
+//     data: {
+//       course: [{
+//           'course_no': 1,
+//           'session': [{
+//               'session_no': [1, 2, 3],
+//               'lesson': [{
+//                   'lesson_no': [1, 2, 3],
+//                   'quiz': 'Quiz 1',
+//                   'material':[{
+//                       'material_list': [1, 2, 3]
+//                   }]
+//                   }]
+//               }]
+//           },
+//           {
+//             'course_no': 2,
+//             'session': [{
+//                 'session_no': [1, 2, 3],
+//                 'lesson': [{
+//                     'lesson_no': [1, 2, 3],
+//                     'quiz': 'Quiz 2',
+//                     'material':[{
+//                         'material_list': [1, 2, 3]
+//                     }]
+//                     }]
+//                 }]
+//             },
+//             {
+//                 'course_no': 3,
+//                 'session': [{
+//                     'session_no': [1, 2, 3],
+//                     'lesson': [{
+//                         'lesson_no': [1, 2, 3],
+//                         'quiz': 'Quiz 3',
+//                         'material':[{
+//                             'material_list': [1, 2, 3]
+//                         }]
+//                         }]
+//                     }]
+//                 }]
+//     }
+// })
         
->>>>>>> a25e2d26abd8522f5feb4e5ac5185dc59d5bbc63
+// >>>>>>> a25e2d26abd8522f5feb4e5ac5185dc59d5bbc63

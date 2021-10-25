@@ -111,4 +111,4 @@ def find_by_instructor_class(Instructor_ID):
     ), 404
 
 if __name__ == '__main__':
-    app.run(port=5244, debug=True)
+    app.run(host='0.0.0.0', port=5044, debug=True)

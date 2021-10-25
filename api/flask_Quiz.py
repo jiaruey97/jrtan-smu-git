@@ -132,4 +132,4 @@ def create_quiz():
 
 
 if __name__ == '__main__':
-    app.run(port=5344, debug=True)
+    app.run(host='0.0.0.0', port=5544, debug=True)

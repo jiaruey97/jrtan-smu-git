@@ -84,4 +84,4 @@ def create_results():
     ), 201
 
 if __name__ == '__main__':
-    app.run(port=5544, debug=True)
+    app.run(host='0.0.0.0', port=5444, debug=True)

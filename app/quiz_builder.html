@@ -71,13 +71,13 @@
       <v-icon
         small
         class="mr-2"
-        @click="editItem(item)"
+        @click="editQuiz(item)"
       >
         mdi-pencil
       </v-icon>
       <v-icon
         small
-        @click="deleteItem(item)"
+        @click="deleteExistingQuiz(item)"
       >
         mdi-delete
       </v-icon>
@@ -107,7 +107,7 @@
       <v-icon
         small
         class="mr-2"
-        @click="newQuiz"
+        @click="newQuiz(item)"
       >
         mdi-pencil
       </v-icon>

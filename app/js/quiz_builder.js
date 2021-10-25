@@ -18,7 +18,7 @@ const vueApp = new Vue({
     question_edit: 1, //Keeps track if mode is edit, the question number. It MUST correspond with the index position in the question store
     mode: true, //true == new or false == edit
     show_quiz: false, //true means show quiz buildinng interface
-    question_id: "", //For storing purpose
+    Quiz_ID: "", //For storing purpose
     items: [1, 2, 3, 5, 6, 7],
     seclected_section:"",
     Class_ID:"",
@@ -27,7 +27,7 @@ const vueApp = new Vue({
       {
         text: 'Quiz ID',
         align: 'start',
-        value: 'name',
+        value: 'Quiz_ID',
       },
       { text: 'Course_ID', value: 'Course_ID' },
       { text: 'Section', value: 'Section' },
@@ -48,12 +48,7 @@ const vueApp = new Vue({
     ],
 
     quiz_list: [],
-    course_list: [{
-      Class_ID: 1,
-      Class_Name: 2,
-      Course_ID: 3,
-      Sections: 4
-    }],
+    course_list: [],
 
   },
 
@@ -64,6 +59,7 @@ const vueApp = new Vue({
   methods: {
     
     newQuiz: function(item){
+      console.log(item)
       if (this.seclected_section > item.Section){
         alert("Please Selecte a Section Lower than the Section")
       } else{
@@ -75,17 +71,20 @@ const vueApp = new Vue({
     },
 
 
-    editItem: function(item) {
+    editQuiz: function(item) {
       console.log(item)
-      this.questions_store = item.Question_Object
+      question = JSON.parse(item.Question_Object)
+      this.questions_store = question
       this.Course_ID = item.Course_ID
       this.Section = item.Section
-      this.name = item.question_id
+      this.Quiz_ID = item.Quiz_ID
       this.show_quiz = true
+      console.log(this.Quiz_ID)
     },
     
-    deleteItem: function (item) {
-      axios.delete('http://127.0.0.1:5000/quiz/delete/' + item.name)
+    deleteExistingQuiz: function (item) {
+      axios.delete('http://127.0.0.1:5344/quiz/delete/' + item.Quiz_ID)
+      // axios.delete('http://3.131.65.207:5244/quiz/delete/' + item.Quiz_ID)
       .then(function (response) {
         console.log(response)
         alert("Your Quiz has been deleted")
@@ -98,12 +97,14 @@ const vueApp = new Vue({
 
     initialize: function() {
       typo = Array()
-      axios.get("http://3.131.65.207:5244/spm/quiz/12")
+      axios.get('http://127.0.0.1:5344/spm/quiz/12')
+      // axios.get("http://3.131.65.207:5244/spm/quiz/12")
       .then(function (response) {
         quiz = response.data.data.course
+        console.log(quiz)
         for (let i = 0; i < quiz.length; i++) {
           placehold = {
-            name:quiz[i].Quiz_ID,
+            Quiz_ID:quiz[i].Quiz_ID,
             Course_ID:quiz[i].Course_ID,
             Section:quiz[i].Section,
             Question_Object: quiz[i].Question_Object
@@ -120,9 +121,9 @@ const vueApp = new Vue({
 
       typo2 = Array()
 
-      axios.get("http://3.131.65.207:5244/spm/class/12")
+      axios.get('http://127.0.0.1:5000/spm/class/12')
+      //axios.get("http://3.131.65.207:5244/spm/class/12")
       .then(function (response) {
-        console.log(response)
         class_list = response.data.data.course
         for (let i = 0; i < class_list.length; i++) {
           placehold = {
@@ -146,32 +147,35 @@ const vueApp = new Vue({
 
     submit_database: function() {
 
-      console.log(this.questions_store)
-
       // To Purge the Database of the current one
       if(this.questions_store.length != 0){
-
-        if(this.question_id != ""){
-          axios.delete('http://3.131.65.207:5244/quiz/delete/' + this.question_id)
+        if(this.Quiz_ID != ""){
+          axios.delete('http://localhost:5344/quiz/delete/' + this.Quiz_ID)
+          // axios.delete('http://3.131.65.207:5244/quiz/delete/' + this.Quiz_ID)
           .then(function (response) {
             console.log(response)
-            alert("Your Quiz has been deleted")
+            alert("Your Quiz has been deleted, Please Note the ID have been Changed")
             window.location.reload()
           })
           .catch(function (error) {
             alert("Something have went wrong")
           });
+          
+
         }
 
         post_object = {
           'Course_ID': this.Course_ID,
           'Instructor_ID': 12,
-          'Section': this.Section_ID,
+          'Section': this.Section,
           'Question_Object': JSON.stringify(this.questions_store),
           'Class_ID': this.Class_ID 
         } 
-              
-        axios.post("http://3.131.65.207:5244/create_quiz", post_object) 
+        
+        console.log(post_object)
+
+        //axios.post("http://3.131.65.207:5244/create_quiz", post_object) 
+        axios.post("http://localhost:5344/create_quiz", post_object) 
 
         .then(function (response) {
           console.log(response);
@@ -298,6 +302,10 @@ function mcq_question_submit() {
   } else {
     //Assume edit mode, we use the question number to track
     question_index = vueApp.question_edit - 1
+    question_title = vueApp.question_title
+    question_name = vueApp.question_name
+    question_option = vueApp.options
+    question_answer = vueApp.correct_option
     if (question_title != "" & question_name != "" & question_option.length != 0 & question_answer != ""){
       mcq_question = {
         'question_no': vueApp.question_edit,

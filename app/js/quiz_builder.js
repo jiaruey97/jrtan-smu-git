@@ -1,3 +1,6 @@
+//Please extract them as a variable!!
+const address = "3.131.65.207:5244"
+
 const vueApp = new Vue({
   el: '#app',
   vuetify: new Vuetify(),
@@ -83,7 +86,7 @@ const vueApp = new Vue({
     },
     
     deleteExistingQuiz: function (item) {
-      axios.delete('http://127.0.0.1:5344/quiz/delete/' + item.Quiz_ID)
+      axios.delete(`http://${address}/quiz/delete/` + item.Quiz_ID)
       // axios.delete('http://3.131.65.207:5244/quiz/delete/' + item.Quiz_ID)
       .then(function (response) {
         console.log(response)
@@ -97,7 +100,7 @@ const vueApp = new Vue({
 
     initialize: function() {
       typo = Array()
-      axios.get('http://127.0.0.1:5344/spm/quiz/12')
+      axios.get(`http://${address}/spm/quiz/12`)
       // axios.get("http://3.131.65.207:5244/spm/quiz/12")
       .then(function (response) {
         quiz = response.data.data.course
@@ -121,7 +124,7 @@ const vueApp = new Vue({
 
       typo2 = Array()
 
-      axios.get('http://127.0.0.1:5000/spm/class/12')
+      axios.get(`http://${address}/spm/class/12`)
       //axios.get("http://3.131.65.207:5244/spm/class/12")
       .then(function (response) {
         class_list = response.data.data.course
@@ -150,7 +153,7 @@ const vueApp = new Vue({
       // To Purge the Database of the current one
       if(this.questions_store.length != 0){
         if(this.Quiz_ID != ""){
-          axios.delete('http://localhost:5344/quiz/delete/' + this.Quiz_ID)
+          axios.delete(`http://${address}/quiz/delete/` + this.Quiz_ID)
           // axios.delete('http://3.131.65.207:5244/quiz/delete/' + this.Quiz_ID)
           .then(function (response) {
             console.log(response)
@@ -175,7 +178,7 @@ const vueApp = new Vue({
         console.log(post_object)
 
         //axios.post("http://3.131.65.207:5244/create_quiz", post_object) 
-        axios.post("http://localhost:5344/create_quiz", post_object) 
+        axios.post(`http://${address}/create_quiz`, post_object) 
 
         .then(function (response) {
           console.log(response);
@@ -326,7 +329,7 @@ function mcq_question_submit() {
   
       vueApp.mode = true
     } else {
-      alert("Birds Chirping")
+      alert("Birds Chirping????")
     }
 
 

@@ -1,9 +1,6 @@
 //Please extract them as a variable!!
-const address = "3.131.65.207:5244"
-
-//Dummy variables, Please remove them in the actual one!
-// CTRL-F to see where it's used!
-const section_id = 1
+const addressQuiz = "3.131.65.207:5544"
+const addressClass = "3.131.65.207:5044"
 
 const vueApp = new Vue({
   el: '#app',
@@ -27,7 +24,7 @@ const vueApp = new Vue({
     show_quiz: false, //true means show quiz buildinng interface
     Quiz_ID: "", //For storing purpose
     items: [1, 2, 3, 5, 6, 7],
-    selected_section: section_id, //DUMMIFIED!, please change!
+    selected_section: "",
     Class_ID:"",
 
     headers: [
@@ -68,7 +65,7 @@ const vueApp = new Vue({
     newQuiz: function(item){
       console.log(item)
       if (this.selected_section > item.Section){
-        alert("Please Selecte a Section Lower than the Section")
+        alert("Please Select a Section Lower than the Section")
       } else{
         this.Course_ID = item.Course_ID
         this.Section = item.selected_section
@@ -90,7 +87,7 @@ const vueApp = new Vue({
     },
     
     deleteExistingQuiz: function (item) {
-      axios.delete(`http://${address}/quiz/delete/` + item.Quiz_ID)
+      axios.delete(`http://${addressQuiz}/quiz/delete/` + item.Quiz_ID)
       // axios.delete('http://3.131.65.207:5244/quiz/delete/' + item.Quiz_ID)
       .then(function (response) {
         console.log(response)
@@ -104,7 +101,7 @@ const vueApp = new Vue({
 
     initialize: function() {
       typo = Array()
-      axios.get(`http://${address}/spm/quiz/12`)
+      axios.get(`http://${addressQuiz}/spm/quiz/12`)
       // axios.get("http://3.131.65.207:5244/spm/quiz/12")
       .then(function (response) {
         quiz = response.data.data.course
@@ -128,7 +125,7 @@ const vueApp = new Vue({
 
       typo2 = Array()
 
-      axios.get(`http://${address}/spm/class/12`)
+      axios.get(`http://${addressClass}/spm/class/12`)
       //axios.get("http://3.131.65.207:5244/spm/class/12")
       .then(function (response) {
         class_list = response.data.data.course
@@ -157,7 +154,7 @@ const vueApp = new Vue({
       // To Purge the Database of the current one
       if(this.questions_store.length != 0){
         if(this.Quiz_ID != ""){
-          axios.delete(`http://${address}/quiz/delete/` + this.Quiz_ID)
+          axios.delete(`http://${addressQuiz}/quiz/delete/` + this.Quiz_ID)
           // axios.delete('http://3.131.65.207:5244/quiz/delete/' + this.Quiz_ID)
           .then(function (response) {
             console.log(response)
@@ -174,7 +171,7 @@ const vueApp = new Vue({
         post_object = {
           'Course_ID': this.Course_ID,
           'Instructor_ID': 12,
-          'Section': this.Section,
+          'Section': this.selected_section, //originally, this.section 
           'Question_Object': JSON.stringify(this.questions_store),
           'Class_ID': this.Class_ID 
         } 
@@ -182,7 +179,7 @@ const vueApp = new Vue({
         console.log(post_object)
 
         //axios.post("http://3.131.65.207:5244/create_quiz", post_object) 
-        axios.post(`http://${address}/create_quiz`, post_object) 
+        axios.post(`http://${addressQuiz}/create_quiz`, post_object) 
 
         .then(function (response) {
           console.log(response);

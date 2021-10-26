@@ -1,44 +1,43 @@
+const addressQuiz = "3.131.65.207:5544"
+
 const quiz_app = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: {
-      questions: [{
-          'question_no': 1,
-          'question_title': 'Question 1',
-          'question': 'Which planet is the smallest in our Solar System?',
-          'options': ['Jupiter', 'Mars', 'Mercury', 'Pluto'],
-          'answer': 3,
-          'type': 'mcq'
-      },
-      {
-          'question_no': 2,
-          'question_title': 'Question 2',
-          'question': 'Elon Musk was the co-founder of Paypal before he sold it',
-          'answer': 'true',
-          'type': 'binary',
-      },
-      {
-          'question_no': 3,
-          'question_title': 'Question 3',
-          'question': 'Are frogs reptilians?',
-          'answer': 'false',
-          'type': 'binary'
-      },
-      {
-        'question_no': 4,
-        'question_title': 'Question 4',
-        'question': "Which of the following disorders has Savant Syndrome been observed the most?",
-        'options': ['Narcolepsy', 'Autism', 'Kleptomania', 'Dyslexia'],
-        'answer': 2,
-        'type': 'mcq'
-    },],
-    answer_options: [],
-    quiz_section: true, //This tick implies that you are in the quiz portion,
-    score: 0,
-    percentage: 0,
-    banner_flag: false,
-    banner_flag_msg: "",
-    submit_msg: ""
+        isLoaded: true,
+        results: [],
+        questions: [],
+        answer_options: [],
+        quiz_section: true, //'init, quiz, end' -> They denote the 3 phases, initilization phase, quiz, and submission page
+        score: 0,
+        percentage: 0,
+        banner_flag: false,
+        banner_flag_msg: "",
+        submit_msg: ""
+    },
+    created(){
+        
+        axios.get(`http://${addressQuiz}/spm/quiz_retrieve/4`)
+        .then(function (response) {
+            loaded_question = JSON.parse(response.data.data.Question_Object)
+            quiz_app.questions = loaded_question
+      
+        })
+        .catch( function (error) {
+            console.log(error)
+        })
+    }, 
+    computed: {
+        returnQuiz: function() {
+            return this.questions
+        }
+    },
+    methods: {
+        mountQuiz: function() {
+            this.questions = this.results
+            console.log(this.questions)
+            return None
+        }
     }
 })
 
@@ -46,6 +45,7 @@ function quiz_submit() {
     //There will be submission portion, but there will be grading!
     //Manual grading will happen first, then submission of grades together with answer
     quiz_app.banner_flag = false
+
     //TO-DO: Check if user completed all the questions!
     if (quiz_app.answer_options.length != quiz_app.questions.length){
         //user did not complete question

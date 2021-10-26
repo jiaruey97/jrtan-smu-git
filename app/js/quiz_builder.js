@@ -1,5 +1,5 @@
 //Please extract them as a variable!!
-const addressQuiz = "3.131.65.207:5944"
+const addressQuiz = "3.131.65.207:5544"
 const addressClass = "3.131.65.207:5044"
 
 const vueApp = new Vue({

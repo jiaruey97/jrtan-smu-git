@@ -66,6 +66,25 @@ def get_all_quiz():
         }
     ), 404
 
+@app.route("/spm/quiz_retrieve/<string:Quiz_ID>")
+def get_quiz_for_learner(Quiz_ID):
+    quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).one()
+    if len(quiz):
+        return jsonify(
+            {
+                "code": 200,
+                "data":{
+                    quiz
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Quiz Not Found not found."
+        }
+    ), 404
+
 #
 @app.route("/spm/quiz/<string:Instructor_ID>")
 def find_by_isbn13(Instructor_ID):

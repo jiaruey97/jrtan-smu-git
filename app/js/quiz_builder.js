@@ -1,5 +1,5 @@
 //Please extract them as a variable!!
-const addressQuiz = "3.131.65.207:5544"
+const addressQuiz = "3.131.65.207:5944"
 const addressClass = "3.131.65.207:5044"
 
 const vueApp = new Vue({
@@ -87,8 +87,7 @@ const vueApp = new Vue({
     },
     
     deleteExistingQuiz: function (item) {
-      axios.delete(`http://${addressQuiz}/quiz/delete/` + item.Quiz_ID)
-      // axios.delete('http://3.131.65.207:5244/quiz/delete/' + item.Quiz_ID)
+      axios.post(`http://${addressQuiz}/quiz/delete/` + item.Quiz_ID)
       .then(function (response) {
         console.log(response)
         alert("Your Quiz has been deleted")
@@ -154,43 +153,52 @@ const vueApp = new Vue({
       // To Purge the Database of the current one
       if(this.questions_store.length != 0){
         if(this.Quiz_ID != ""){
-          axios.delete(`http://${addressQuiz}/quiz/delete/` + this.Quiz_ID)
-          // axios.delete('http://3.131.65.207:5244/quiz/delete/' + this.Quiz_ID)
+
+          post_object = {
+            'Question_Object': JSON.stringify(this.questions_store),
+          }
+          console.log(post_object)
+          axios.post(`http://${addressQuiz}/quiz/`+ this.Quiz_ID + `/update`, post_object)
           .then(function (response) {
-            console.log(response)
-            alert("Your Quiz has been deleted, Please Note the ID have been Changed")
+            console.log(response);
+            alert("UpdaTED  ")
             window.location.reload()
-          })
-          .catch(function (error) {
-            alert("Something have went wrong")
-          });
+            })
           
+          .catch(function (error) {
+            console.log(error);
+            alert("It seems that something have went wrong")
+          });
 
         }
+        else{
 
-        post_object = {
-          'Course_ID': this.Course_ID,
-          'Instructor_ID': 12,
-          'Section': this.selected_section, //originally, this.section 
-          'Question_Object': JSON.stringify(this.questions_store),
-          'Class_ID': this.Class_ID 
-        } 
-        
-        console.log(post_object)
+          post_object = {
+            'Course_ID': this.Course_ID,
+            'Instructor_ID': 12,
+            'Section': this.selected_section, //originally, this.section 
+            'Question_Object': JSON.stringify(this.questions_store),
+            'Class_ID': this.Class_ID 
+          } 
+          
+          console.log(post_object)
+  
+          //axios.post("http://3.131.65.207:5244/create_quiz", post_object) 
+          axios.post(`http://${addressQuiz}/create_quiz`, post_object) 
+  
+          .then(function (response) {
+            console.log(response);
+            alert("Your Message have been save in teh database")
+            window.location.reload()
+            })
+          
+          .catch(function (error) {
+            console.log(error);
+            alert("It seems that something have went wrong")
+          });
 
-        //axios.post("http://3.131.65.207:5244/create_quiz", post_object) 
-        axios.post(`http://${addressQuiz}/create_quiz`, post_object) 
 
-        .then(function (response) {
-          console.log(response);
-          alert("Your Message have been save in teh database")
-          window.location.reload()
-          })
-        
-        .catch(function (error) {
-          console.log(error);
-          alert("It seems that something have went wrong")
-        });
+        }
 
       } else {
        alert("There is No Question Stored. Please submit a Question")

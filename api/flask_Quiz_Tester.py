@@ -125,6 +125,7 @@ def delete_quiz(Quiz_ID):
             "message": "Oops somethign went wrong"
         }
     ), 404
+
     
 
 # Create Quiz
@@ -152,6 +153,7 @@ def create_quiz():
         }
     ), 201
 
+
 @app.route('/quiz/<int:Quiz_ID>/update',methods = ['POST'])
 def update(Quiz_ID):
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID)
@@ -174,7 +176,6 @@ def update(Quiz_ID):
         }
     ), 404
 
- 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5544, debug=True)
+    app.run(host='0.0.0.0', port=5944, debug=True)

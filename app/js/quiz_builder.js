@@ -23,7 +23,7 @@ const vueApp = new Vue({
     show_quiz: false, //true means show quiz buildinng interface
     Quiz_ID: "", //For storing purpose
     items: [1, 2, 3, 5, 6, 7],
-    seclected_section:"",
+    selected_section:"",
     Class_ID:"",
 
     headers: [
@@ -63,11 +63,11 @@ const vueApp = new Vue({
     
     newQuiz: function(item){
       console.log(item)
-      if (this.seclected_section > item.Section){
+      if (this.selected_section > item.Section){
         alert("Please Selecte a Section Lower than the Section")
       } else{
         this.Course_ID = item.Course_ID
-        this.Section = item.seclected_section
+        this.Section = item.selected_section
         this.Class_ID = item.Class_ID
         this.show_quiz = true
       }

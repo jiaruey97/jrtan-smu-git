@@ -36,7 +36,26 @@ const course_page = new Vue({
     },
   ],
         course_section: true,
-    }
+    },
+    
+    methods: {
+        greet: function (event){
+          //alert("hi")
+          axios({
+            url: 'http://localhost/spm_project/material1.txt',
+            method: 'GET',
+            responseType: 'blob'
+          }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'material1.txt');
+            document.body.appendChild(link);
+            link.click();
+            });
+        }
+
+      }
 })
 // =======
 // const course_leaner_app = new Vue({

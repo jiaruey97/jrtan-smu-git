@@ -1,6 +1,10 @@
 //Please extract them as a variable!!
 const address = "3.131.65.207:5244"
 
+//Dummy variables, Please remove them in the actual one!
+// CTRL-F to see where it's used!
+const section_id = 1
+
 const vueApp = new Vue({
   el: '#app',
   vuetify: new Vuetify(),
@@ -23,7 +27,7 @@ const vueApp = new Vue({
     show_quiz: false, //true means show quiz buildinng interface
     Quiz_ID: "", //For storing purpose
     items: [1, 2, 3, 5, 6, 7],
-    selected_section:"",
+    selected_section: section_id, //DUMMIFIED!, please change!
     Class_ID:"",
 
     headers: [

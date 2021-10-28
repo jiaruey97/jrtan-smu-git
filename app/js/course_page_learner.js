@@ -55,7 +55,7 @@ const course_page = new Vue({
             });
         }
 
-      }
+    }
 })
 // =======
 // const course_leaner_app = new Vue({
@@ -88,7 +88,7 @@ const course_page = new Vue({
 //                     }]
 //                 }]
 //             },
-//             {
+//             { 
 //                 'course_no': 3,
 //                 'session': [{
 //                     'session_no': [1, 2, 3],

@@ -57,5 +57,24 @@ def get_all_user():
         }
     ), 404
 
+@app.route("/user_database/<string:Username>")
+def get_user_name(Username):
+    user_Database = User_Database.query.filter_by(Username=Username).first()
+    if len(user_Database):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "course": [user.json() for user in user_Database]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no users."
+        }
+    ), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5744, debug=True)

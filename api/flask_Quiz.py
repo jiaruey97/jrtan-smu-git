@@ -74,7 +74,7 @@ def get_quiz_for_learner(Quiz_ID):
             {
                 "code": 200,
                 "data":{
-                    quiz
+                    quiz.json()
                 }
             }
         )

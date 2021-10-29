@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+
+<body>
+    <div id="app">
+
+        <div id="app">
+
+            <v-app>
+
+                <v-app-bar color="deep-blue accent-4" dark app>
+                    <v-toolbar-title>Course Enrolment</v-toolbar-title>
+                    <v-col class="text-right">
+                        <!-- This is to commit to the Server the changes made-->
+                        <v-btn elevation="2" onclick='quiz_submit()'> Submit Quiz </v-btn>
+                    </v-col>
+
+                </v-app-bar>
+
+
+                <v-main>
+
+                    <v-container>
+                        <h1> Currently Enrolled in Courses </h1>
+
+                        <v-data-table
+                            :headers="headers"
+                            :items="enrolled_course"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have no Course"
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            @click="editQuiz(item)"
+                        >
+                        Enroll
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                    </v-container>
+
+
+                    <v-container>
+                        <h1> Course to Enroll in </h1>
+
+                          <v-data-table
+                            :headers="headers"
+                            :items="course_list"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have no Course"
+                            
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            @click="editQuiz(item)"
+                        >
+                        Enroll
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                    </v-container>
+
+
+
+                </v-main>
+            </v-app>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/course_enrolment_page.js"></script>
+
+</body>
+
+</html>

@@ -19,19 +19,19 @@ class Lesson_Materials(db.Model):
     __tablename__ = 'Lesson_Materials'
 
     Lesson_Materials_ID = db.Column(db.Integer, primary_key=True)
-    Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
+    Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
     Section = db.Column(db.Integer, nullable=False)
     Lesson_Materials = db.Column(db.String(255), nullable=False)
 
 
-    def __init__(self, Lesson_Materials_ID, Class_ID, Section, Lesson_Materials):
+    def __init__(self, Lesson_Materials_ID, Course_ID, Section, Lesson_Materials):
         self.Lesson_Materials_ID = Lesson_Materials_ID
-        self.Class_ID = Class_ID
+        self.Course_ID = Course_ID
         self.Section = Section
         self.Lesson_Materials = Lesson_Materials
 
     def json(self):
-        return {"Lesson_Materials_ID":self.Lesson_Materials_ID, "Class_ID": self.Class_ID, "Section": self.Section, "Lesson_Materials": self.Lesson_Materials}
+        return {"Lesson_Materials_ID":self.Lesson_Materials_ID, "Course_ID": self.Course_ID, "Section": self.Section, "Lesson_Materials": self.Lesson_Materials}
 
 
 @app.route("/spm/materials")
@@ -52,6 +52,26 @@ def get_all_materials():
             "message": "There are no results."
         }
     ), 404
+
+#Retrieve specific material
+@app.route("/spm/materials/<id:course_id>")
+def get_materials_by_course_id(course_id):
+    material = Lesson_Materials.query.filter_by(Course_id=course_id)
+    if len(material):
+        return jsonify(
+            {
+                "code":200,
+                "data":{
+                    material
+                },
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Material for this course ID cannot be found."
+        }
+    ), 404 
 
 
 @app.route("/create_materials", methods=['POST'])

@@ -1,41 +1,27 @@
 // <<<<<<< HEAD
+
+sample_data = [{
+  'course_id': '1',
+  'course_name': 'Circuit Theory',
+  'course_details': 'In this course, students are required to understand the underlying infrastructure of a circuit board and how each nodes are connected to each other.',
+  'duration': '',
+  'prerequisite': '',
+  'start_time': '2021-12-01 00:00:00',
+  'end_time': '2021-12-29 00:00:00',
+  'lesson_materials': [{'section 1': [{
+    'material_name': "Lecture 1",
+    'material_location': 'somelocation...'
+  }, {
+    'material_name': "Lecture 2",
+    'material_location': 'somelocation'
+  }]}],
+}]
+
 const course_page = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data:{
-        sections: [{
-          'section_no': 1,
-          'section_title': 'Section 1',
-
-      },
-      {
-          'section_no': 2,
-          'section_title': 'Section 2',
-
-      },
-      {
-          'section_no': 3,
-          'section_title': 'Section 3',
-          
-      },
-    ],
-        lessons: [{
-        'lesson_no': 1,
-        'lesson_title': 'Lesson 1',
-
-    },
-    {
-        'lesson_no': 2,
-        'lesson_title': 'Lesson 2',
-
-    },
-    {
-        'lesson_no': 3,
-        'lesson_title': 'Lesson 3',
-        
-    },
-  ],
-        course_section: true,
+      course_details: sample_data
     },
     
     methods: {
@@ -57,6 +43,7 @@ const course_page = new Vue({
 
     }
 })
+<<<<<<< Updated upstream
 // =======
 // const course_leaner_app = new Vue({
 //     el: '#app',
@@ -105,3 +92,6 @@ const course_page = new Vue({
 // })
         
 // >>>>>>> a25e2d26abd8522f5feb4e5ac5185dc59d5bbc63
+=======
+
+>>>>>>> Stashed changes

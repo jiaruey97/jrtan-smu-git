@@ -30,8 +30,40 @@
       </div>
 
 
+
       <v-main>
         <v-container>
+
+          <!-- This is the uploader interface for them to upload stuff! -->
+          <!-- https://stackoverflow.com/questions/43013858/how-to-post-a-file-from-a-form-with-axios -->
+
+          <v-card style="margin-bottom: 15px;">
+            <v-toolbar flat color=#607D8B dark>
+              <v-toolbar-title>Upload Material Interface</v-toolbar-title>
+            </v-toolbar>
+            <v-tabs vertical>
+              <v-tab>
+                <v-icon left>
+                  mdi-numeric-1-box
+                </v-icon>
+                Upload Material
+              </v-tab>
+              <v-tab-item>
+                <v-card flat>
+                  <v-card-title>
+                    Upload Material List
+                  </v-card-title>
+                  <v-text-field type='number' label="Section Number:"></v-text-field>
+                  <v-text-field label="Material Name:"></v-text-field>
+                  <v-file-input show-size label="File input"></v-file-input>
+                  <v-btn depressed large class="ma-2" outlined color="indigo">Upload</v-btn>
+                </v-card>
+              </v-tab-item>
+            </v-tabs>
+          </v-card>
+
+          <!-- This is the uploader interface for them to upload stuff! -->
+
           <!-- This entire section would be V-FORED!! -->
           <div v-for='(lesson, index) in lesson_materials' :keys="lesson_materials.materials">
             <v-card style="margin-bottom: 15px;">
@@ -60,7 +92,7 @@
                       Lesson Material List
                     </v-card-title>
 
-                    <!-- V-for list -->
+                    <!-- V-for list, allow users to preview the content, but the actual upload is here! -->
                     <v-list v-for="(material, index) in lesson.materials" :key="lesson.material_title">
                       <v-list-item>
                         <v-list-item-action>
@@ -76,15 +108,6 @@
                         </v-list-item-action>
                       </v-list-item>
                     </v-list>
-
-                    <v-divider inset></v-divider>
-                    <v-spacer></v-spacer>
-                    <v-spacer></v-spacer>
-                    <v-card-text>
-                      Material Upload
-                    </v-card-text>
-                    <v-file-input multiple label="File input" @change="onFileSelected"></v-file-input>
-                    <v-btn elevation="2" @click="onUpload">Upload</v-btn>
                   </v-card>
                 </v-tab-item>
                 <!-- Quiz Tab -->

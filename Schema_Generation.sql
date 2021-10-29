@@ -114,11 +114,11 @@ Tracker_ID needed for Flask
 
 create table if not EXISTS Lesson_Materials(
   Lesson_Materials_ID int NOT NULL,
-  Class_ID int NOT NULL,
+  Course_ID int NOT NULL,
   Section int NOT NULL,
   Lesson_Materials varchar(255) NOT NULL,
   PRIMARY KEY (Lesson_Materials_ID),
-  FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID)
+  FOREIGN KEY (Course_ID) REFERENCES Class(Course_ID)
 );
 
 /*Material Generated will be based on Current Sections*/

@@ -5,15 +5,16 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-#local flask
+# local flask
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
 
-#bitnami flask
+# bitnami flask
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:t2AlF2wAibZH@127.0.0.1:3306/SPM'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
 
 class Course(db.Model):
     __tablename__ = 'Course'
@@ -57,6 +58,26 @@ def get_all_course():
         {
             "code": 404,
             "message": "There are no courses."
+        }
+    ), 404
+
+
+@app.route("/spm/course/<id:course_id>")
+def get_all_course(course_id):
+    course = Course.query.filter_by(course_id=course_id).one()
+    if len(course):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    course
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Course information Not Found."
         }
     ), 404
 

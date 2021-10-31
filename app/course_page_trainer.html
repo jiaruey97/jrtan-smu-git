@@ -53,10 +53,14 @@
                   <v-card-title>
                     Upload Material List
                   </v-card-title>
-                  <v-text-field type='number' label="Section Number:"></v-text-field>
-                  <v-text-field label="Material Name:"></v-text-field>
-                  <v-file-input show-size label="File input"></v-file-input>
-                  <v-btn depressed large class="ma-2" outlined color="indigo">Upload</v-btn>
+                  <v-radio-group v-model="new_old_section_choice">
+                    <v-radio label="New Section" value="new"></v-radio>
+                    <v-radio label="Old Section" value="old"></v-radio>
+                  </v-radio-group>
+                  <v-text-field type='number' min="1" v-model='chosen_section' :max="current_sections" label="Section Number:"></v-text-field>
+                  <v-text-field v-model="new_material" label="Material Name:"></v-text-field>
+                  <v-file-input show-size v-model="material_path" label="File input"></v-file-input>
+                  <v-btn depressed large class="ma-2" @click='append_material' outlined color="indigo">Upload</v-btn>
                 </v-card>
               </v-tab-item>
             </v-tabs>
@@ -65,7 +69,7 @@
           <!-- This is the uploader interface for them to upload stuff! -->
 
           <!-- This entire section would be V-FORED!! -->
-          <div v-for='(lesson, index) in lesson_materials' :keys="lesson_materials.materials">
+          <div v-for='(lesson, index) in lesson_materials.Lesson_Materials' :keys="lesson_materials.Lesson_Materials.materials">
             <v-card style="margin-bottom: 15px;">
               <v-toolbar flat color=#607D8B dark>
                 <v-toolbar-title>Section {{lesson.section_no}}</v-toolbar-title>

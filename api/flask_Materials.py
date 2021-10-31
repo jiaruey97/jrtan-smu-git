@@ -79,9 +79,9 @@ def get_materials_by_course_id(course_id):
     ), 404 
 
 #This one is only updating/creating new lesson information
-@app.route("/update_materials/<id:Lesson_Materials_ID>", methods=['POST'])
-def update_materials(Lesson_Materials_ID):
-    lesson_materials = Lesson_Materials.query.filter_by(Lesson_Materials_ID=Lesson_Materials_ID).first()
+@app.route("/update_materials/<id:Course_ID>", methods=['POST'])
+def update_materials(Course_ID):
+    lesson_materials = Lesson_Materials.query.filter_by(Course_ID=Course_ID).first()
     if lesson_materials:
         data = request.get_json()
         lesson_materials.Lesson_Materials = data.Lesson_Materials
@@ -96,7 +96,6 @@ def update_materials(Lesson_Materials_ID):
     else:
         data = request.get_json()
         lesson_materials = Lesson_Materials(**data)
-
         try:
             db.session.add(lesson_materials)
             db.session.commit()

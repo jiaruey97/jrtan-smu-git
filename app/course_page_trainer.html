@@ -16,15 +16,13 @@
         <v-app-bar color=#455A64 dense dark>
           <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-          <v-toolbar-title>Circuit Theory Course</v-toolbar-title>
+          <v-toolbar-title>{{chosen_course_name}}</v-toolbar-title>
 
           <v-spacer></v-spacer>
-
+          <v-select :items="all_courses" label="Select Course" dense item-text="Course_Name"
+          item-value="Course_ID"></v-select>
           <v-btn icon>
-            <v-icon>mdi-home-city</v-icon>
-          </v-btn>
-          <v-btn icon>
-            <v-icon>mdi-account</v-icon>
+            <v-icon>mdi-plus-thick</v-icon>
           </v-btn>
         </v-app-bar>
       </div>
@@ -57,7 +55,8 @@
                     <v-radio label="New Section" value="new"></v-radio>
                     <v-radio label="Old Section" value="old"></v-radio>
                   </v-radio-group>
-                  <v-text-field type='number' min="1" v-model='chosen_section' :max="current_sections" label="Section Number:"></v-text-field>
+                  <v-text-field type='number' min="1" v-model='chosen_section' :max="current_sections"
+                    label="Section Number:"></v-text-field>
                   <v-text-field v-model="new_material" label="Material Name:"></v-text-field>
                   <v-file-input show-size v-model="material_path" label="File input"></v-file-input>
                   <v-btn depressed large class="ma-2" @click='append_material' outlined color="indigo">Upload</v-btn>
@@ -69,7 +68,8 @@
           <!-- This is the uploader interface for them to upload stuff! -->
 
           <!-- This entire section would be V-FORED!! -->
-          <div v-for='(lesson, index) in lesson_materials.Lesson_Materials' :keys="lesson_materials.Lesson_Materials.materials">
+          <div v-for='(lesson, index) in lesson_materials.Lesson_Materials'
+            :keys="lesson_materials.Lesson_Materials.materials">
             <v-card style="margin-bottom: 15px;">
               <v-toolbar flat color=#607D8B dark>
                 <v-toolbar-title>Section {{lesson.section_no}}</v-toolbar-title>

@@ -19,7 +19,7 @@ create table if not EXISTS Course (
 /*Course can have as many class as it needs*/
 
 create table if not EXISTS Class (
-  Class_ID int  NOT NULL,
+  Class_ID int NOT NULL,
   Class_Name varchar(255)  NOT NULL,
   Class_Details varchar(255)  NOT NULL,
   Size int  NOT NULL,
@@ -115,8 +115,7 @@ Tracker_ID needed for Flask
 create table if not EXISTS Lesson_Materials(
   Lesson_Materials_ID int NOT NULL,
   Course_ID int NOT NULL,
-  Section int NOT NULL,
-  Lesson_Materials varchar(255) NOT NULL,
+  Lesson_Materials json NOT NULL,
   PRIMARY KEY (Lesson_Materials_ID),
   FOREIGN KEY (Course_ID) REFERENCES Class(Course_ID)
 );

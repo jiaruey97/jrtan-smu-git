@@ -11,7 +11,6 @@ course_details = [{
 top_materials = {
   'Lesson_Materials_ID': 1,
   'Course_ID': 1,
-  'Section': 1,
   Lesson_Materials:
   [
     {
@@ -43,6 +42,8 @@ top_materials = {
   ]
 }
 
+const courseAddress = '3.131.65.207:5144'
+
 // -> Section -> Lesson -> Materials
 
 const vueApp = new Vue({
@@ -50,18 +51,33 @@ const vueApp = new Vue({
   vuetify: new Vuetify(),
   data: {
     selectedFile: null,
+    all_courses: [],
     course_details: course_details,
     lesson_materials: top_materials,
     current_sections: 0, //Current number of sections
     new_old_section_choice: 'new',
+    chosen_course_name: 'Course',
+    chosen_course_id: 0,
     chosen_section: 1, //Which section user choose if they want to update old sessions
     new_material: "",
     material_path: [],
   },
   created() {
     this.current_sections = this.lesson_materials.length
+    axios.get(`http://${courseAddress}/spm/course`)
+        .then(function (response) {
+            course_data = response.data.data
+            vueApp.all_courses = course_data.course
+            console.log(vueApp.all_courses)
+        })
+        .catch( function (error) {
+            console.log(error)
+        })
   },
   methods: {
+    load_course_content: function () {
+      
+    },
     append_material: function () {
       if (vueApp.new_old_section_choice == 'old') {
         const select_section = vueApp.lesson_materials.Lesson_Materials.find(section => section.section_no == this.chosen_section)

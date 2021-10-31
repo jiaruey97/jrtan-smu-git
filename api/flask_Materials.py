@@ -1,9 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 CORS(app)
+
+#This is the upload path!
+UPLOAD_FOLDER = '/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'doc', 'docx', 'pdf', 'ppt', 'pptx'}
 
 #local flask
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
@@ -73,30 +78,69 @@ def get_materials_by_course_id(course_id):
         }
     ), 404 
 
+#This one is only updating/creating new lesson information
+@app.route("/update_materials/<id:Lesson_Materials_ID>", methods=['POST'])
+def update_materials(Lesson_Materials_ID):
+    lesson_materials = Lesson_Materials.query.filter_by(Lesson_Materials_ID=Lesson_Materials_ID).first()
+    if lesson_materials:
+        data = request.get_json()
+        lesson_materials.Lesson_Materials = data.Lesson_Materials
 
-@app.route("/create_materials", methods=['POST'])
-def create_materials():
-
-    data = request.get_json()
-    materials = Lesson_Materials(**data)
-
-    try:
-        db.session.add(materials)
-        db.session.commit()
-    except:
-        return jsonify(
+        try:
+            db.session.commit()
+        except:
             {
                 "code": 500,
-                "message": "An error occurred creating the materials."
+                "message": "An error occurred updating lesson materials."
+            }
+    else:
+        data = request.get_json()
+        lesson_materials = Lesson_Materials(**data)
+
+        try:
+            db.session.add(lesson_materials)
+            db.session.commit()
+        except:
+            return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating new lesson materials."
             }
         ), 500
-
+    
     return jsonify(
         {
-            "code": 201,
-            "data": materials.json()
+            'code': 201,
+            "message": "It's a success!"
         }
-    ), 201
+    )
+    
+
+
+
+# @app.route("/create_materials", methods=['POST'])
+# def create_materials():
+
+#     data = request.get_json()
+#     materials = Lesson_Materials(**data)
+
+#     try:
+#         db.session.add(materials)
+#         db.session.commit()
+#     except:
+#         return jsonify(
+#             {
+#                 "code": 500,
+#                 "message": "An error occurred creating the materials."
+#             }
+#         ), 500
+
+#     return jsonify(
+#         {
+#             "code": 201,
+#             "data": materials.json()
+#         }
+#     ), 201
 
 
 if __name__ == '__main__':

@@ -73,9 +73,7 @@ def get_quiz_for_learner(Quiz_ID):
         return jsonify(
             {
                 "code": 200,
-                "data":{
-                    quiz.json()
-                }
+                "data": quiz.json() 
             }
         )
     return jsonify(

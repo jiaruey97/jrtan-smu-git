@@ -62,25 +62,22 @@ def get_all_course():
     ), 404
 
 
-@app.route("/spm/course/<id:course_id>")
-def get_all_course(course_id):
-    course = Course.query.filter_by(course_id=course_id).one()
-    if len(course):
+@app.route("/spm/course_retrieve/<int:Course_ID>")
+def get_course_for_learner(Course_ID):
+    course = Course.query.filter_by(Course_ID=Course_ID).one()
+    if course != None:
         return jsonify(
             {
                 "code": 200,
-                "data": {
-                    course
-                }
+                "data": course.json()      
             }
         )
     return jsonify(
         {
             "code": 404,
-            "message": "Course information Not Found."
+            "message": "Course Not Found not found."
         }
     ), 404
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5144, debug=True)

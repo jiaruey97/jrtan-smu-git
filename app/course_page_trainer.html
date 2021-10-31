@@ -19,11 +19,12 @@
           <v-toolbar-title>{{chosen_course_name}}</v-toolbar-title>
 
           <v-spacer></v-spacer>
-          <v-select :items="all_courses" label="Select Course" dense item-text="Course_Name"
+          <v-select :items="all_courses" v-model='chosen_course' label="Select Course" dense item-text="Course_Name"
           item-value="Course_ID"></v-select>
-          <v-btn icon>
+          <v-btn @click='load_course_content' icon>
             <v-icon>mdi-plus-thick</v-icon>
           </v-btn>
+          <v-btn depressed large class="ma-2" @click='update_course_material' :disabled='lock_course_update_button' color="success">Update Course</v-btn>
         </v-app-bar>
       </div>
 
@@ -35,7 +36,7 @@
           <!-- This is the uploader interface for them to upload stuff! -->
           <!-- https://stackoverflow.com/questions/43013858/how-to-post-a-file-from-a-form-with-axios -->
 
-          <v-card style="margin-bottom: 15px;">
+          <v-card style="margin-bottom: 15px;" :disabled='lock_upload_materials_interface'>
             <v-toolbar flat color=#607D8B dark>
               <v-toolbar-title>Upload Material Interface</v-toolbar-title>
             </v-toolbar>

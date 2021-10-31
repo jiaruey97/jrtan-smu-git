@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import json
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -24,19 +25,17 @@ class Lesson_Materials(db.Model):
     __tablename__ = 'Lesson_Materials'
 
     Lesson_Materials_ID = db.Column(db.Integer, primary_key=True)
-    Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
-    Section = db.Column(db.Integer, nullable=False)
+    Course_ID = db.Column(db.Integer, nullable=False)
     Lesson_Materials = db.Column(db.String(255), nullable=False)
 
 
-    def __init__(self, Lesson_Materials_ID, Course_ID, Section, Lesson_Materials):
+    def __init__(self, Lesson_Materials_ID, Course_ID, Lesson_Materials):
         self.Lesson_Materials_ID = Lesson_Materials_ID
         self.Course_ID = Course_ID
-        self.Section = Section
         self.Lesson_Materials = Lesson_Materials
 
     def json(self):
-        return {"Lesson_Materials_ID":self.Lesson_Materials_ID, "Course_ID": self.Course_ID, "Section": self.Section, "Lesson_Materials": self.Lesson_Materials}
+        return {"Lesson_Materials_ID":self.Lesson_Materials_ID, "Course_ID": self.Course_ID, "Lesson_Materials": self.Lesson_Materials}
 
 
 @app.route("/spm/materials")
@@ -59,16 +58,14 @@ def get_all_materials():
     ), 404
 
 #Retrieve specific material
-@app.route("/spm/materials/<id:course_id>")
+@app.route("/spm/materials/<int:course_id>")
 def get_materials_by_course_id(course_id):
-    material = Lesson_Materials.query.filter_by(Course_id=course_id)
-    if len(material):
+    material = Lesson_Materials.query.filter_by(Course_ID=course_id).one()
+    if material:
         return jsonify(
             {
                 "code":200,
-                "data":{
-                    material
-                },
+                "data": material.json(),
             }
         )
     return jsonify(
@@ -79,20 +76,26 @@ def get_materials_by_course_id(course_id):
     ), 404 
 
 #This one is only updating/creating new lesson information
-@app.route("/update_materials/<id:Course_ID>", methods=['POST'])
-def update_materials(Course_ID):
-    lesson_materials = Lesson_Materials.query.filter_by(Course_ID=Course_ID).first()
+@app.route("/update_materials/<int:Lesson_Materials_ID>", methods=['POST'])
+def update_materials(Lesson_Materials_ID):
+    lesson_materials = Lesson_Materials.query.filter_by(Lesson_Materials_ID=Lesson_Materials_ID).one()
     if lesson_materials:
         data = request.get_json()
-        lesson_materials.Lesson_Materials = data.Lesson_Materials
-
-        try:
-            db.session.commit()
-        except:
-            {
-                "code": 500,
-                "message": "An error occurred updating lesson materials."
-            }
+        print(data)
+        print(data['Lesson_Materials'])
+        print(lesson_materials)
+        lesson_materials.Lesson_Materials = json.dumps(data['Lesson_Materials'])
+        print(lesson_materials.Lesson_Materials)
+        db.session.add(lesson_materials)
+        db.session.commit()
+        # try:
+        #      db.session.add(lesson_materials)
+        #      db.session.commit()
+        # except:
+        #     {
+        #         "code": 500,
+        #         "message": "An error occurred updating lesson materials."
+        #     }
     else:
         data = request.get_json()
         lesson_materials = Lesson_Materials(**data)
@@ -109,10 +112,10 @@ def update_materials(Course_ID):
     
     return jsonify(
         {
-            'code': 201,
+            'code': 200,
             "message": "It's a success!"
         }
-    )
+    ),200
     
 
 

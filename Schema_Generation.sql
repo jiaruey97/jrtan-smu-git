@@ -117,7 +117,7 @@ create table if not EXISTS Lesson_Materials(
   Course_ID int NOT NULL,
   Lesson_Materials json NOT NULL,
   PRIMARY KEY (Lesson_Materials_ID),
-  FOREIGN KEY (Course_ID) REFERENCES Class(Course_ID)
+  FOREIGN KEY (Course_ID) REFERENCES Course(Course_ID)
 );
 
 /*Material Generated will be based on Current Sections*/

@@ -144,7 +144,8 @@ const vueApp = new Vue({
 
     },
     download_materials: function (file) {
-      window.location.href = file
+      //window.location.href = file
+      window.open(file, '_blank');
 
     }
   },

@@ -59,8 +59,10 @@
                   <v-text-field type='number' min="1" v-model='chosen_section' :max="current_sections"
                     label="Section Number:"></v-text-field>
                   <v-text-field v-model="new_material" label="Material Name:"></v-text-field>
-                  <v-file-input show-size v-model="material_path" label="File input"></v-file-input>
-                  <v-btn depressed large class="ma-2" @click='append_material' outlined color="indigo">Upload</v-btn>
+                  <!-- <v-file-input show-size v-model="material_path" @change='selectFile' label="File input"></v-file-input> -->
+                  <v-file-input show-size @change='selectFile' label="File input"></v-file-input>
+                  <v-btn depressed large class="ma-2" onclick="file_upload()" outlined color="indigo">Upload File</v-btn>
+                  <v-btn depressed large class="ma-2" @click='append_material' outlined color="indigo">Update Materials</v-btn>
                 </v-card>
               </v-tab-item>
             </v-tabs>
@@ -107,7 +109,7 @@
                           <v-list-item-title>{{material.material_title}}</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
-                          <v-btn icon>
+                          <v-btn @click='download_materials(material.material_path)' icon>
                             <v-icon>mdi-download</v-icon>
                           </v-btn>
                         </v-list-item-action>

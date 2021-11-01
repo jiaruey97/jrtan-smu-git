@@ -46,9 +46,41 @@
                     </v-container>
 
 
-                    <v-container>
-                        <h1> Course to Enroll in </h1>
+                    <v-container v-if="enrollment_period">
+                        <h1> Enrollment Admin </h1>
+                        
+                        <h2> Enrollment Period </h2>
+                        <v-data-table
+                            :headers="headers_date"
+                            :items="enrollment_dates"
+                            class="elevation-1"
+                        > </v-data-table>
+                        
+                        <br>
 
+                        <h2> Pending Course to be Approve </h2>
+                          <v-data-table
+                            :headers="headers"
+                            :items="course_pending"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have nothing pending"  
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "error"
+                            class="mr-2"
+                            @click="delete_enrollment(item)"
+                        >
+                        Delete  
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                        
+
+
+                        <h2> Available Course </h2>
                           <v-data-table
                             :headers="headers"
                             :items="course_list"
@@ -73,7 +105,7 @@
 
 
                 <v-app-bar color="deep-blue accent-4" dark app v-if = "!mode">
-                    <v-toolbar-title>Class Enrolment</v-toolbar-title>
+                    <v-toolbar-title>Class Enrollment</v-toolbar-title>
                 </v-app-bar>
 
 
@@ -96,7 +128,7 @@
                             class="mr-2"
                             @click="enroll_complete(item)"
                         >
-                        Enter Course Page
+                        Enroll to Course
                         </v-btn>
                         </template>
                         </v-data-table>

@@ -22,20 +22,22 @@ class User_Database(db.Model):
     Actual_Name = db.Column(db.String(255), nullable=False)
     Department = db.Column(db.String(255), nullable=False)
     Current_Position = db.Column(db.String(255), nullable=False)
-    Course_Assigned = db.Column(db.DateTime, nullable=False)
-    Course_Completed = db.Column(db.DateTime, nullable=False)
+    Course_Assigned = db.Column(db.String(255))
+    Course_Completed = db.Column(db.String(255))
+    Course_Pending = db.Column(db.String(255))
 
 
-    def __init__(self, Username, Actual_Name, Department, Current_Position, Course_Assigned, Course_Completed):
+    def __init__(self, Username, Actual_Name, Department, Current_Position, Course_Assigned, Course_Completed, Course_Pending):
         self.Username = Username
         self.Actual_Name = Actual_Name
         self.Department = Department
         self.Current_Position = Current_Position
         self.Course_Assigned = Course_Assigned
         self.Course_Completed = Course_Completed
+        self.Course_Pending = Course_Pending
 
     def json(self):
-        return {"Username": self.Username, "Actual_Name": self.Actual_Name, "Department": self.Department, "Current_Position": self.Current_Position, "Course_Assigned": self.Course_Assigned, "Course_Completed": self.Course_Completed}
+        return {"Username": self.Username, "Actual_Name": self.Actual_Name, "Department": self.Department, "Current_Position": self.Current_Position, "Course_Assigned": self.Course_Assigned, "Course_Completed": self.Course_Completed, "Course_Pending": self.Course_Pending}
 
 
 @app.route("/spm/user_database")
@@ -59,7 +61,7 @@ def get_all_user():
 
 @app.route("/user_database/<string:Username>")
 def get_user_name(Username):
-    user_Database = User_Database.query.filter_by(Username=Username).first()
+    user_Database = User_Database.query.filter_by(Username=Username).all()
     if len(user_Database):
         return jsonify(
             {
@@ -75,6 +77,7 @@ def get_user_name(Username):
             "message": "There are no users."
         }
     ), 404
+
 
 @app.route('/user_database/<string:Username>/update',methods = ['POST'])
 def update_user(Username):

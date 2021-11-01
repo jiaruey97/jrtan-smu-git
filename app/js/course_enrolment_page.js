@@ -2,6 +2,9 @@ const addressCourse = "3.131.65.207:5144"
 const addressUser = "3.131.65.207:5744"
 const addressClass = "3.131.65.207:5044"
 
+const urlSearchParams = new URLSearchParams(window.location.search)
+const params = Object.fromEntries(urlSearchParams.entries())
+
 
 const quiz_app = new Vue({
     el: '#app',
@@ -43,12 +46,13 @@ const quiz_app = new Vue({
         enrolled_course:[],
         class_list:[],
         mode: true,
-        user: "Tommy",
+        user: params.user,
     },
 
     created(){    
         this.initialise_enrolled_course()
         this.initialise_course_to_enroll()
+        console.log(params)
         
     }, 
     computed: {
@@ -234,14 +238,12 @@ const quiz_app = new Vue({
             .catch( function (error) {
                 console.log(error)
             })  
+        },
 
-
-
-
+        enter_class: function(stuff){
+            console.log(stuff)
+            alert("redirect to url")
         }
-
-
-
 
     }
 })

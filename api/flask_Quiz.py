@@ -27,18 +27,20 @@ class Quiz(db.Model):
     Section = db.Column(db.Integer, nullable=False)
     Question_Object = db.Column(db.Text, nullable=False)
     Class_ID = db.Column(db.Integer)
+    Time = db.Column(db.Float)
 
 
-    def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object):
+    def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Time):
         self.Class_ID = Class_ID
         self.Course_ID = Course_ID
         self.Instructor_ID = Instructor_ID
         self.Section = Section
         self.Question_Object = Question_Object
+        self.Time = Time
 
 
     def json(self):
-        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID}
+        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Time":self.Time}
 
 
 ###################################################################################################################################################################################################################
@@ -69,7 +71,7 @@ def get_all_quiz():
 @app.route("/spm/quiz_retrieve/<string:Quiz_ID>")
 def get_quiz_for_learner(Quiz_ID):
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).one()
-    if len(quiz):
+    if quiz != None:
         return jsonify(
             {
                 "code": 200,

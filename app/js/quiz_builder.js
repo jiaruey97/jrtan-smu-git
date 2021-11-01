@@ -28,6 +28,8 @@ const vueApp = new Vue({
     selected_section: "",
     Class_ID:"",
     instructor_ID:params.instructor,
+    dialog: false,
+    timing: '',
 
     headers: [
       {
@@ -38,6 +40,7 @@ const vueApp = new Vue({
       { text: 'Course ID', value: 'Course_ID' },
       { text: 'Class ID', value: 'Class_ID' },
       { text: 'Section', value: 'Section' },
+      { text: 'Timing', value: 'Timing' },
       { text: 'Actions', value: 'actions' },
     ],
 
@@ -116,6 +119,7 @@ const vueApp = new Vue({
             Class_ID:quiz[i].Class_ID,
             Course_ID:quiz[i].Course_ID,
             Section:quiz[i].Section,
+            Timing:quiz[i].Time,
             Question_Object: quiz[i].Question_Object
           }
           typo.push(placehold)
@@ -153,15 +157,21 @@ const vueApp = new Vue({
       this.course_list = typo2
     },
 
+    trigger_dialog: function(){
+      this.dialog = true
+    },
+
 
     submit_database: function() {
 
-      // To Purge the Database of the current one
+      this.dialog = false
+
       if(this.questions_store.length != 0){
         if(this.Quiz_ID != ""){
 
           post_object = {
             'Question_Object': JSON.stringify(this.questions_store),
+            'Time': this.timing 
           }
           console.log(post_object)
           axios.post(`http://${addressQuiz}/quiz/`+ this.Quiz_ID + `/update`, post_object)
@@ -184,7 +194,8 @@ const vueApp = new Vue({
             'Instructor_ID': 12,
             'Section': this.selected_section, //originally, this.section 
             'Question_Object': JSON.stringify(this.questions_store),
-            'Class_ID': this.Class_ID 
+            'Class_ID': this.Class_ID,
+            'Time': this.timing 
           } 
           
           console.log(post_object)

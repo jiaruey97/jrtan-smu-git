@@ -76,5 +76,28 @@ def get_user_name(Username):
         }
     ), 404
 
+@app.route('/user_database/<string:Username>/update',methods = ['POST'])
+def update_user(Username):
+    users = User_Database.query.filter_by(Username=Username)
+    if request.method == 'POST':
+        if users:
+            data = request.get_json()
+            users.update(data)
+            db.session.commit()
+            return jsonify(
+            {
+                "code": 200,
+                "message": "Update Successful"
+            }
+        ), 200
+    
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Oops somethign went wrong"
+        }
+    ), 404
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5744, debug=True)

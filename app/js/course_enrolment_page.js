@@ -1,16 +1,10 @@
 const addressCourse = "3.131.65.207:5144"
 const addressUser = "3.131.65.207:5744"
+const addressClass = "3.131.65.207:5044"
 
-const address = fetch(`http://${addressUser}/user_database/Tommy`)
-.then((response) => response.json())
-.then((user) => {
-  return user.data.course[0];
-});
+const urlSearchParams = new URLSearchParams(window.location.search)
+const params = Object.fromEntries(urlSearchParams.entries())
 
-const printAddress = async () => {
-    const a = await address;
-    console.log(a)
-};
 
 const quiz_app = new Vue({
     el: '#app',
@@ -30,14 +24,35 @@ const quiz_app = new Vue({
             { text: 'Sections', value: 'Sections' },
             { text: 'Actions', value: 'actions' },
           ],
+
+          headers_class: [
+            {
+              text: 'Class ID',
+              align: 'start',
+              value: 'Class_ID',
+            },
+            { text: 'Class Name', value: 'Class_Name' },
+            { text: 'Class Details', value: 'Class_Details' },
+            { text: 'Size', value: 'Size' },
+            { text: 'Current_Size', value: 'Current_Size' },
+            { text: 'Instructor', value: 'Instructor' },
+            { text: 'Start_Time', value: 'Start_Time' },
+            { text: 'End_Time', value: 'End_Time' },
+            { text: 'Students', value: 'Students' },
+            { text: 'Actions', value: 'actions' },
+          ],
         
         course_list: [],
         enrolled_course:[],
+        class_list:[],
+        mode: true,
+        user: params.user,
     },
 
     created(){    
         this.initialise_enrolled_course()
         this.initialise_course_to_enroll()
+        console.log(params)
         
     }, 
     computed: {
@@ -54,7 +69,7 @@ const quiz_app = new Vue({
                 course = user.Course_Assigned
                 course = course.split(',')
                 for (let index = 0; index < course.length; index++) {
-                    id = index + 1
+                    id = course[index]
                     axios.get(`http://${addressCourse}/spm/course_retrieve/` + id)
                     .then(function (response) {
                         courses = response.data.data    
@@ -85,7 +100,7 @@ const quiz_app = new Vue({
 
         initialise_course_to_enroll: function(){
             placehold_array_2 = Array()
-            axios.get(`http://${addressUser}/user_database/Tommy`)
+            axios.get(`http://${addressUser}/user_database/` + this.user)
             .then(function (response) {
                 user = response.data.data.course[0]
                 course_assigned = user.Course_Assigned
@@ -140,9 +155,95 @@ const quiz_app = new Vue({
             this.course_list = placehold_array_2
         },
 
+        select_class: function(stuff){
+            course_id = stuff.Course_ID
+            console.log(stuff.Course_ID)
+            this.mode = false
+            placehold_array_3 = Array()
+
+            axios.get(`http://${addressClass}/spm/search_class_course/` + course_id )
+            .then(function (response) {
+                console.log(response)
+                class_list = response.data.data.course
+                for (let index = 0; index < class_list.length; index++) {
+                    class_details = class_list[index]
+                    console.log(class_details)
+                    if (class_details.Size > class_details.Current_Size) {
+                        placehold = {
+                            Class_ID:class_details.Class_ID,
+                            Class_Name:class_details.Class_Name,
+                            Class_Details:class_details.Class_Details,
+                            Current_Size:class_details.Current_Size,
+                            Size: class_details.Size,
+                            Instructor: class_details.Instructor_ID,
+                            Start_Time: class_details.Start_Time,
+                            End_Time: class_details.End_Time,
+                            Sections: class_details.Sections,
+                            Students: class_details.Students,
+                            Course_ID: course_id,
+                        }
+                        placehold_array_3.push(placehold)
+                    }
+                }
+
+            })
+            .catch( function (error) {
+                    console.log(error)
+            })      
+            
+            this.class_list = placehold_array_3
+        },
+
+        enroll_complete: function(stuff){
+            class_id = stuff.Class_ID
+            new_size = stuff.Current_Size + 1
+            new_student = stuff.Students + "," + this.user
 
 
+            post_object = {
+                'Current_Size': new_size,
+                'Students': new_student,      
+            }
 
+            axios.post(`http://${addressClass}/class/` + class_id + `/update`, post_object)
+            .then(function (response) {
+                console.log(response)
+                alert("Update to Class successful")
+            })
+            .catch( function (error) {
+                console.log(error)
+                alert("Something when wrong with the Update")
+            }) 
+             
+            axios.get(`http://${addressUser}/user_database/` + this.user)
+            .then(function (response) {
+                user = response.data.data.course[0]
+                course_assigned = user.Course_Assigned
+                course_new = course_assigned + "," + course_id
+                console.log(course_new)
+                console.log(class_id)
+                console.log(this.user)
+                post_object_2 = {
+                    'Course_Assigned': course_new
+                }
+                axios.post(`http://${addressUser}/user_database/` + user.Username + `/update`, post_object_2)
+                .then(function (response) {
+                    alert("Update to User successful")
+                })
+                .catch( function (error) {
+                    alert("Something when wrong with the Update")
+                })
+                
+            })
+            .catch( function (error) {
+                console.log(error)
+            })  
+        },
+
+        enter_class: function(stuff){
+            console.log(stuff)
+            alert("redirect to url")
+        }
 
     }
 })

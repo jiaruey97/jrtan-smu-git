@@ -15,17 +15,12 @@
 
             <v-app>
 
-                <v-app-bar color="deep-blue accent-4" dark app>
+                <v-app-bar color="deep-blue accent-4" dark app v-if="mode">
                     <v-toolbar-title>Course Enrolment</v-toolbar-title>
-                    <v-col class="text-right">
-                        <!-- This is to commit to the Server the changes made-->
-                        <v-btn elevation="2" onclick='quiz_submit()'> Submit Quiz </v-btn>
-                    </v-col>
-
                 </v-app-bar>
 
 
-                <v-main>
+                <v-main v-if="mode">
 
                     <v-container>
                         <h1> Currently Enrolled in Courses </h1>
@@ -42,9 +37,9 @@
                             small
                             color = "primary"
                             class="mr-2"
-                            @click="editQuiz(item)"
+                            @click="enter_class(item)"
                         >
-                        Enroll
+                        Enter Course Page
                         </v-btn>
                         </template>
                         </v-data-table>
@@ -67,17 +62,50 @@
                             small
                             color = "primary"
                             class="mr-2"
-                            @click="editQuiz(item)"
+                            @click="select_class(item)"
                         >
-                        Enroll
+                        Enroll  
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                    </v-container>
+                </v-main>
+
+
+                <v-app-bar color="deep-blue accent-4" dark app v-if = "!mode">
+                    <v-toolbar-title>Class Enrolment</v-toolbar-title>
+                </v-app-bar>
+
+
+                <v-main v-if="!mode">
+
+                    <v-container>
+                        <h1> Classessss </h1>
+
+                        <v-data-table
+                            :headers="headers_class"
+                            :items="class_list"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have no Course"
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            @click="enroll_complete(item)"
+                        >
+                        Enter Course Page
                         </v-btn>
                         </template>
                         </v-data-table>
                     </v-container>
 
-
-
                 </v-main>
+
+
+
             </v-app>
 
         </div>

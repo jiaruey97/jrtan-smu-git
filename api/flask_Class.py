@@ -28,9 +28,9 @@ class Class(db.Model):
     Start_Time = db.Column(db.DateTime, nullable=False)
     End_Time = db.Column(db.DateTime, nullable=False)
     Sections = db.Column(db.Integer, nullable=False)
+    Students = db.Column(db.Text)
 
-
-    def __init__(self, Class_ID, Class_Name, Class_Details, Size, Current_Size, Course_ID,Instructor_ID,Start_Time, End_Time, Sections):
+    def __init__(self, Class_ID, Class_Name, Class_Details, Size, Current_Size, Course_ID,Instructor_ID,Start_Time, End_Time, Sections, Students):
         self.Class_ID = Class_ID
         self.Class_Name = Class_Name
         self.Class_Details = Class_Details
@@ -41,10 +41,11 @@ class Class(db.Model):
         self.Start_Time = Start_Time
         self.End_Time = End_Time
         self.Sections = Sections
+        self.Students = Students
         
 
     def json(self):
-        return {"Class_ID": self.Class_ID, "Class_Name": self.Class_Name, "Class_Details": self.Class_Details, "Size": self.Size, "Current_Size": self.Current_Size, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID,"Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections}
+        return {"Class_ID": self.Class_ID, "Class_Name": self.Class_Name, "Class_Details": self.Class_Details, "Size": self.Size, "Current_Size": self.Current_Size, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID,"Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections, "Students": self.Students}
 
 
 
@@ -107,6 +108,47 @@ def find_by_instructor_class(Instructor_ID):
         {
             "code": 404,
             "message": "Class Not Found not found."
+        }
+    ), 404
+
+@app.route("/spm/search_class_course/<int:Course_ID>")
+def find_by_course_class(Course_ID):
+    class_list = Class.query.filter_by(Course_ID=Course_ID).all()
+    if len(class_list):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "course": [class_i.json() for class_i in class_list]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Class Not Found not found."
+        }
+    ), 404
+
+@app.route('/class/<int:Class_ID>/update',methods = ['POST'])
+def update_class(Class_ID):
+    class_details = Class.query.filter_by(Class_ID=Class_ID)
+    if request.method == 'POST':
+        if class_details:
+            data = request.get_json()
+            class_details.update(data)
+            db.session.commit()
+            return jsonify(
+            {
+                "code": 200,
+                "message": "Update Successful"
+            }
+        ), 200
+    
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Oops somethign went wrong"
         }
     ), 404
 

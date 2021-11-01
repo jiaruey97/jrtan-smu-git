@@ -1,4 +1,4 @@
-import flask 
+import flask
 import time
 
 app = flask.Flask(__name__)

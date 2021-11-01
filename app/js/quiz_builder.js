@@ -1,6 +1,8 @@
 //Please extract them as a variable!!
 const addressQuiz = "3.131.65.207:5544"
 const addressClass = "3.131.65.207:5044"
+const urlSearchParams = new URLSearchParams(window.location.search)
+const params = Object.fromEntries(urlSearchParams.entries())
 
 const vueApp = new Vue({
   el: '#app',
@@ -23,9 +25,9 @@ const vueApp = new Vue({
     mode: true, //true == new or false == edit
     show_quiz: false, //true means show quiz buildinng interface
     Quiz_ID: "", //For storing purpose
-    items: [1, 2, 3, 5, 6, 7],
     selected_section: "",
     Class_ID:"",
+    instructor_ID:params.instructor,
 
     headers: [
       {
@@ -33,7 +35,8 @@ const vueApp = new Vue({
         align: 'start',
         value: 'Quiz_ID',
       },
-      { text: 'Course_ID', value: 'Course_ID' },
+      { text: 'Course ID', value: 'Course_ID' },
+      { text: 'Class ID', value: 'Class_ID' },
       { text: 'Section', value: 'Section' },
       { text: 'Actions', value: 'actions' },
     ],
@@ -44,11 +47,12 @@ const vueApp = new Vue({
         align: 'start',
         value: 'Class_ID',
       },
-      { text: 'Class_Name', value: 'Class_Name' },
-      { text: 'Class_Details', value: 'Class_Details' },
-      { text: 'Course_ID', value: 'Course_ID' },
+      { text: 'Class Name', value: 'Class_Name' },
+      { text: 'Class Details', value: 'Class_Details' },
+      { text: 'Course ID', value: 'Course_ID' },
       { text: 'Section', value: 'Section' },
-      { text: 'Selected_Section', value: 'act' },
+      { text: 'Selected Section', value: 'sec' },
+      { text: 'Actions', value: 'act' },
     ],
 
     quiz_list: [],
@@ -58,6 +62,7 @@ const vueApp = new Vue({
 
   created: function() {
     this.initialize()
+    console.log(params)
   },
   
   methods: {
@@ -100,7 +105,7 @@ const vueApp = new Vue({
 
     initialize: function() {
       typo = Array()
-      axios.get(`http://${addressQuiz}/spm/quiz/12`)
+      axios.get(`http://${addressQuiz}/spm/quiz/` + this.instructor_ID)
       // axios.get("http://3.131.65.207:5244/spm/quiz/12")
       .then(function (response) {
         quiz = response.data.data.course
@@ -108,6 +113,7 @@ const vueApp = new Vue({
         for (let i = 0; i < quiz.length; i++) {
           placehold = {
             Quiz_ID:quiz[i].Quiz_ID,
+            Class_ID:quiz[i].Class_ID,
             Course_ID:quiz[i].Course_ID,
             Section:quiz[i].Section,
             Question_Object: quiz[i].Question_Object
@@ -124,7 +130,7 @@ const vueApp = new Vue({
 
       typo2 = Array()
 
-      axios.get(`http://${addressClass}/spm/class/12`)
+      axios.get(`http://${addressClass}/spm/class/`+this.instructor_ID)
       //axios.get("http://3.131.65.207:5244/spm/class/12")
       .then(function (response) {
         class_list = response.data.data.course

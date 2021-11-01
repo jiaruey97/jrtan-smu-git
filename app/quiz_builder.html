@@ -68,19 +68,25 @@
         
       >
       <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editQuiz(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteExistingQuiz(item)"
-      >
-        mdi-delete
-      </v-icon>
+
+        <v-btn
+          small
+          color = "primary"
+          class="mr-2"
+          @click="editQuiz(item)"
+        >
+        Edit  
+        </v-btn>
+      
+        <v-btn
+          small
+          color = "danger"
+          class="mr-2"
+          @click="deleteExistingQuiz(item)"
+        >
+        Delete  
+        </v-btn>
+
       </template>
       </v-data-table>
 
@@ -95,22 +101,26 @@
         loading-text="Oh It Appears you have no Class"
         
       >
+
+        <template v-slot:item.sec>
+
+        <v-text-field type = "number" v-model.number="selected_section" color="blue darken-2" label="Type a Section Number" outlined
+        required></v-text-field>
+
+        </template>
+
+
       <template v-slot:item.act="{ item }">
 
-        <v-select
-          v-model = "selected_section"
-          :items="items"
-          label="Standard"
-          width="20px"
-        ></v-select>
+        <v-btn
+          small
+          color = "primary"
+          class="mr-2"
+          @click="newQuiz(item)"
+        >
+        Create Quiz  
+        </v-btn>
 
-      <v-icon
-        small
-        class="mr-2"
-        @click="newQuiz(item)"
-      >
-        mdi-pencil
-      </v-icon>
       </template>
       
       </v-data-table>

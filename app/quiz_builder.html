@@ -56,82 +56,77 @@
       
 
       <v-main v-if ="!show_quiz">
-      
-                            <v-btn
-            color="primary"
-            dark
-            @click.stop="dialog = true"
+
+        <v-container>
+          <h1> Edit your Quiz </h1>
+          <v-data-table
+            :headers="headers"
+            :items="quiz_list"
+            class="elevation-1"
+            loading
+            loading-text="Oh It Appears you have no Quiz"
+            
           >
-            Open Dialog
-          </v-btn>
+          <template v-slot:item.actions="{ item }">
 
-      <h1> Edit your Quiz </h1>
+            <v-btn
+              small
+              color = "primary"
+              class="mr-2"
+              @click="editQuiz(item)"
+            >
+            Edit  
+            </v-btn>
+          
+            <v-btn
+              small
+              color = "danger"
+              class="mr-2"
+              @click="deleteExistingQuiz(item)"
+            >
+            Delete  
+            </v-btn>
 
-      <v-data-table
-        :headers="headers"
-        :items="quiz_list"
-        class="elevation-1"
-        loading
-        loading-text="Oh It Appears you have no Quiz"
-        
-      >
-      <template v-slot:item.actions="{ item }">
-
-        <v-btn
-          small
-          color = "primary"
-          class="mr-2"
-          @click="editQuiz(item)"
-        >
-        Edit  
-        </v-btn>
-      
-        <v-btn
-          small
-          color = "danger"
-          class="mr-2"
-          @click="deleteExistingQuiz(item)"
-        >
-        Delete  
-        </v-btn>
-
-      </template>
-      </v-data-table>
+          </template>
+          </v-data-table>
 
 
-      <h1> Or you can start a new quiz </h1>
+          <h1> Or you can start a new quiz </h1>
 
-        <v-data-table
-        :headers="headers2"
-        :items="course_list"
-        class="elevation-1"
-        loading
-        loading-text="Oh It Appears you have no Class"
-        
-      >
+            <v-data-table
+            :headers="headers2"
+            :items="course_list"
+            class="elevation-1"
+            loading
+            loading-text="Oh It Appears you have no Class"
+            
+          >
 
-        <template v-slot:item.sec>
+            <template v-slot:item.sec>
 
-        <v-text-field type = "number" v-model.number="selected_section" color="blue darken-2" label="Type a Section Number" outlined
-        required></v-text-field>
+            <v-text-field type = "number" v-model.number="selected_section" color="blue darken-2" label="Type a Section Number" outlined
+            required></v-text-field>
 
-        </template>
+            </template>
 
 
-      <template v-slot:item.act="{ item }">
+          <template v-slot:item.act="{ item }">
 
-        <v-btn
-          small
-          color = "primary"
-          class="mr-2"
-          @click="newQuiz(item)"
-        >
-        Create Quiz  
-        </v-btn>
+            <v-btn
+              small
+              color = "primary"
+              class="mr-2"
+              @click="newQuiz(item)"
+            >
+            Create Quiz  
+            </v-btn>
 
-      </template>
-      
-      </v-data-table>
+          </template>
+          
+          </v-data-table>
+        </v-container>
+
+
 
 
       </v-main>

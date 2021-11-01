@@ -15,7 +15,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-
 class Course(db.Model):
     __tablename__ = 'Course'
 
@@ -78,6 +77,9 @@ def get_course_for_learner(Course_ID):
             "message": "Course Not Found not found."
         }
     ), 404
+
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5144, debug=True)

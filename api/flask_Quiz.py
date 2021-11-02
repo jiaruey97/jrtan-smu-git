@@ -1,15 +1,18 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_Course import Course
+from flask_Instructor import Instructor
+from flask_Class import Class
 
 app = Flask(__name__)
 CORS(app)
 
 #local flask
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
 
 #bitnami flask
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:t2AlF2wAibZH@127.0.0.1:3306/SPM'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:t2AlF2wAibZH@127.0.0.1:3306/SPM'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -22,25 +25,25 @@ class Quiz(db.Model):
     __tablename__ = 'Quiz'
 
     Quiz_ID = db.Column(db.Integer, primary_key=True)
-    Course_ID = db.Column(db.Integer)
-    Instructor_ID = db.Column(db.Integer)
+    Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
+    Instructor_ID = db.Column(db.Integer, db.ForeignKey('Instructor.Instructor_ID'))
     Section = db.Column(db.Integer, nullable=False)
     Question_Object = db.Column(db.Text, nullable=False)
-    Class_ID = db.Column(db.Integer)
-    Time = db.Column(db.Float)
+    Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
+    Timing = db.Column(db.Float)
 
 
-    def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Time):
+    def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Timing):
         self.Class_ID = Class_ID
         self.Course_ID = Course_ID
         self.Instructor_ID = Instructor_ID
         self.Section = Section
         self.Question_Object = Question_Object
-        self.Time = Time
+        self.Time = Timing
 
 
     def json(self):
-        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Time":self.Time}
+        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Timing":self.Timing}
 
 
 ###################################################################################################################################################################################################################
@@ -134,6 +137,27 @@ def create_quiz():
     data = request.get_json()
     quiz = Quiz(**data)
 
+    # Validate Course
+    course = Course.query.filter_by(Course_ID = data['Course_ID']).first()
+    if not course:
+        return jsonify({
+            "message": "Course not valid."
+        }), 500
+
+    # Validate Instructor
+    instructor = Instructor.query.filter_by(Instructor_ID=data['Instructor_ID']).first()
+    if not instructor:
+        return jsonify({
+            "message": "Instructor not valid."
+        }), 500
+
+    # Validate Class
+    classes = Class.query.filter_by(Class_ID=data['Class_ID']).first()
+    if not classes:
+        return jsonify({
+            "message": "Class not valid."
+        }), 500
+
     try:
         db.session.add(quiz)
         db.session.commit()
@@ -155,6 +179,7 @@ def create_quiz():
 @app.route('/quiz/<int:Quiz_ID>/update',methods = ['POST'])
 def update(Quiz_ID):
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID)
+
     if request.method == 'POST':
         if quiz:
             data = request.get_json()

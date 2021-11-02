@@ -128,21 +128,12 @@ def update_materials(Lesson_Materials_ID):
     if lesson_materials:
         data = request.get_json()
         print(data)
-        print(data['Lesson_Materials'])
-        print(lesson_materials)
-        lesson_materials.Lesson_Materials = json.dumps(
-            data['Lesson_Materials'])
-        print(lesson_materials.Lesson_Materials)
+        print(type(data))
+        lesson_materials.Lesson_Materials = json.dumps(data['Lesson_Materials'])
+
         db.session.add(lesson_materials)
         db.session.commit()
-        # try:
-        #      db.session.add(lesson_materials)
-        #      db.session.commit()
-        # except:
-        #     {
-        #         "code": 500,
-        #         "message": "An error occurred updating lesson materials."
-        #     }
+
     else:
         data = request.get_json()
         lesson_materials = Lesson_Materials(**data)
@@ -165,28 +156,5 @@ def update_materials(Lesson_Materials_ID):
     ), 200
 
 
-# @app.route("/create_materials", methods=['POST'])
-# def create_materials():
-
-#     data = request.get_json()
-#     materials = Lesson_Materials(**data)
-
-#     try:
-#         db.session.add(materials)
-#         db.session.commit()
-#     except:
-#         return jsonify(
-#             {
-#                 "code": 500,
-#                 "message": "An error occurred creating the materials."
-#             }
-#         ), 500
-
-#     return jsonify(
-#         {
-#             "code": 201,
-#             "data": materials.json()
-#         }
-#     ), 201
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5344, debug=True)

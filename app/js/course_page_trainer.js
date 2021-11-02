@@ -28,7 +28,6 @@ const vueApp = new Vue({
       .then(function (response) {
         course_data = response.data.data
         vueApp.all_courses = course_data.course
-        console.log(vueApp.all_courses)
       })
       .catch(function (error) {
         console.log(error)
@@ -36,9 +35,7 @@ const vueApp = new Vue({
   },
   methods: {
     selectFile: function (file) {
-      console.log(file)
       this.material_path = file
-      console.log(this.material_path)
     },
     load_course_content: function () {
       //Display the course name:
@@ -55,7 +52,6 @@ const vueApp = new Vue({
           }
 
           vueApp.lesson_materials = return_response
-          console.log(vueApp.lesson_materials)
 
           //Unlock!
           vueApp.current_sections = vueApp.lesson_materials.Lesson_Materials.length
@@ -97,6 +93,7 @@ const vueApp = new Vue({
     },
     update_course_material: function () {
       lesson_material_id = this.lesson_materials.Lesson_Materials_ID
+      console.log(this.lesson_materials)
       axios.post(`http://${materialAddress}/update_materials/${lesson_material_id}`, this.lesson_materials)
         .then(function (response) {
           server_reply = response.data.message
@@ -116,11 +113,8 @@ const vueApp = new Vue({
 })
 
 function file_upload() {
-  //filename = vueApp.material_path.name
-  console.log(vueApp.material_path)
   var formData = new FormData();
   formData.append('file', vueApp.material_path)
-  console.log(formData)
   axios.post(`http://${materialAddress}/spm/upload_materials/`, formData,
     {
       headers: {

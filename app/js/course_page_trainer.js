@@ -1,38 +1,3 @@
-
-top_materials = {
-  'Lesson_Materials_ID': 1,
-  'Course_ID': 1,
-  Lesson_Materials:
-    [
-      {
-        'section_no': '1',
-        'materials': [
-          {
-            'material_title': 'Introudction to Circuit Theory',
-            'material_path': 'filepath'
-          },
-          {
-            'material_title': 'Intro Tutorial',
-            'material_path': 'filepath'
-          }
-        ]
-      },
-      {
-        'section_no': '2',
-        'materials': [
-          {
-            'material_title': 'DC Circuits Lecture',
-            'material_path': 'filepath'
-          },
-          {
-            'material_title': 'DC Circuit Tutorial',
-            'material_path': 'filepath'
-          }
-        ]
-      }
-    ]
-}
-
 const courseAddress = '3.131.65.207:5144'
 const materialAddress = '3.131.65.207:5344'
 
@@ -63,7 +28,6 @@ const vueApp = new Vue({
       .then(function (response) {
         course_data = response.data.data
         vueApp.all_courses = course_data.course
-        console.log(vueApp.all_courses)
       })
       .catch(function (error) {
         console.log(error)
@@ -71,9 +35,7 @@ const vueApp = new Vue({
   },
   methods: {
     selectFile: function (file) {
-      console.log(file)
       this.material_path = file
-      console.log(this.material_path)
     },
     load_course_content: function () {
       //Display the course name:
@@ -90,7 +52,6 @@ const vueApp = new Vue({
           }
 
           vueApp.lesson_materials = return_response
-          console.log(vueApp.lesson_materials)
 
           //Unlock!
           vueApp.current_sections = vueApp.lesson_materials.Lesson_Materials.length
@@ -107,9 +68,8 @@ const vueApp = new Vue({
         const materials_arr = select_section.materials
         materials_arr.push({
           'material_title': this.new_material,
-          'material_path': '/upload/' + this.material_path.name
+          'material_path': '/upload/' + replace_whitespace(this.material_path.name)
         })
-
 
       } else {
         //Create a new section
@@ -133,6 +93,7 @@ const vueApp = new Vue({
     },
     update_course_material: function () {
       lesson_material_id = this.lesson_materials.Lesson_Materials_ID
+      console.log(this.lesson_materials)
       axios.post(`http://${materialAddress}/update_materials/${lesson_material_id}`, this.lesson_materials)
         .then(function (response) {
           server_reply = response.data.message
@@ -152,11 +113,8 @@ const vueApp = new Vue({
 })
 
 function file_upload() {
-  //filename = vueApp.material_path.name
-  console.log(vueApp.material_path)
   var formData = new FormData();
   formData.append('file', vueApp.material_path)
-  console.log(formData)
   axios.post(`http://${materialAddress}/spm/upload_materials/`, formData,
     {
       headers: {

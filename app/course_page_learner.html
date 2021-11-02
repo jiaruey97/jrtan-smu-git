@@ -16,120 +16,100 @@
         <v-app-bar color=#455A64 dense dark>
           <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-          <v-toolbar-title>All In One</v-toolbar-title>
+          <v-toolbar-title>{{this.student}}</v-toolbar-title>
 
           <v-spacer></v-spacer>
-
-          <v-btn icon>
-            <v-icon>mdi-home-city</v-icon>
+          <v-select :items="all_classes" v-model='chosen_class' label="Select Course" dense item-text="Course_Name"
+          item-value="Course_ID"></v-select>
+          <!-- <v-btn @click='load_course_content' icon>
+            <v-icon>mdi-plus-thick</v-icon>
           </v-btn>
-          <v-btn icon>
-            <v-icon>mdi-account</v-icon>
-          </v-btn>
+          <v-btn depressed large class="ma-2" @click='update_course_material' :disabled='lock_course_update_button' color="success">Update Course</v-btn> -->
         </v-app-bar>
       </div>
 
-      <!-- <div> -->
-      <div id='course_section' v-for='(section, index) in sections' :key='section.section_no'>
-        <v-main>
-          <v-container>
 
-          <!-- Section info -->
+      <!-- <div>
+        <div v-for='(lesson, index) in lesson_materials.Lesson_Materials'
+        :keys="lesson_materials.Lesson_Materials.materials">
+        <v-card style="margin-bottom: 15px;">
+          <v-toolbar flat color=#607D8B dark>
+            <v-toolbar-title>Section {{lesson.section_no}}</v-toolbar-title>
+          </v-toolbar>
+          <v-tabs vertical>
+            <v-tab>
+              <v-icon left>
+                mdi-numeric-1-box
+              </v-icon>
+              Lesson
+            </v-tab>
+            <v-tab>
+              <v-icon left>
+                mdi-comment-question-outline
+              </v-icon>
+              <v-badge color=#E57373 content="1">
+                Quiz
+              </v-badge>
+            </v-tab>
 
-            <v-card>
-              <v-toolbar flat color=#607D8B dark>
-                <v-toolbar-title>{{section.section_title}}</v-toolbar-title>
-              </v-toolbar>
-              <div id='lesson_section' v-for='(lesson, index) in lessons' :key='lesson.lesson_no'>
-                <v-tabs vertical>
-                  <v-tab>
-                    <v-icon left>
-                      mdi-numeric-1-box
-                    </v-icon>
-                    {{lesson.lesson_title}}
-                  </v-tab>
-                  <!-- <v-tab>
-                    <v-icon left>
-                      mdi-numeric-2-box
-                    </v-icon>
-                    Lesson 2
-                  </v-tab>
-                  <v-tab>
-                    <v-icon left>
-                      mdi-numeric-3-box
-                    </v-icon>
-                    Lesson 3
-                  </v-tab> -->
-                  <v-tab>
-                    <v-icon left>
-                      mdi-comment-question-outline
-                    </v-icon>
-                    <v-badge color=#E57373 content="1">
-                      Quiz
-                    </v-badge>
-                  </v-tab>
-                  <v-tab-item>
-                    <v-card flat>
-                      <v-card-title>
-                        Lesson 1 Material List
-                      </v-card-title>
-                      <v-list>
-                        <v-list-item>
-                          <v-list-item-action>
-                            <v-icon>mdi-numeric-1-box-multiple-outline</v-icon>
-                          </v-list-item-action>
-                          <v-list-item-content>
-                            <v-list-item-title>Material 1</v-list-item-title>
-                          </v-list-item-content>
-                          <v-list-item-action>
-                            <v-btn @click="greet" icon>
-                              <v-icon>mdi-download</v-icon>
-                            </v-btn>
-                          </v-list-item-action>
-                        </v-list-item>
+            <v-tab-item>
+              <v-card flat>
+                <v-card-title>
+                  Lesson Material List
+                </v-card-title> -->
 
-                        <v-divider inset></v-divider>
-
-                        <v-list-item>
-                          <v-list-item-action>
-                            <v-icon>mdi-numeric-2-box-multiple-outline</v-icon>
-                          </v-list-item-action>
-                          <v-list-item-content>
-                            <v-list-item-title>Material 2</v-list-item-title>
-                          </v-list-item-content>
-                          <v-list-item-action>
-                            <v-btn @click="greet" icon>
-                              <v-icon>mdi-download</v-icon>
-                            </v-btn>
-                          </v-list-item-action>
-                        </v-list-item>
-
-                        <v-divider inset></v-divider>
-
-                        <v-list-item>
-                          <v-list-item-action>
-                            <v-icon>mdi-numeric-3-box-multiple-outline</v-icon>
-                          </v-list-item-action>
-                          <v-list-item-content>
-                            <v-list-item-title>Material 3</v-list-item-title>
-                          </v-list-item-content>
-                          <v-list-item-action>
-                            <v-btn icon @click="greet">
-                              <v-icon>mdi-download</v-icon>
-                            </v-btn>
-                          </v-list-item-action>
-                        </v-list-item>
-                        <v-spacer></v-spacer>
-                    </v-card>
-                  </v-tab-item>
-
-              </div>
-
-            </v-card>
-          </v-container>
-
-        </v-main>
-      </div>
+                <!-- V-for list, allow users to preview the content, but the actual upload is here! -->
+                <!-- <v-list v-for="(material, index) in lesson.materials" :key="lesson.material_title">
+                  <v-list-item>
+                    <v-list-item-action>
+                      <v-icon>mdi-numeric-1-box-multiple-outline</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                      <v-list-item-title>{{material.material_title}}</v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-btn icon>
+                        <v-icon>mdi-download</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-tab-item> -->
+            <!-- Quiz Tab -->
+            <!-- <v-tab-item>
+              <v-card flat>
+                <v-card-title>
+                  Quiz List
+                </v-card-title>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-action>
+                      <v-btn depressed large class="ma-2" outlined color="indigo" href="quiz.html">
+                        Quiz 1
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                  <v-spacer></v-spacer>
+                  <v-card-title>
+                    Add More Quiz
+                  </v-card-title>
+                  <v-list>
+                    <v-list-item>
+                      <v-list-item-action>
+                        <v-btn depressed large class="ma-2" outlined color="indigo" target="_blank"
+                          href="quiz_builder.html">
+                          Create New Quiz
+                        </v-btn>
+                      </v-list-item-action>
+                    </v-list-item>
+                    <v-spacer></v-spacer>
+                  </v-list>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
+        </v-card>
+      </div> -->
 
     </v-app>
 

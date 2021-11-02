@@ -1,38 +1,3 @@
-
-top_materials = {
-  'Lesson_Materials_ID': 1,
-  'Course_ID': 1,
-  Lesson_Materials:
-    [
-      {
-        'section_no': '1',
-        'materials': [
-          {
-            'material_title': 'Introudction to Circuit Theory',
-            'material_path': 'filepath'
-          },
-          {
-            'material_title': 'Intro Tutorial',
-            'material_path': 'filepath'
-          }
-        ]
-      },
-      {
-        'section_no': '2',
-        'materials': [
-          {
-            'material_title': 'DC Circuits Lecture',
-            'material_path': 'filepath'
-          },
-          {
-            'material_title': 'DC Circuit Tutorial',
-            'material_path': 'filepath'
-          }
-        ]
-      }
-    ]
-}
-
 const courseAddress = '3.131.65.207:5144'
 const materialAddress = '3.131.65.207:5344'
 
@@ -107,9 +72,8 @@ const vueApp = new Vue({
         const materials_arr = select_section.materials
         materials_arr.push({
           'material_title': this.new_material,
-          'material_path': '/upload/' + this.material_path.name
+          'material_path': '/upload/' + replace_whitespace(this.material_path.name)
         })
-
 
       } else {
         //Create a new section

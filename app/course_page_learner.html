@@ -16,11 +16,11 @@
         <v-app-bar color=#455A64 dense dark>
           <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-          <v-toolbar-title>{{this.student}}</v-toolbar-title>
+          <v-toolbar-title v-model='chosen_class'>{{student}}</v-toolbar-title>
 
           <v-spacer></v-spacer>
-          <v-select :items="all_classes" v-model='chosen_class' label="Select Course" dense item-text="Course_Name"
-          item-value="Course_ID"></v-select>
+          <!-- <v-select :items="all_classes" v-model='chosen_class' label="Select Course" dense item-text="Course_Name"
+          item-value="Course_ID"></v-select> -->
           <!-- <v-btn @click='load_course_content' icon>
             <v-icon>mdi-plus-thick</v-icon>
           </v-btn>

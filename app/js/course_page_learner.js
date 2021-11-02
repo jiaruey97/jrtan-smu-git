@@ -9,24 +9,10 @@ const vueApp = new Vue({
   el: '#app',
   vuetify: new Vuetify(),
   data: {
-    selectedFile: null,
-    student='chicken',
-    all_courses: [],
-    all_classes:[],
-    lesson_materials: [],
-    current_sections: 0, //Current number of sections
-    new_old_section_choice: 'new',
-    chosen_course: {}, //This one holds the course id chosen initially
-    chosen_class:{},
-    // chosen_course_name: 'Course',
-    class_name="Class",
-    class_id: 8,
-    // chosen_course_id: 0, //This one locks the course id loaded
-    chosen_section: 1, //Which section user choose if they want to update old sessions
-    new_material: "",
-    material_path: [],
-    lock_upload_materials_interface: true, //Loock the Upload Material Interface, only unlock once user choose course!
-    lock_course_update_button: true, //Unlock only after user has selected and loaded a course
+    student:'',
+    class_id:8,
+    course_id:0,
+    chosen_class:{}
   },
   created() {
     // this.current_sections = this.lesson_materials.length
@@ -36,8 +22,10 @@ const vueApp = new Vue({
             // loaded_question = JSON.parse(response.data.data.Question_Object)
             // quiz_app.questions = loaded_question
             class_data = response.data.data
-            vueApp.all_classes = class_data.class
+            vueApp.all_classes = class_data.course
+            // vueApp.course_id=class_data.course.Course_ID
             console.log(vueApp.all_classes)
+            // console.log(vueApp.course_id)
       
         })
         .catch( function (error) {
@@ -45,13 +33,13 @@ const vueApp = new Vue({
         })
   },
   methods: {
-    load_course_content: function () {
+    load_class_content: function () {
 
       //Display the course name:
       display_class_content()
       this.class_id=this.class_info
       // this.chosen_course_id = this.chosen_course
-      axios.get(`http://${classAddress}/spm/class/${this.class_id}`)
+      axios.get(`http://${classAddress}/spm/search_class/${this.class_id}`)
         .then(function (response) {
           return_response = response.data.data
 
@@ -69,54 +57,15 @@ const vueApp = new Vue({
         })
 
     },
-    // append_material: function () {
-    //   if (this.new_old_section_choice == 'old') {
-    //     const select_section = vueApp.lesson_materials.Lesson_Materials.find(section => section.section_no == this.chosen_section)
-    //     const materials_arr = select_section.materials
-    //     materials_arr.push({
-    //       'material_title': this.new_material,
-    //       'material_path': 'upload/' + this.material_path.name
-    //     })
-    //   } else {
-    //     //Create a new section
-    //     new_section = {
-    //       'section_no': (this.current_sections + 1).toString(),
-    //       'materials': [{
-    //         'material_title': this.new_material,
-    //         'material_path': 'upload/' + this.material_path.name
-    //       }]
-    //     }
-    //     //Check if it's a new course
-    //     if (this.lesson_materials.Lesson_Materials == '') {
-    //       //If it's a new course
-    //       this.lesson_materials.Lesson_Materials = [new_section]
-    //     } else {
-    //       //If it's an old course
-    //       this.lesson_materials.Lesson_Materials.push(new_section)
-    //     }
-    //     this.current_sections += 1
-    //   }
-    // },
-    // update_course_material: function () {
-    //   lesson_material_id = this.lesson_materials.Lesson_Materials_ID
-    //   axios.post(`http://${materialAddress}/update_materials/${lesson_material_id}`, this.lesson_materials)
-    //   .then(function (response) {
-    //     server_reply = response.data.message
-    //     alert(server_reply)
-    //   })
-    //   .catch(function(error){
-    //     alert(error)
-    //   })
-
-    // }
   },
 })
 
 //Find course name to display
 function display_class_content(class_id){
-    class_obj = vueApp.all_classes.find(class_item => class_item.Class_ID == vueApp.chosen_class)
+    class_obj = vueApp.all_classes.find(course => course.Class_ID == vueApp.chosen_class)
     // vueApp.chosen_course_name = course_obj.Course_Name
     vueApp.class_id=class_obj.Class_ID
+    vueApp.student=class_obj.Students
 }
 
 //We create a course prototype

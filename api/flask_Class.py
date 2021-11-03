@@ -1,5 +1,3 @@
-
-
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -59,7 +57,7 @@ def get_all_class():
             {
                 "code": 200,
                 "data": {
-                    "course": [class_in.json() for class_in in class_list]
+                    "class": [class_in.json() for class_in in class_list]
                 }
             }
         )
@@ -102,7 +100,7 @@ def find_by_instructor_class(Instructor_ID):
             {
                 "code": 200,
                 "data": {
-                    "course": [class_i.json() for class_i in class_list]
+                    "class": [class_i.json() for class_i in class_list]
                 }
             }
         )
@@ -121,7 +119,7 @@ def find_by_course_class(Course_ID):
             {
                 "code": 200,
                 "data": {
-                    "course": [class_i.json() for class_i in class_list]
+                    "class": [class_i.json() for class_i in class_list]
                 }
             }
         )

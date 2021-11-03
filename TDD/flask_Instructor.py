@@ -19,18 +19,17 @@ class Instructor(db.Model):
     __tablename__ = 'Instructor'
 
     Instructor_ID = db.Column(db.Integer, primary_key=True)
-    LastName = db.Column(db.String(255), nullable=False)
-    FirstName = db.Column(db.String(255), nullable=False)
+    Actual_Name = db.Column(db.String(255), nullable=False)
+    Username = db.Column(db.String(255), nullable=False)
 
-
-    def __init__(self, Instructor_ID, LastName, FirstName):
+    def __init__(self, Instructor_ID, Actual_Name,Username):
         self.Instructor_ID = Instructor_ID
-        self.LastName = LastName
-        self.FirstName = FirstName
+        self.Actual_Name = Actual_Name
+        self.Username = Username
 
 
     def json(self):
-        return {"Instructor_ID": self.Instructor_ID, "LastName": self.LastName, "FirstName": self.FirstName}
+        return {"Instructor_ID": self.Instructor_ID, "Actual_Name": self.Actual_Name, "Username": self.Username}
 
 
 

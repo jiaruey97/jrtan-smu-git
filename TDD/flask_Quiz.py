@@ -63,7 +63,7 @@ def get_all_quiz():
                     "course": [quiz_i.json() for quiz_i in quiz]
                 }
             }
-        )
+        ), 200
     return jsonify(
         {
             "code": 404,
@@ -71,16 +71,16 @@ def get_all_quiz():
         }
     ), 404
 
-@app.route("/spm/quiz_retrieve/<string:Quiz_ID>")
+@app.route("/spm/quiz_retrieve/<int:Quiz_ID>")
 def get_quiz_for_learner(Quiz_ID):
-    quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).one()
+    quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
     if quiz != None:
         return jsonify(
             {
                 "code": 200,
                 "data": quiz.json() 
             }
-        )
+        ), 200
     return jsonify(
         {
             "code": 404,
@@ -97,7 +97,7 @@ def find_by_isbn13(Instructor_ID):
             {
                 "code": 200,
                 "data": {
-                    "course": [quiz_i.json() for quiz_i in quiz]
+                    "quiz": [quiz_i.json() for quiz_i in quiz]
                 }
             }
         )

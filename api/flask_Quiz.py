@@ -199,7 +199,6 @@ def update(Quiz_ID):
             "message": "Oops somethign went wrong"
         }
     ), 404
-
  
 
 if __name__ == '__main__':

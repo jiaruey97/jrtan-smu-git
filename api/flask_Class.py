@@ -156,7 +156,7 @@ def update_class(Class_ID):
     if request.method == 'POST':
         if class_details:
             data = request.get_json()
-            class_details.S(data)
+            class_details.update(data)
             db.session.commit()
             return jsonify(
             {

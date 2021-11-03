@@ -154,6 +154,7 @@ const quiz_app = new Vue({
             placehold_array2 = Array()
             axios.get(`http://${addressUser}/spm/user_database`)
             .then(function (response) {
+                alert("hello")
                 user_list = response.data.data.user
                 console.log(user_list)
                 for (let index = 0; index < user_list.length; index++) {
@@ -163,7 +164,7 @@ const quiz_app = new Vue({
                         course_list = JSON.parse(user.Course_Pending)
                         for (let i2 = 0; i2 < course_list.length; i2++) {
                             course_details = course_list[i2]
-                            
+
                             axios.get(`http://${addressClass}/spm/class_id/` + course_details.class)
                             .then(function (response) {
                                 class_details = response.data.data.class[0]
@@ -195,41 +196,54 @@ const quiz_app = new Vue({
             this.enrollment_list = placehold_array2
         },
 
+
         student_acceptance: function(stuff){
             console.log(stuff)
             course_assigned_array = JSON.parse(stuff.Course_Enrolled)
-            course_assigned_array.push({course:stuff.Course_Id, class:stuff.Class_ID})
-
-
+            course_assigned_array.push({course:stuff.Course_ID, class:stuff.Class_ID})
+        
+        
             post_object = {
-                Course_Pending:stuff.Course_Remaining,
-                Course_Assigned:course_assigned_array
+                Course_Pending:JSON.stringify(stuff.Course_Remaining),
+                Course_Assigned:JSON.stringify(course_assigned_array)
             }
+            if (stuff.Class_Students == "") {
+                student_array = [stuff.Username]
+            }
+            else{
+                student_array = JSON.parse(stuff.Class_Students)
+                student_array.push(stuff.Username) 
+            }
+
 
             post_object2 = {
-                Current_Size: stuff.Class_Current_Size + 1,
-                Students:stuff.Class_Students + "," + stuff.Username
+                Current_Size: JSON.stringify(stuff.Class_Current_Size + 1),
+                Students:JSON.stringify(student_array)
             }
+            
+            console.log(post_object2)
+            console.log(post_object)
 
-            axios.post(`http://${addressClass}/class/` + stuff.Class_ID + `/update`, post_object2)
+            axios.post(`http://${addressClass}/class/` + stuff.Class_ID + "/update", post_object2)
             .then(function (response) {
                 alert("Update Successful")         
             })
             .catch( function (error) {
                 console.log(error)
             })
-
-            axios.post(`http://${addressUser}/user_database/` + stuff.Username + `/update`, post_object)
+        
+            axios.post(`http://${addressUser}/user_database/` + stuff.Username + "/update", post_object)
             .then(function (response) {
                 alert("Update Successful")         
             })
             .catch( function (error) {
                 console.log(error)
             })
+            
+            
+
 
         }
-
-        
 
     }
 })

@@ -1,7 +1,24 @@
 const courseAddress = '3.131.65.207:5144'
 const materialAddress = '3.131.65.207:5344'
+const classAddress = '3.131.65.207:5044'
 
 // -> Section -> Lesson -> Materials
+tracking_data = {
+  'course_id': 2,
+  'class_id': 1,
+  'section_track': [
+    {
+      'section_no': 1,
+      'section': false,
+      'quiz': false
+    },
+    {
+      'section_no': 2,
+      'section': false,
+      'quiz': false
+    },
+  ]
+}
 
 const vueApp = new Vue({
   el: '#app',
@@ -97,7 +114,21 @@ const vueApp = new Vue({
       axios.post(`http://${materialAddress}/update_materials/${lesson_material_id}`, this.lesson_materials)
         .then(function (response) {
           server_reply = response.data.message
-          alert(server_reply)
+          alert(server_reply + " updating sections")
+
+          number_of_sections = vueApp.current_sections
+
+          //This function updates the section for the classes with the corresponding course id
+          axios.get(`http://${classAddress}/spm/class/update_section/${vueApp.chosen_course_id}/${number_of_sections}`)
+          .then(function(response){
+            server_reply = response.data.message
+            alert(server_reply)
+
+          }).catch(function (response){
+
+            alert(error)
+          })
+
         })
         .catch(function (error) {
           alert(error)

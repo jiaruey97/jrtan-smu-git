@@ -360,7 +360,7 @@ const quiz_app = new Vue({
             class_id = course_item.Class
             course_id = course_item.Course_ID
             course_name = course_item.Course_Name
-            url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id=" + course_id.toString() + "&course_name=" + course_name 
+            url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id=" + course_id.toString() + "&course_name=" + course_name + "&user=" + vueApp.user.toString() 
             window.open(url_to_visit, '_blank')
         }
 

@@ -130,6 +130,33 @@ def find_by_class_id(Class_ID):
         }
     ), 404
 
+#Class section update
+@app.route("/spm/class/update_section/<int:Course_ID>/<int:section>")
+def update_sections_for_course(Course_ID,section):
+    class_list = Class.query.filter_by(Course_ID=Course_ID).all()
+    if len(class_list):
+        for class_item in class_list:
+            class_item.Sections = section
+            db.session.add(class_item)
+
+    try:
+        db.session.commit()
+    except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred updating the sections."
+                }
+            ), 500 
+    
+    return jsonify(
+        {
+            'code': 200,
+            "message": "Material update is a success!"
+        }
+    ), 200
+
+
 
 @app.route("/spm/search_class_course/<int:Course_ID>")
 def find_by_course_class(Course_ID):

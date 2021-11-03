@@ -15,9 +15,7 @@
       <div>
         <v-app-bar color=#455A64 dense dark>
           <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
           <v-toolbar-title>{{chosen_course_name}}</v-toolbar-title>
-
           <v-spacer></v-spacer>
 
         </v-app-bar>
@@ -37,6 +35,8 @@
             <v-card style="margin-bottom: 15px;">
               <v-toolbar flat color=#607D8B dark>
                 <v-toolbar-title>Section {{lesson.section_no}}</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn depressed large class="ma-2" color="success">Section Complete!</v-btn>
               </v-toolbar>
               <v-tabs vertical>
                 <v-tab>
@@ -68,11 +68,12 @@
                         </v-list-item-action>
                         <v-list-item-content>
                           <v-list-item-title>{{material.material_title}}</v-list-item-title>
+                          </v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
-                          <v-btn @click='download_materials(material.material_path)' icon>
-                            <v-icon>mdi-download</v-icon>
-                          </v-btn>
+                            <v-btn @click='download_materials(material.material_path)' icon>
+                              <v-icon>mdi-download</v-icon>
+                            </v-btn>
                         </v-list-item-action>
                       </v-list-item>
                     </v-list>
@@ -92,21 +93,6 @@
                           </v-btn>
                         </v-list-item-action>
                       </v-list-item>
-                      <v-spacer></v-spacer>
-                      <v-card-title>
-                        Add More Quiz
-                      </v-card-title>
-                      <v-list>
-                        <v-list-item>
-                          <v-list-item-action>
-                            <v-btn depressed large class="ma-2" outlined color="indigo" target="_blank"
-                              href="quiz_builder.html">
-                              Create New Quiz
-                            </v-btn>
-                          </v-list-item-action>
-                        </v-list-item>
-                        <v-spacer></v-spacer>
-                      </v-list>
                   </v-card>
                 </v-tab-item>
               </v-tabs>

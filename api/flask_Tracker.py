@@ -55,6 +55,11 @@ def get_all_tracker():
         }
     ), 404
 
+@app.route("/spm/get_tracker/<string:username>")
+def retrieve_user_track():
+    data = request.get_json()
+    
+
 @app.route("/create_tracker", methods=['POST'])
 def create_tracker():
 

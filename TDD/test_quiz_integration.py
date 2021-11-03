@@ -1,7 +1,7 @@
 import unittest
 import flask_testing
 import json
-from flask_tester import app, db, Quiz, Course, Instructor, Class
+from app import app, db, Quiz, Course, Instructor, Class, User_Database
 
 import datetime
 
@@ -29,22 +29,29 @@ class TestCreateQuiz(TestApp):
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
-        i1 = Instructor(Instructor_ID=1, LastName='Ducky',
-                     FirstName='Tommy')
-
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID = 1, Instructor_ID = 1,
                     Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
+
+        i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
+                     Username='UKM123')
+
+        u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
+                    Department='UKM123', Current_Position='hello', Course_Assigned='123',
+                    Course_Completed="date_object", Course_Pending="Course_Pending")
+        
         
         db.session.add(c1)
         db.session.add(i1)
+        db.session.add(u1)
         db.session.add(cl1)
+        
         db.session.commit()
 
         request_body = {
             "Course_ID":c1.Course_ID,
-            "Instructor_ID":i1.Instructor_ID,
+            "Instructor_ID": i1.Instructor_ID,
             "Section":12,
             "Question_Object":"Chickeasd",
             "Class_ID": cl1.Class_ID,
@@ -108,8 +115,11 @@ class TestCreateQuiz(TestApp):
         
         date_object = datetime.datetime.now()
         
-        i1 = Instructor(Instructor_ID=1, LastName='Ducky',
-                        FirstName='Tommy')
+        i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
+                     Username='UKM123')
+        u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
+                    Department='UKM123', Current_Position='hello', Course_Assigned='123',
+                    Course_Completed="date_object", Course_Pending="Course_Pending")
 
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
@@ -118,6 +128,7 @@ class TestCreateQuiz(TestApp):
         
         db.session.add(i1)
         db.session.add(cl1)
+        db.session.add(u1)
         db.session.commit()
 
         request_body = {
@@ -142,16 +153,21 @@ class TestCreateQuiz(TestApp):
         
         date_object = datetime.datetime.now()
         
-        i1 = Instructor(Instructor_ID=1, LastName='Ducky',
-                        FirstName='Tommy')
+        i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
+                     Username='UKM123')
 
         c1 = Course(Course_ID=1, Course_Name='Ducky',
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
+        u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
+                    Department='UKM123', Current_Position='hello', Course_Assigned='123',
+                    Course_Completed="date_object", Course_Pending="Course_Pending")
+
 
         db.session.add(i1)
         db.session.add(c1)
+        db.session.add(u1)
         db.session.commit()
 
         request_body = {
@@ -185,8 +201,11 @@ class TestQuizRetrieveByID(TestApp):
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
-        i1 = Instructor(Instructor_ID=1, LastName='Ducky',
-                     FirstName='Tommy')
+        i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
+                     Username='UKM123')
+        u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
+                    Department='UKM123', Current_Position='hello', Course_Assigned='123',
+                    Course_Completed="date_object", Course_Pending="Course_Pending")
 
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
@@ -194,6 +213,7 @@ class TestQuizRetrieveByID(TestApp):
                     Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
         
         db.session.add(q1)
+        db.session.add(u1)
         db.session.add(c1)
         db.session.add(i1)
         db.session.add(cl1)
@@ -237,8 +257,11 @@ class TestQuizRetrieve(TestApp):
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
-        i1 = Instructor(Instructor_ID=1, LastName='Ducky',
-                     FirstName='Tommy')
+        i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
+                     Username='UKM123')
+        u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
+                    Department='UKM123', Current_Position='hello', Course_Assigned='123',
+                    Course_Completed="date_object", Course_Pending="Course_Pending")
 
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
@@ -246,6 +269,7 @@ class TestQuizRetrieve(TestApp):
                     Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
         
         db.session.add(q1)
+        db.session.add(u1)
         db.session.add(c1)
         db.session.add(i1)
         db.session.add(cl1)
@@ -255,7 +279,7 @@ class TestQuizRetrieve(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                        "course": [{
+                        "quiz": [{
                             "Course_ID":1,
                             "Instructor_ID":1,
                             "Section":1,
@@ -285,8 +309,12 @@ class TestQuizRetrieveByInstructor(TestApp):
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
-        i1 = Instructor(Instructor_ID=1, LastName='Ducky',
-                     FirstName='Tommy')
+        i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
+                     Username='UKM123')
+
+        u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
+                    Department='UKM123', Current_Position='hello', Course_Assigned='123',
+                    Course_Completed="date_object", Course_Pending="Course_Pending")
 
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
@@ -294,6 +322,7 @@ class TestQuizRetrieveByInstructor(TestApp):
                     Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
         
         db.session.add(q1)
+        db.session.add(u1)
         db.session.add(c1)
         db.session.add(i1)
         db.session.add(cl1)
@@ -305,7 +334,7 @@ class TestQuizRetrieveByInstructor(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                        "course": [{
+                        "quiz": [{
                             "Course_ID":1,
                             "Instructor_ID":1,
                             "Section":1,
@@ -338,8 +367,12 @@ class TestQuizDelete(TestApp):
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
-        i1 = Instructor(Instructor_ID=1, LastName='Ducky',
-                     FirstName='Tommy')
+        i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
+                     Username='UKM123')
+
+        u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
+                    Department='UKM123', Current_Position='hello', Course_Assigned='123',
+                    Course_Completed="date_object", Course_Pending="Course_Pending")
 
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
@@ -347,10 +380,12 @@ class TestQuizDelete(TestApp):
                     Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
         
         db.session.add(q1)
+        db.session.add(u1)
         db.session.add(c1)
         db.session.add(i1)
         db.session.add(cl1)
         db.session.commit()
+
 
         id = q1.Quiz_ID
         response = self.client.post("/quiz/delete/{0}".format(id))
@@ -380,8 +415,12 @@ class TestQuizUpdate(TestApp):
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
-        i1 = Instructor(Instructor_ID=1, LastName='Ducky',
-                     FirstName='Tommy')
+        i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
+                     Username='UKM123')
+
+        u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
+                    Department='UKM123', Current_Position='hello', Course_Assigned='123',
+                    Course_Completed="date_object", Course_Pending="Course_Pending")
 
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
@@ -389,6 +428,7 @@ class TestQuizUpdate(TestApp):
                     Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
         
         db.session.add(q1)
+        db.session.add(u1)
         db.session.add(c1)
         db.session.add(i1)
         db.session.add(cl1)

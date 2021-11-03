@@ -38,7 +38,7 @@ class Course(db.Model):
         self.Sections = Sections
 
     def json(self):
-        return {"Course_ID": self.Course_ID, "Course_Name": self.Course_Name, "Course_Details": self.Course_Details, "Duration": self.Duration, "Prerequestic": self.Prerequestic, "Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections}
+        return {"Course_ID": self.Course_ID, "Course_Name": self.Course_Name, "Course_Details": self.Course_Details, "Duration": self.Duration, "Prerequisite": self.Prerequisite, "Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections}
 
 
 @app.route("/spm/course")

@@ -209,8 +209,7 @@ const quiz_app = new Vue({
             axios.get(`http://${addressUser}/user_database/` + this.user)
                 .then(function (response) {
                     user = response.data.data.user[0]
-                    course_pending = user.Course_Pending
-                    course_pending = course_pending.split(',')
+                    course_pending = JSON.parse(user.Course_Pending)
                     console.log(course_pending)
                     for (let index = 0; index < course_pending.length; index++) {
                         id = course_pending[index]

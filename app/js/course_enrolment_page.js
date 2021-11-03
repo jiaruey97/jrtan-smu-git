@@ -109,32 +109,34 @@ const quiz_app = new Vue({
 
         initialise_enrolled_course: function () {
             placehold_array = Array()
-            axios.get(`http://${addressUser}/user_database/`+this.user)
+            axios.get(`http://${addressUser}/user_database/` + this.user)
                 .then(function (response) {
                     user = response.data.data.user[0]
                     courses = user.Course_Assigned
-                    print(courses)
-                    courses = JSON.parse(courses)
                     console.log(courses)
-                    for (course of courses) {
-                        id = course.course
-                        console.log(id)
-                        class_id = course.class
-                        axios.get(`http://${addressCourse}/spm/course_retrieve/` + id)
-                            .then(function (response) {
-                                retreived_courses = response.data.data
-                                placehold = {
-                                    Course_ID: retreived_courses.Course_ID,
-                                    Course_Name: retreived_courses.Course_Name,
-                                    Duration: retreived_courses.Duration,
-                                    Prerequisite: retreived_courses.Prerequisite,
-                                    Start_Time: retreived_courses.Start_Time,
-                                    End_Time: retreived_courses.End_Time,
-                                    Class: class_id,
-                                    Sections: retreived_courses.Sections
-                                }
-                                placehold_array.push(placehold)
-                            })
+                    if (courses != "") {
+                        courses = JSON.parse(courses)
+                        console.log(courses)
+                        for (course of courses) {
+                            id = course.course
+                            console.log(id)
+                            class_id = course.class
+                            axios.get(`http://${addressCourse}/spm/course_retrieve/` + id)
+                                .then(function (response) {
+                                    retreived_courses = response.data.data
+                                    placehold = {
+                                        Course_ID: retreived_courses.Course_ID,
+                                        Course_Name: retreived_courses.Course_Name,
+                                        Duration: retreived_courses.Duration,
+                                        Prerequisite: retreived_courses.Prerequisite,
+                                        Start_Time: retreived_courses.Start_Time,
+                                        End_Time: retreived_courses.End_Time,
+                                        Class: class_id,
+                                        Sections: retreived_courses.Sections
+                                    }
+                                    placehold_array.push(placehold)
+                                })
+                        }
                     }
                     console.log(placehold_array)
 
@@ -151,14 +153,24 @@ const quiz_app = new Vue({
             axios.get(`http://${addressUser}/user_database/` + this.user)
                 .then(function (response) {
                     user = response.data.data.user[0]
-                    course_assigned = JSON.parse(user.Course_Assigned)
-                    course_completed = JSON.parse(user.Course_Completed)
-                    course_pending = JSON.parse(user.Course_Pending)
-                    
+                    course_assigned = []
+                    course_completed = []
+                    course_pending = []
+
+                    if (user.Course_Assigned != '') {
+                        course_assigned = JSON.parse(user.Course_Assigned)
+                    }
+                    if (user.Course_Completed != '') {
+                        course_completed = JSON.parse(user.Course_Completed)
+                    }
+                    if (user.Course_Pending != '') {
+                        course_pending = JSON.parse(user.Course_Pending)
+                    }
+
                     course_assigned_array = Array()
                     course_complete_array = Array()
                     course_pending_array = Array()
-                
+
                     for (let index = 0; index < course_assigned.length; index++) {
                         course_assigned_array.push(course_assigned[index].course)
                     }
@@ -216,153 +228,157 @@ const quiz_app = new Vue({
                             console.log(error)
                         })
                 })
-                .catch(function (error) {
-                    console.log(error)
-                })
+    .catch(function (error) {
+        console.log(error)
+    })
 
-            this.course_list = placehold_array_2
+this.course_list = placehold_array_2
         },
 
 
 
-        initialise_pending_course: function () {
-            placehold_array_5 = Array()
-            axios.get(`http://${addressUser}/user_database/` + this.user)
-                .then(function (response) {
-                    user = response.data.data.user[0]
-                    course_pending = JSON.parse(user.Course_Pending)
-                    console.log(course_pending)
-                    for (let index = 0; index < course_pending.length; index++) {
-                        id = course_pending[index]
-                        axios.get(`http://${addressCourse}/spm/course_retrieve/` + id.course)
-                            .then(function (response) {
-                                console.log(response)
-                                courses = response.data.data
-                                placehold_5 = {
-                                    Course_ID: courses.Course_ID,
-                                    Course_Name: courses.Course_Name,
-                                    Duration: courses.Duration,
-                                    Prerequisite: courses.Prerequisite,
-                                    Start_Time: courses.Start_Time,
-                                    End_Time: courses.End_Time,
-                                    Sections: courses.Sections,
-                                    Class: id.class,
-                                    Course_Pending: course_pending,
-                                }
-                                placehold_array_5.push(placehold_5)
-                            })
-                            .catch(function (error) {
-                                console.log(error)
-                            })
+initialise_pending_course: function () {
+    placehold_array_5 = Array()
+    axios.get(`http://${addressUser}/user_database/` + this.user)
+        .then(function (response) {
+            user = response.data.data.user[0]
+            course_pending = []
+            if (user.Course_Pending != ""){
+                course_pending = JSON.parse(user.Course_Pending)
+            }
+
+            console.log(course_pending)
+            for (let index = 0; index < course_pending.length; index++) {
+                id = course_pending[index]
+                axios.get(`http://${addressCourse}/spm/course_retrieve/` + id.course)
+                    .then(function (response) {
+                        console.log(response)
+                        courses = response.data.data
+                        placehold_5 = {
+                            Course_ID: courses.Course_ID,
+                            Course_Name: courses.Course_Name,
+                            Duration: courses.Duration,
+                            Prerequisite: courses.Prerequisite,
+                            Start_Time: courses.Start_Time,
+                            End_Time: courses.End_Time,
+                            Sections: courses.Sections,
+                            Class: id.class,
+                            Course_Pending: course_pending,
+                        }
+                        placehold_array_5.push(placehold_5)
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+            }
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
+
+    this.course_pending = placehold_array_5
+},
+
+delete_enrollment: function (stuff) {
+    course_pending_list = stuff.Course_Pending
+    course_delete = stuff.Course_ID
+
+    for (let index = 0; index < course_pending_list.length; index++) {
+        pending_item = course_pending_list[index]
+        if (pending_item.course == course_delete) {
+            course_pending_list.splice(index, 1)
+        }
+    }
+
+    post_object_3 = {
+        'Course_Pending': JSON.stringify(course_pending_list)
+    }
+
+    axios.post(`http://${addressUser}/user_database/` + this.user + `/update`, post_object_3)
+        .then(function (response) {
+            alert("Update to User successful")
+        })
+        .catch(function (error) {
+            alert("Something when wrong with the Update")
+        })
+},
+
+
+select_class: function (stuff) {
+    course_id = stuff.Course_ID
+    console.log(stuff.Course_ID)
+    this.mode = false
+    placehold_array_3 = Array()
+    now_time = Date.parse(today) - 28, 800, 000
+
+    axios.get(`http://${addressClass}/spm/search_class_course/` + course_id)
+        .then(function (response) {
+            console.log(response)
+            class_list = response.data.data.class
+            for (let index = 0; index < class_list.length; index++) {
+                class_details = class_list[index]
+                console.log(class_details)
+                if (class_details.Size > class_details.Current_Size) {
+                    if (Date.parse(class_details.Start_Time) > now_time) {
+                        placehold = {
+                            Class_ID: class_details.Class_ID,
+                            Class_Name: class_details.Class_Name,
+                            Class_Details: class_details.Class_Details,
+                            Current_Size: class_details.Current_Size,
+                            Size: class_details.Size,
+                            Instructor: class_details.Instructor_ID,
+                            Start_Time: class_details.Start_Time,
+                            End_Time: class_details.End_Time,
+                            Sections: class_details.Sections,
+                            Students: class_details.Students,
+                            Course_ID: course_id,
+                            Course_Pending: stuff.Course_Pending
+                        }
+                        placehold_array_3.push(placehold)
                     }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
-
-            this.course_pending = placehold_array_5
-        },
-
-        delete_enrollment: function (stuff) {
-            course_pending_list = stuff.Course_Pending
-            course_delete = stuff.Course_ID
-
-            for (let index = 0; index < course_pending_list.length; index++) {
-                pending_item = course_pending_list[index]
-                if (pending_item.course == course_delete) {
-                    course_pending_list.splice(index, 1)
                 }
             }
 
-            post_object_3 = {
-                'Course_Pending': JSON.stringify(course_pending_list)
-            }
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
 
-            axios.post(`http://${addressUser}/user_database/` + this.user + `/update`, post_object_3)
-                .then(function (response) {
-                    alert("Update to User successful")
-                })
-                .catch(function (error) {
-                    alert("Something when wrong with the Update")
-                })
-        },
+    this.class_list = placehold_array_3
+},
 
+enroll_complete: function (stuff) {
+    console.log(stuff)
+    current_pending_course = stuff.Course_Pending
 
-        select_class: function (stuff) {
-            course_id = stuff.Course_ID
-            console.log(stuff.Course_ID)
-            this.mode = false
-            placehold_array_3 = Array()
-            now_time = Date.parse(today) - 28, 800, 000
+    storage_object = {
+        course: stuff.Course_ID,
+        class: stuff.Class_ID
+    }
+    current_pending_course.push(storage_object)
 
-            axios.get(`http://${addressClass}/spm/search_class_course/` + course_id)
-                .then(function (response) {
-                    console.log(response)
-                    class_list = response.data.data.class
-                    for (let index = 0; index < class_list.length; index++) {
-                        class_details = class_list[index]
-                        console.log(class_details)
-                        if (class_details.Size > class_details.Current_Size) {
-                            if (Date.parse(class_details.Start_Time) > now_time) {
-                                placehold = {
-                                    Class_ID: class_details.Class_ID,
-                                    Class_Name: class_details.Class_Name,
-                                    Class_Details: class_details.Class_Details,
-                                    Current_Size: class_details.Current_Size,
-                                    Size: class_details.Size,
-                                    Instructor: class_details.Instructor_ID,
-                                    Start_Time: class_details.Start_Time,
-                                    End_Time: class_details.End_Time,
-                                    Sections: class_details.Sections,
-                                    Students: class_details.Students,
-                                    Course_ID: course_id,
-                                    Course_Pending: stuff.Course_Pending
-                                }
-                                placehold_array_3.push(placehold)
-                            }
-                        }
-                    }
+    post_object_2 = {
+        'Course_Pending': JSON.stringify(current_pending_course)
+    }
 
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
+    axios.post(`http://${addressUser}/user_database/` + user.Username + `/update`, post_object_2)
+        .then(function (response) {
+            alert("Update to User successful")
+        })
+        .catch(function (error) {
+            alert("Something when wrong with the Update")
+        })
 
-            this.class_list = placehold_array_3
-        },
+},
 
-        enroll_complete: function (stuff) {
-            console.log(stuff)
-            current_pending_course = stuff.Course_Pending
-
-            storage_object = {
-                course: stuff.Course_ID,
-                class: stuff.Class_ID
-            }
-            current_pending_course.push(storage_object)
-
-            post_object_2 = {
-                'Course_Pending': JSON.stringify(current_pending_course)
-            }
-
-            axios.post(`http://${addressUser}/user_database/` + user.Username + `/update`, post_object_2)
-            .then(function (response) {
-                alert("Update to User successful")
-            })
-            .catch(function (error) {
-                alert("Something when wrong with the Update")
-            })
-
-        },
-
-        enter_class: function (course_item) {
-            console.log(course_item)
-            class_id = course_item.Class
-            course_id = course_item.Course_ID
-            course_name = course_item.Course_Name
-            url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id=" + course_id.toString() + "&course_name=" + course_name + "&user=" + vueApp.user.toString() 
-            window.open(url_to_visit, '_blank')
-        }
+enter_class: function (course_item) {
+    console.log(course_item)
+    class_id = course_item.Class
+    course_id = course_item.Course_ID
+    course_name = course_item.Course_Name
+    url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id=" + course_id.toString() + "&course_name=" + course_name + "&user=" + vueApp.user.toString()
+    window.open(url_to_visit, '_blank')
+}
 
     }
 })

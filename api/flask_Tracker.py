@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -26,15 +27,15 @@ class Tracker(db.Model):
     Section_Object = db.Column(db.String(255), nullable=False)
 
 
-    def __init__(self, Tracker_ID, Username, Course_ID, Class_ID, Section_Object):
-        self.Tracker_ID = Tracker_ID
+    def __init__(self, Username, Course_ID, Class_ID, Section_Object):
+        #self.Tracker_ID = Tracker_ID
         self.Username = Username
         self.Course_ID = Course_ID
         self.Class_ID = Class_ID
         self.Section_Object = Section_Object
-
+        #"Tracker_ID": self.Tracker_ID
     def json(self):
-        return {"Tracker_ID": self.Tracker_ID, "Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Section_Object": self.Section_Object}
+        return {"Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Section_Object": self.Section_Object}
 
 @app.route("/spm/tracker")
 def get_all_tracker():
@@ -58,31 +59,34 @@ def get_all_tracker():
 @app.route("/spm/get_tracker/<string:username>")
 def retrieve_user_track():
     data = request.get_json()
-    
 
-@app.route("/create_tracker", methods=['POST'])
-def create_tracker():
-
-    data = request.get_json()
-    tracker = Tracker(**data)
+#Initialize the tracker for user
+@app.route("/create_tracker/<string:username>/<int:course_id>/<int:class_id>")
+def create_tracker(username, course_id, class_id):
+    json_track = json.dumps({'sections_cleared': 0, 'quiz_cleared': 0})
+    tracker = Tracker(Username=username, Course_ID=course_id, Class_ID=class_id, Section_Object=json_track)
+    db.session.add(tracker)
 
     try:
-        db.session.add(tracker)
         db.session.commit()
     except:
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred creating the tracker."
+                "message": "An error occurred creating unique tracking id for user."
             }
-        ), 500
-
+        )
+    
     return jsonify(
         {
-            "code": 201,
-            "data": tracker.json()
+            'code': 200,
+            'message': "Unique tracking id created!"
         }
-    ), 201
+    )
+
+
+
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5644, debug=True)

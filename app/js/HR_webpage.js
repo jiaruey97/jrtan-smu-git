@@ -2,6 +2,7 @@ const addressCourse = "3.131.65.207:5144"
 const addressUser = "3.131.65.207:5744"
 const addressClass = "3.131.65.207:5044"
 const addressInstructor = "3.131.65.207:5244"
+const trackerAddress = '3.131.65.207:5644'
 
 const urlSearchParams = new URLSearchParams(window.location.search)
 const params = Object.fromEntries(urlSearchParams.entries())
@@ -172,6 +173,12 @@ const quiz_app = new Vue({
                                 front_array = course_list.slice(i2+1)
                                 remaing_array = front_array.concat(back_array)
                                 console.log(remaing_array)
+
+                                //Check if course asssigned is empty, if empty, initialize empty array
+                                if (user.Course_Assigned == ""){
+                                    user.Course_Assigned = []
+                                } 
+
                                 course_placeholder = {
                                     Username:user.Username,
                                     Course_Enrolled:user.Course_Assigned,
@@ -199,9 +206,16 @@ const quiz_app = new Vue({
 
         student_acceptance: function(stuff){
             console.log(stuff)
-            course_assigned_array = JSON.parse(stuff.Course_Enrolled)
+
+            //Check if it's a valid json
+            if(typeof(stuff.Course_Enrolled) != 'object'){
+                //parse it
+                course_assigned_array = JSON.parse(stuff.Course_Enrolled)
+            } else {
+                course_assigned_array = stuff.Course_Enrolled
+            }
             course_assigned_array.push({course:stuff.Course_ID, class:stuff.Class_ID})
-        
+
         
             post_object = {
                 Course_Pending:JSON.stringify(stuff.Course_Remaining),
@@ -226,7 +240,7 @@ const quiz_app = new Vue({
 
             axios.post(`http://${addressClass}/class/` + stuff.Class_ID + "/update", post_object2)
             .then(function (response) {
-                alert("Update Successful")         
+                alert("Class Update Successful")         
             })
             .catch( function (error) {
                 console.log(error)
@@ -234,7 +248,15 @@ const quiz_app = new Vue({
         
             axios.post(`http://${addressUser}/user_database/` + stuff.Username + "/update", post_object)
             .then(function (response) {
-                alert("Update Successful")         
+                alert("User Update Successful")         
+            })
+            .catch( function (error) {
+                console.log(error)
+            })
+
+            axios.get(`http://${trackerAddress}/create_tracker/${stuff.Username}/${stuff.Course_ID}/${stuff.Class_ID}`)
+            .then(function (response) {
+                alert("Tracking update successful")         
             })
             .catch( function (error) {
                 console.log(error)
@@ -247,3 +269,17 @@ const quiz_app = new Vue({
 
     }
 })
+
+
+
+function tryParseJSONObject (jsonString){
+    try {
+        var o = JSON.parse(jsonString);
+        if (o && typeof o === "object") {
+            return o;
+        }
+    }
+    catch (e) { }
+
+    return false;
+};

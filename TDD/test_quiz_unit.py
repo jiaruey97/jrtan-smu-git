@@ -1,6 +1,6 @@
 import unittest
 
-from flask_tester import Quiz
+from app import Quiz
 
 class TestQuiz(unittest.TestCase):
     def test_to_dict(self):

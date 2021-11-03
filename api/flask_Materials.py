@@ -55,7 +55,7 @@ def get_all_materials():
             {
                 "code": 200,
                 "data": {
-                    "course": [materials.json() for materials in materia]
+                    "materials": [materials.json() for materials in materia]
                 }
             }
         )

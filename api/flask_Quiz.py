@@ -25,12 +25,12 @@ class Quiz(db.Model):
     __tablename__ = 'Quiz'
 
     Quiz_ID = db.Column(db.Integer, primary_key=True)
-    Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
-    Instructor_ID = db.Column(db.Integer, db.ForeignKey('Instructor.Instructor_ID'))
+    Course_ID = db.Column(db.Integer)
+    Instructor_ID = db.Column(db.Integer)
     Section = db.Column(db.Integer, nullable=False)
     Question_Object = db.Column(db.Text, nullable=False)
-    Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
-    Timing = db.Column(db.Float)
+    Class_ID = db.Column(db.Integer)
+    Timing = db.Column(db.String(30), nullable=False)
 
 
     def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Timing):
@@ -39,7 +39,7 @@ class Quiz(db.Model):
         self.Instructor_ID = Instructor_ID
         self.Section = Section
         self.Question_Object = Question_Object
-        self.Time = Timing
+        self.Timing = Timing
 
 
     def json(self):
@@ -63,7 +63,7 @@ def get_all_quiz():
                     "course": [quiz_i.json() for quiz_i in quiz]
                 }
             }
-        )
+        ), 200
     return jsonify(
         {
             "code": 404,
@@ -71,16 +71,16 @@ def get_all_quiz():
         }
     ), 404
 
-@app.route("/spm/quiz_retrieve/<string:Quiz_ID>")
+@app.route("/spm/quiz_retrieve/<int:Quiz_ID>")
 def get_quiz_for_learner(Quiz_ID):
-    quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).one()
+    quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
     if quiz != None:
         return jsonify(
             {
                 "code": 200,
                 "data": quiz.json() 
             }
-        )
+        ), 200
     return jsonify(
         {
             "code": 404,
@@ -97,7 +97,7 @@ def find_by_isbn13(Instructor_ID):
             {
                 "code": 200,
                 "data": {
-                    "course": [quiz_i.json() for quiz_i in quiz]
+                    "quiz": [quiz_i.json() for quiz_i in quiz]
                 }
             }
         )
@@ -133,10 +133,8 @@ def delete_quiz(Quiz_ID):
 # Create Quiz
 @app.route("/create_quiz", methods=['POST'])
 def create_quiz():
-
     data = request.get_json()
-    quiz = Quiz(**data)
-
+    
     # Validate Course
     course = Course.query.filter_by(Course_ID = data['Course_ID']).first()
     if not course:
@@ -158,6 +156,8 @@ def create_quiz():
             "message": "Class not valid."
         }), 500
 
+    quiz = Quiz(**data)
+    
     try:
         db.session.add(quiz)
         db.session.commit()
@@ -165,6 +165,7 @@ def create_quiz():
         return jsonify(
             {
                 "code": 500,
+                "data": quiz.json(),
                 "message": "An error occurred creating the Quiz."
             }
         ), 500

@@ -20,9 +20,9 @@ class Quiz_Results(db.Model):
     __tablename__ = 'Quiz_Results'
 
     Quiz_Results_ID = db.Column(db.Integer, primary_key=True)
-    Username = db.Column(db.String(50), db.ForeignKey('User_Database.Username'))
-    Quiz_ID = db.Column(db.Integer, db.ForeignKey('Quiz.Quiz'))
-    Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
+    Username = db.Column(db.String(50))
+    Quiz_ID = db.Column(db.Integer)
+    Course_ID = db.Column(db.Integer)
     Section = db.Column(db.Integer, nullable=False)
     Marks = db.Column(db.Integer, nullable=False)
     Pass = db.Column(db.Boolean, nullable=False)
@@ -48,7 +48,7 @@ def get_all_results():
             {
                 "code": 200,
                 "data": {
-                    "course": [result_i.json() for result_i in results]
+                    "quiz_results": [result_i.json() for result_i in results]
                 }
             }
         )

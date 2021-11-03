@@ -9,7 +9,7 @@ create table if not EXISTS Course (
   Course_Name varchar(255)  NOT NULL,
   Course_Details varchar(255)  NOT NULL,
   Duration varchar(255)  NOT NULL, 
-  Prerequestic varchar(255)  NOT NULL, 
+  Prerequisite varchar(255)  NOT NULL, 
   Start_Time DATETIME  NOT NULL, 
   End_Time DATETIME  NOT NULL, 
   Sections int NOT NULL, 

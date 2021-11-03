@@ -173,6 +173,7 @@ const quiz_app = new Vue({
                                 console.log(remaing_array)
                                 course_placeholder = {
                                     Username:user.Username,
+                                    Course_Enrolled:user.Course_Assigned,
                                     Course_ID:course_details.course,
                                     Class_ID:course_details.class,
                                     Course_Remaining: remaing_array,
@@ -196,8 +197,13 @@ const quiz_app = new Vue({
 
         student_acceptance: function(stuff){
             console.log(stuff)
+            course_assigned_array = JSON.parse(stuff.Course_Enrolled)
+            course_assigned_array.push({course:stuff.Course_Id, class:stuff.Class_ID})
+
+
             post_object = {
-                Course_Pending:stuff.Course_Remaining
+                Course_Pending:stuff.Course_Remaining,
+                Course_Assigned:course_assigned_array
             }
 
             post_object2 = {

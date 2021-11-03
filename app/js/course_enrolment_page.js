@@ -109,11 +109,12 @@ const quiz_app = new Vue({
 
         initialise_enrolled_course: function () {
             placehold_array = Array()
-            axios.get(`http://${addressUser}/user_database/Tommy`)
+            axios.get(`http://${addressUser}/user_database/`+this.user)
                 .then(function (response) {
                     user = response.data.data.user[0]
                     courses = user.Course_Assigned
                     courses = JSON.parse(courses)
+                    console.log(courses)
                     for (course of courses) {
                         id = course.course
                         console.log(id)
@@ -152,10 +153,30 @@ const quiz_app = new Vue({
                     course_assigned = JSON.parse(user.Course_Assigned)
                     course_completed = JSON.parse(user.Course_Completed)
                     course_pending = JSON.parse(user.Course_Pending)
+                    
+                    course_assigned_array = Array()
+                    course_complete_array = Array()
+                    course_pending_array = Array()
+                
+
+
+                    for (let index = 0; index < course_assigned.length; index++) {
+                        course_assigned_array.push(course_assigned[index].course)
+                    }
+
+                    for (let index = 0; index < course_completed.length; index++) {
+                        course_complete_array.push(course_completed[index].course)
+                    }
+
+                    for (let index = 0; index < course_pending.length; index++) {
+                        course_assigned_array.push(course_pending[index].course)
+                    }
+
 
                     axios.get(`http://${addressCourse}/spm/course`)
                         .then(function (response) {
                             course_list = response.data.data.course
+                            console.log(course_list)
                             for (let index = 0; index < course_list.length; index++) {
                                 course = course_list[index]
                                 pre = course.Prerequisite.split(",")
@@ -172,9 +193,9 @@ const quiz_app = new Vue({
                                 }
 
                                 if (pre.length == fufilled_condition) {
-                                    if (course_assigned.find(element => element == course.Course_ID) == undefined) {
-                                        if (course_completed.find(element => element == course.Course_ID) == undefined) {
-                                            if (course_pending.find(element => element == course.Course_ID) == undefined) {
+                                    if (course_assigned_array.find(element => element == course.Course_ID) == undefined) {
+                                        if (course_complete_array.find(element => element == course.Course_ID) == undefined) {
+                                            if (course_pending_array.find(element => element == course.Course_ID) == undefined) {
                                                 placehold = {
                                                     Course_ID: course.Course_ID,
                                                     Course_Name: course.Course_Name,
@@ -182,7 +203,8 @@ const quiz_app = new Vue({
                                                     Prerequisite: course.Prerequisite,
                                                     Start_Time: course.Start_Time,
                                                     End_Time: course.End_Time,
-                                                    Sections: course.Sections
+                                                    Sections: course.Sections,
+                                                    Course_Pending: course_pending
                                                 }
                                                 placehold_array_2.push(placehold)
                                             }
@@ -213,7 +235,7 @@ const quiz_app = new Vue({
                     console.log(course_pending)
                     for (let index = 0; index < course_pending.length; index++) {
                         id = course_pending[index]
-                        axios.get(`http://${addressCourse}/spm/course_retrieve/` + id)
+                        axios.get(`http://${addressCourse}/spm/course_retrieve/` + id.course)
                             .then(function (response) {
                                 console.log(response)
                                 courses = response.data.data
@@ -225,6 +247,7 @@ const quiz_app = new Vue({
                                     Start_Time: courses.Start_Time,
                                     End_Time: courses.End_Time,
                                     Sections: courses.Sections,
+                                    Class: id.class,
                                     Course_Pending: course_pending,
                                 }
                                 placehold_array_5.push(placehold_5)
@@ -245,18 +268,18 @@ const quiz_app = new Vue({
             course_pending_list = stuff.Course_Pending
             course_delete = stuff.Course_ID
 
-            index = course_pending_list.indexOf(course_delete.toString())
-
-            console.log(index)
-            if (index > -1) {
-                course_pending_list.splice(index, 1)
+            for (let index = 0; index < course_pending_list.length; index++) {
+                pending_item = course_pending_list[index]
+                if (pending_item.course == course_delete) {
+                    course_pending_list.splice(index, 1)
+                }
             }
 
             post_object_3 = {
-                'Course_Pending': course_pending_list.toString()
+                'Course_Pending': JSON.stringify(course_pending_list)
             }
 
-            axios.post(`http://${addressUser}/user_database/` + user.Username + `/update`, post_object_3)
+            axios.post(`http://${addressUser}/user_database/` + this.user + `/update`, post_object_3)
                 .then(function (response) {
                     alert("Update to User successful")
                 })
@@ -276,7 +299,7 @@ const quiz_app = new Vue({
             axios.get(`http://${addressClass}/spm/search_class_course/` + course_id)
                 .then(function (response) {
                     console.log(response)
-                    class_list = response.data.data.course
+                    class_list = response.data.data.class
                     for (let index = 0; index < class_list.length; index++) {
                         class_details = class_list[index]
                         console.log(class_details)
@@ -294,6 +317,7 @@ const quiz_app = new Vue({
                                     Sections: class_details.Sections,
                                     Students: class_details.Students,
                                     Course_ID: course_id,
+                                    Course_Pending: stuff.Course_Pending
                                 }
                                 placehold_array_3.push(placehold)
                             }
@@ -309,17 +333,26 @@ const quiz_app = new Vue({
         },
 
         enroll_complete: function (stuff) {
+            console.log(stuff)
+            current_pending_course = stuff.Course_Pending
+
+            storage_object = {
+                course: stuff.Course_ID,
+                class: stuff.Class_ID
+            }
+            current_pending_course.push(storage_object)
 
             post_object_2 = {
-                'Course_Pending': stuff.Course_ID
+                'Course_Pending': JSON.stringify(current_pending_course)
             }
+
             axios.post(`http://${addressUser}/user_database/` + user.Username + `/update`, post_object_2)
-                .then(function (response) {
-                    alert("Update to User successful")
-                })
-                .catch(function (error) {
-                    alert("Something when wrong with the Update")
-                })
+            .then(function (response) {
+                alert("Update to User successful")
+            })
+            .catch(function (error) {
+                alert("Something when wrong with the Update")
+            })
 
         },
 

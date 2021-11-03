@@ -19,7 +19,7 @@ const quiz_app = new Vue({
             },
             { text: 'Course Name', value: 'Course_Name' },
             { text: 'Duration', value: 'Duration' },
-            { text: 'Prerequestic', value: 'Prerequestic' },
+            { text: 'Prerequisite', value: 'Prerequisite' },
             { text: 'Start_Time', value: 'Start_Time' },
             { text: 'End_Time', value: 'End_Time' },
             { text: 'Sections', value: 'Sections' },
@@ -107,17 +107,12 @@ const quiz_app = new Vue({
             this.enrollment_dates = placehold_array_4
         },
 
-
-
-
         initialise_enrolled_course: function () {
             placehold_array = Array()
             axios.get(`http://${addressUser}/user_database/Tommy`)
                 .then(function (response) {
                     user = response.data.data.user[0]
-                    console.log(user)
                     courses = user.Course_Assigned
-                    console.log(courses)
                     courses = JSON.parse(courses)
                     for (course of courses) {
                         id = course.course
@@ -130,7 +125,7 @@ const quiz_app = new Vue({
                                     Course_ID: retreived_courses.Course_ID,
                                     Course_Name: retreived_courses.Course_Name,
                                     Duration: retreived_courses.Duration,
-                                    Prerequestic: retreived_courses.Prerequestic,
+                                    Prerequisite: retreived_courses.Prerequisite,
                                     Start_Time: retreived_courses.Start_Time,
                                     End_Time: retreived_courses.End_Time,
                                     Class: class_id,
@@ -153,20 +148,17 @@ const quiz_app = new Vue({
             placehold_array_2 = Array()
             axios.get(`http://${addressUser}/user_database/` + this.user)
                 .then(function (response) {
-                    user = response.data.data.course[0]
-                    course_assigned = user.Course_Assigned
-                    course_completed = user.Course_Completed
-                    course_pending = user.Course_Pending
-                    course_assigned = course_assigned.split(',')
-                    course_completed = course_completed.split(',')
-                    course_pending = course_pending.split(',')
+                    user = response.data.data.user[0]
+                    course_assigned = JSON.parse(user.Course_Assigned)
+                    course_completed = JSON.parse(user.Course_Completed)
+                    course_pending = JSON.parse(user.Course_Pending)
 
                     axios.get(`http://${addressCourse}/spm/course`)
                         .then(function (response) {
                             course_list = response.data.data.course
                             for (let index = 0; index < course_list.length; index++) {
                                 course = course_list[index]
-                                pre = course.Prerequestic.split(",")
+                                pre = course.Prerequisite.split(",")
                                 fufilled_condition = 0
 
                                 for (let index_1 = 0; index_1 < pre.length; index_1++) {
@@ -187,7 +179,7 @@ const quiz_app = new Vue({
                                                     Course_ID: course.Course_ID,
                                                     Course_Name: course.Course_Name,
                                                     Duration: course.Duration,
-                                                    Prerequestic: course.Prerequestic,
+                                                    Prerequisite: course.Prerequisite,
                                                     Start_Time: course.Start_Time,
                                                     End_Time: course.End_Time,
                                                     Sections: course.Sections
@@ -216,7 +208,7 @@ const quiz_app = new Vue({
             placehold_array_5 = Array()
             axios.get(`http://${addressUser}/user_database/` + this.user)
                 .then(function (response) {
-                    user = response.data.data.course[0]
+                    user = response.data.data.user[0]
                     course_pending = user.Course_Pending
                     course_pending = course_pending.split(',')
                     console.log(course_pending)
@@ -230,7 +222,7 @@ const quiz_app = new Vue({
                                     Course_ID: courses.Course_ID,
                                     Course_Name: courses.Course_Name,
                                     Duration: courses.Duration,
-                                    Prerequestic: courses.Prerequestic,
+                                    Prerequisite: courses.Prerequisite,
                                     Start_Time: courses.Start_Time,
                                     End_Time: courses.End_Time,
                                     Sections: courses.Sections,
@@ -336,7 +328,7 @@ const quiz_app = new Vue({
             console.log(course_item)
             class_id = course_item.Class
             course_id = course_item.Course_ID
-            url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id" + course_id.toString()
+            url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id=" + course_id.toString()
             window.open(url_to_visit, '_blank')
         }
 

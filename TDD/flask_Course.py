@@ -22,7 +22,7 @@ class Course(db.Model):
     Course_Name = db.Column(db.String(255), nullable=False)
     Course_Details = db.Column(db.String(255), nullable=False)
     Duration = db.Column(db.String(255), nullable=False)
-    Prerequestic = db.Column(db.String(255), nullable=False)
+    Prerequisite = db.Column(db.String(255), nullable=False)
     Start_Time = db.Column(db.DateTime, nullable=False)
     End_Time = db.Column(db.DateTime, nullable=False)
     Sections = db.Column(db.Integer, nullable=False)

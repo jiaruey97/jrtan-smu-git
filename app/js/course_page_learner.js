@@ -5,56 +5,71 @@ const classAddress='3.131.65.207:5044'
 const userAddress='3.131.65.207:5744'
 // -> Section -> Lesson -> Materials
 
+//Get parameter query
+const urlSearchParams = new URLSearchParams(window.location.search)
+const params = Object.fromEntries(urlSearchParams.entries())
+
 const vueApp = new Vue({
   el: '#app',
   vuetify: new Vuetify(),
   data: {
     student:'',
-    class_id:8,
-    course_id:0,
-    chosen_class:{}
+    class_id:params.class,
+    course_id:params.course_id,
+    current_sections: 0,
+    lesson_materials: [],
+    chosen_course_name: "Some course",
   },
   created() {
     // this.current_sections = this.lesson_materials.length
-
-    axios.get(`http://${classAddress}/spm/search_class/8`)
-        .then(function (response) {
-            // loaded_question = JSON.parse(response.data.data.Question_Object)
-            // quiz_app.questions = loaded_question
-            class_data = response.data.data
-            vueApp.all_classes = class_data.course
-            // vueApp.course_id=class_data.course.Course_ID
-            console.log(vueApp.all_classes)
-            // console.log(vueApp.course_id)
-      
-        })
-        .catch( function (error) {
-            console.log(error)
-        })
-  },
-  methods: {
-    load_class_content: function () {
-
-      //Display the course name:
-      display_class_content()
-      this.class_id=this.class_info
-      // this.chosen_course_id = this.chosen_course
-      axios.get(`http://${classAddress}/spm/search_class/${this.class_id}`)
+    axios.get(`http://${materialAddress}/spm/materials/${this.course_id}`)
         .then(function (response) {
           return_response = response.data.data
 
           //Need to parse the lesson materials, cos it's in JSON form.
-          return_response.Lesson_Materials = JSON.parse(return_response.Lesson_Materials)
+          if (return_response.Lesson_Materials != '') {
+            return_response.Lesson_Materials = JSON.parse(return_response.Lesson_Materials)
+          }
+
           vueApp.lesson_materials = return_response
-          console.log(vueApp.lesson_materials)
-          
+          console.log(vueApp.class_id)
+
           //Unlock!
+          vueApp.current_sections = vueApp.lesson_materials.Lesson_Materials.length
+          vueApp.load_course_content()
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+
+  },
+  methods: {
+    load_course_content: function () {
+      
+      this.chosen_course_id = this.chosen_course
+      axios.get(`http://${materialAddress}/spm/materials/${this.course_id}`)
+        .then(function (response) {
+          return_response = response.data.data
+
+          //Need to parse the lesson materials, cos it's in JSON form.
+          if (return_response.Lesson_Materials != '') {
+            return_response.Lesson_Materials = JSON.parse(return_response.Lesson_Materials)
+          }
+
+          vueApp.lesson_materials = return_response
+
+          //Unlock!
+          vueApp.current_sections = vueApp.lesson_materials.Lesson_Materials.length
           vueApp.lock_upload_materials_interface = false
           vueApp.lock_course_update_button = false
         })
         .catch(function (error) {
           console.log(error)
         })
+    },
+    download_materials: function (file) {
+      //window.location.href = file
+      window.open(file, '_blank');
 
     },
   },

@@ -543,7 +543,7 @@ def get_all_quiz():
             {
                 "code": 200,
                 "data": {
-                    "course": [quiz_i.json() for quiz_i in quiz]
+                    "quiz": [quiz_i.json() for quiz_i in quiz]
                 }
             }
         ), 200
@@ -580,7 +580,7 @@ def find_by_isbn13(Instructor_ID):
             {
                 "code": 200,
                 "data": {
-                    "course": [quiz_i.json() for quiz_i in quiz]
+                    "quiz": [quiz_i.json() for quiz_i in quiz]
                 }
             }
         ), 200

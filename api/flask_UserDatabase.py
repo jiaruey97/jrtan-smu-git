@@ -48,7 +48,7 @@ def get_all_user():
             {
                 "code": 200,
                 "data": {
-                    "course": [user.json() for user in user_Database]
+                    "user": [user.json() for user in user_Database]
                 }
             }
         )
@@ -67,7 +67,7 @@ def get_user_name(Username):
             {
                 "code": 200,
                 "data": {
-                    "course": [user.json() for user in user_Database]
+                    "user": [user.json() for user in user_Database]
                 }
             }
         )

@@ -224,6 +224,33 @@ def update_class(Class_ID):
         }
     ), 404
 
+#Class section update
+@app.route("/spm/class/update_section/<int:Course_ID>/<int:section>")
+def update_sections_for_course(Course_ID,section):
+    class_list = Class.query.filter_by(Course_ID=Course_ID).all()
+    if len(class_list):
+        for class_item in class_list:
+            class_item.Sections = section
+            db.session.add(class_item)
+
+    try:
+        db.session.commit()
+    except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred updating the sections."
+                }
+            ), 500 
+
+    return jsonify(
+        {
+            'code': 200,
+            "message": "Material update is a success!"
+        }
+    ), 200
+
+
 @app.route("/spm/search_class/<int:Class_ID>")
 def find_by_class(Class_ID):
     class_list = Class.query.filter_by(Class_ID=Class_ID).all()
@@ -887,6 +914,10 @@ def create_tracker():
             "data": tracker.json()
         }
     ), 201
+
+@app.route("/spm/get_tracker/<string:username>")
+def retrieve_user_track():
+    data = request.get_json()
 
 
 if __name__ == '__main__':

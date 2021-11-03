@@ -21,10 +21,13 @@ class Tracker(db.Model):
     __tablename__ = 'Tracker'
 
     Tracker_ID = db.Column(db.Integer, primary_key=True)
-    Username = db.Column(db.String(50), db.ForeignKey('User_Database.Username'))
-    Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
-    Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
-    Section_Object = db.Column(db.String(255), nullable=False)
+    # Username = db.Column(db.String(50), db.ForeignKey('User_Database.Username'))
+    # Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
+    # Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
+    Username = db.Column(db.String(50))
+    Course_ID = db.Column(db.Integer)
+    Class_ID = db.Column(db.Integer)
+    Section_Object = db.Column(db.Text, nullable=False)
 
 
     def __init__(self, Username, Course_ID, Class_ID, Section_Object):
@@ -33,9 +36,9 @@ class Tracker(db.Model):
         self.Course_ID = Course_ID
         self.Class_ID = Class_ID
         self.Section_Object = Section_Object
-        #"Tracker_ID": self.Tracker_ID
+
     def json(self):
-        return {"Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Section_Object": self.Section_Object}
+        return {"Tracker_ID": self.Tracker_ID, "Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Section_Object": self.Section_Object}
 
 @app.route("/spm/tracker")
 def get_all_tracker():
@@ -64,6 +67,9 @@ def retrieve_user_track():
 @app.route("/create_tracker/<string:username>/<int:course_id>/<int:class_id>")
 def create_tracker(username, course_id, class_id):
     json_track = json.dumps({'sections_cleared': 0, 'quiz_cleared': 0})
+    print(username)
+    print(course_id)
+    print()
     tracker = Tracker(Username=username, Course_ID=course_id, Class_ID=class_id, Section_Object=json_track)
     db.session.add(tracker)
 
@@ -75,14 +81,14 @@ def create_tracker(username, course_id, class_id):
                 "code": 500,
                 "message": "An error occurred creating unique tracking id for user."
             }
-        )
+        ), 500
     
     return jsonify(
         {
             'code': 200,
             'message': "Unique tracking id created!"
         }
-    )
+    ), 200
 
 
 

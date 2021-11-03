@@ -113,6 +113,7 @@ const quiz_app = new Vue({
                 .then(function (response) {
                     user = response.data.data.user[0]
                     courses = user.Course_Assigned
+                    print(courses)
                     courses = JSON.parse(courses)
                     console.log(courses)
                     for (course of courses) {
@@ -158,8 +159,6 @@ const quiz_app = new Vue({
                     course_complete_array = Array()
                     course_pending_array = Array()
                 
-
-
                     for (let index = 0; index < course_assigned.length; index++) {
                         course_assigned_array.push(course_assigned[index].course)
                     }
@@ -360,7 +359,8 @@ const quiz_app = new Vue({
             console.log(course_item)
             class_id = course_item.Class
             course_id = course_item.Course_ID
-            url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id=" + course_id.toString()
+            course_name = course_item.Course_Name
+            url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id=" + course_id.toString() + "&course_name=" + course_name 
             window.open(url_to_visit, '_blank')
         }
 

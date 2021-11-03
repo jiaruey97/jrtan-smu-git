@@ -18,7 +18,7 @@ const vueApp = new Vue({
     course_id:params.course_id,
     current_sections: 0,
     lesson_materials: [],
-    chosen_course_name: "Some course",
+    chosen_course_name: params.course_name,
   },
   created() {
     // this.current_sections = this.lesson_materials.length

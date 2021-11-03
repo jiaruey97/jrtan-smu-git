@@ -92,7 +92,7 @@ def create_class():
         }
     ), 201
 
-@app.route("/spm/class/<string:Instructor_ID>")
+@app.route("/spm/class/<int:Instructor_ID>")
 def find_by_instructor_class(Instructor_ID):
     class_list = Class.query.filter_by(Instructor_ID=Instructor_ID).all()
     if len(class_list):
@@ -110,6 +110,26 @@ def find_by_instructor_class(Instructor_ID):
             "message": "Class Not Found not found."
         }
     ), 404
+
+@app.route("/spm/class_id/<int:Class_ID>")
+def find_by_class_id(Class_ID):
+    class_list = Class.query.filter_by(Class_ID=Class_ID).all()
+    if len(class_list):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "class": [class_i.json() for class_i in class_list]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Class Not Found not found."
+        }
+    ), 404
+
 
 @app.route("/spm/search_class_course/<int:Course_ID>")
 def find_by_course_class(Course_ID):
@@ -136,7 +156,7 @@ def update_class(Class_ID):
     if request.method == 'POST':
         if class_details:
             data = request.get_json()
-            class_details.update(data)
+            class_details.S(data)
             db.session.commit()
             return jsonify(
             {

@@ -41,9 +41,21 @@ const quiz_app = new Vue({
               { text: 'Actions', value: 'actions' },
 
             ],
+            
+            headers_enrollment:[
+                {
+                    text: 'User',
+                    align: 'start',
+                    value: 'Username',
+                  },
+                  { text: 'Course Pending', value: 'Course_ID' },
+                  { text: 'Class', value: 'Class_ID' },
+                  { text: 'Actions', value: 'actions' },
+            ],
         
         class_details:[],
         instructor_list:[],
+        enrollment_list:[],
         class_display: true,
         instructor_display:false,
 
@@ -51,6 +63,7 @@ const quiz_app = new Vue({
 
     created(){    
         this.initalise_all_class()
+        this.initialise_enrollment()
     }, 
     computed: {
 
@@ -136,6 +149,79 @@ const quiz_app = new Vue({
             })
 
         },
+
+        initialise_enrollment: function(){
+            placehold_array2 = Array()
+            axios.get(`http://${addressUser}/spm/user_database`)
+            .then(function (response) {
+                user_list = response.data.data.user
+                console.log(user_list)
+                for (let index = 0; index < user_list.length; index++) {
+                    user = user_list[index]
+                    console.log(user)
+                    if (user.Course_Pending != "" & user.Course_Pending != "[]" ) {
+                        course_list = JSON.parse(user.Course_Pending)
+                        for (let i2 = 0; i2 < course_list.length; i2++) {
+                            course_details = course_list[i2]
+                            
+                            axios.get(`http://${addressClass}/spm/class_id/` + course_details.class)
+                            .then(function (response) {
+                                class_details = response.data.data.class[0]
+                                back_array = course_list.slice(0, i2)
+                                front_array = course_list.slice(i2+1)
+                                remaing_array = front_array.concat(back_array)
+                                console.log(remaing_array)
+                                course_placeholder = {
+                                    Username:user.Username,
+                                    Course_ID:course_details.course,
+                                    Class_ID:course_details.class,
+                                    Course_Remaining: remaing_array,
+                                    Class_Current_Size: class_details.Current_Size,
+                                    Class_Students: class_details.Students 
+                                }
+                                placehold_array2.push(course_placeholder)        
+                            })
+                            .catch( function (error) {
+                                console.log(error)
+                            })
+                        }
+                    }
+                }         
+            })
+            .catch( function (error) {
+                console.log(error)
+            })
+            this.enrollment_list = placehold_array2
+        },
+
+        student_acceptance: function(stuff){
+            console.log(stuff)
+            post_object = {
+                Course_Pending:stuff.Course_Remaining
+            }
+
+            post_object2 = {
+                Current_Size: stuff.Class_Current_Size + 1,
+                Students:stuff.Class_Students + "," + stuff.Username
+            }
+
+            axios.post(`http://${addressClass}/class/` + stuff.Class_ID + `/update`, post_object2)
+            .then(function (response) {
+                alert("Update Successful")         
+            })
+            .catch( function (error) {
+                console.log(error)
+            })
+
+            axios.post(`http://${addressUser}/user_database/` + stuff.Username + `/update`, post_object)
+            .then(function (response) {
+                alert("Update Successful")         
+            })
+            .catch( function (error) {
+                console.log(error)
+            })
+
+        }
 
         
 

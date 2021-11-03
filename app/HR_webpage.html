@@ -67,8 +67,33 @@
                         </template>
                         </v-data-table>
                     </v-container>
-                </v-main
+                </v-main>
                 
+                
+                <v-main v-if="class_display">
+                    <v-container>
+                        <h1> This Students has Applied for these Courses </h1>
+
+                        <v-data-table
+                            :headers="headers_enrollment"
+                            :items="enrollment_list"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have no Course"
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            @click="student_acceptance(item)"
+                        >
+                        Accept Enrollment
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                    </v-container>
+                </v-main>
 
 
 

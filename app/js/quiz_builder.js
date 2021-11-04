@@ -111,7 +111,7 @@ const vueApp = new Vue({
       axios.get(`http://${addressQuiz}/spm/quiz/` + this.instructor_ID)
       // axios.get("http://3.131.65.207:5244/spm/quiz/12")
       .then(function (response) {
-        quiz = response.data.data.course
+        quiz = response.data.data.quiz
         console.log(quiz)
         for (let i = 0; i < quiz.length; i++) {
           placehold = {
@@ -137,7 +137,7 @@ const vueApp = new Vue({
       axios.get(`http://${addressClass}/spm/class/`+this.instructor_ID)
       //axios.get("http://3.131.65.207:5244/spm/class/12")
       .then(function (response) {
-        class_list = response.data.data.course
+        class_list = response.data.data.class
         for (let i = 0; i < class_list.length; i++) {
           placehold = {
             Class_ID:class_list[i].Class_ID,

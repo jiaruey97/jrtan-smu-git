@@ -1,7 +1,24 @@
 const courseAddress = '3.131.65.207:5144'
 const materialAddress = '3.131.65.207:5344'
+const classAddress = '3.131.65.207:5044'
 
 // -> Section -> Lesson -> Materials
+tracking_data = {
+  'course_id': 2,
+  'class_id': 1,
+  'section_track': [
+    {
+      'section_no': 1,
+      'section': false,
+      'quiz': false
+    },
+    {
+      'section_no': 2,
+      'section': false,
+      'quiz': false
+    },
+  ]
+}
 
 const vueApp = new Vue({
   el: '#app',
@@ -28,7 +45,6 @@ const vueApp = new Vue({
       .then(function (response) {
         course_data = response.data.data
         vueApp.all_courses = course_data.course
-        console.log(vueApp.all_courses)
       })
       .catch(function (error) {
         console.log(error)
@@ -36,9 +52,7 @@ const vueApp = new Vue({
   },
   methods: {
     selectFile: function (file) {
-      console.log(file)
       this.material_path = file
-      console.log(this.material_path)
     },
     load_course_content: function () {
       //Display the course name:
@@ -55,7 +69,6 @@ const vueApp = new Vue({
           }
 
           vueApp.lesson_materials = return_response
-          console.log(vueApp.lesson_materials)
 
           //Unlock!
           vueApp.current_sections = vueApp.lesson_materials.Lesson_Materials.length
@@ -97,10 +110,25 @@ const vueApp = new Vue({
     },
     update_course_material: function () {
       lesson_material_id = this.lesson_materials.Lesson_Materials_ID
+      console.log(this.lesson_materials)
       axios.post(`http://${materialAddress}/update_materials/${lesson_material_id}`, this.lesson_materials)
         .then(function (response) {
           server_reply = response.data.message
-          alert(server_reply)
+          alert(server_reply + " updating sections")
+
+          number_of_sections = vueApp.current_sections
+
+          //This function updates the section for the classes with the corresponding course id
+          axios.get(`http://${classAddress}/spm/class/update_section/${vueApp.chosen_course_id}/${number_of_sections}`)
+          .then(function(response){
+            server_reply = response.data.message
+            alert(server_reply)
+
+          }).catch(function (response){
+
+            alert(error)
+          })
+
         })
         .catch(function (error) {
           alert(error)
@@ -116,11 +144,8 @@ const vueApp = new Vue({
 })
 
 function file_upload() {
-  //filename = vueApp.material_path.name
-  console.log(vueApp.material_path)
   var formData = new FormData();
   formData.append('file', vueApp.material_path)
-  console.log(formData)
   axios.post(`http://${materialAddress}/spm/upload_materials/`, formData,
     {
       headers: {

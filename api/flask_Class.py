@@ -57,7 +57,7 @@ def get_all_class():
             {
                 "code": 200,
                 "data": {
-                    "course": [class_in.json() for class_in in class_list]
+                    "class": [class_in.json() for class_in in class_list]
                 }
             }
         )
@@ -92,7 +92,7 @@ def create_class():
         }
     ), 201
 
-@app.route("/spm/class/<string:Instructor_ID>")
+@app.route("/spm/class/<int:Instructor_ID>")
 def find_by_instructor_class(Instructor_ID):
     class_list = Class.query.filter_by(Instructor_ID=Instructor_ID).all()
     if len(class_list):
@@ -100,7 +100,7 @@ def find_by_instructor_class(Instructor_ID):
             {
                 "code": 200,
                 "data": {
-                    "course": [class_i.json() for class_i in class_list]
+                    "class": [class_i.json() for class_i in class_list]
                 }
             }
         )
@@ -111,6 +111,53 @@ def find_by_instructor_class(Instructor_ID):
         }
     ), 404
 
+@app.route("/spm/class_id/<int:Class_ID>")
+def find_by_class_id(Class_ID):
+    class_list = Class.query.filter_by(Class_ID=Class_ID).all()
+    if len(class_list):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "class": [class_i.json() for class_i in class_list]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Class Not Found not found."
+        }
+    ), 404
+
+#Class section update
+@app.route("/spm/class/update_section/<int:Course_ID>/<int:section>")
+def update_sections_for_course(Course_ID,section):
+    class_list = Class.query.filter_by(Course_ID=Course_ID).all()
+    if len(class_list):
+        for class_item in class_list:
+            class_item.Sections = section
+            db.session.add(class_item)
+
+    try:
+        db.session.commit()
+    except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred updating the sections."
+                }
+            ), 500 
+    
+    return jsonify(
+        {
+            'code': 200,
+            "message": "Material update is a success!"
+        }
+    ), 200
+
+
+
 @app.route("/spm/search_class_course/<int:Course_ID>")
 def find_by_course_class(Course_ID):
     class_list = Class.query.filter_by(Course_ID=Course_ID).all()
@@ -119,7 +166,7 @@ def find_by_course_class(Course_ID):
             {
                 "code": 200,
                 "data": {
-                    "course": [class_i.json() for class_i in class_list]
+                    "class": [class_i.json() for class_i in class_list]
                 }
             }
         )

@@ -15,19 +15,17 @@
 
             <v-app>
 
-                <v-app-bar color="deep-blue accent-4" dark app v-if="mode">
-                    <v-toolbar-title>Course Enrolment</v-toolbar-title>
+                <v-app-bar color="#4CAF50" dark app>
+                    <v-toolbar-title>HR WebPage</v-toolbar-title>
                 </v-app-bar>
 
 
-                <v-main v-if="mode">
-
-                    <v-container>
-                        <h1> Currently Enrolled in Courses </h1>
-
+                <v-main v-if="class_display">
+                    <v-container >
+                        <h1> Classes </h1>
                         <v-data-table
-                            :headers="headers"
-                            :items="enrolled_course"
+                            :headers="headers_class"
+                            :items="class_details"
                             class="elevation-1"
                             loading
                             loading-text="Oh It Appears you have no Course"
@@ -37,85 +35,22 @@
                             small
                             color = "primary"
                             class="mr-2"
-                            @click="enter_class(item)"
+                            @click="assign_instructor(item)"
                         >
-                        Enter Course Page
-                        </v-btn>
-                        </template>
-                        </v-data-table>
-                    </v-container>
-
-
-                    <v-container v-if="enrollment_period">
-                        <h1> Enrollment Admin </h1>
-                        
-                        <h2> Enrollment Period </h2>
-                        <v-data-table
-                            :headers="headers_date"
-                            :items="enrollment_dates"
-                            class="elevation-1"
-                        > </v-data-table>
-                        
-                        <br>
-
-                        <h2> Pending Course to be Approve </h2>
-                          <v-data-table
-                            :headers="headers"
-                            :items="course_pending"
-                            class="elevation-1"
-                            loading
-                            loading-text="Oh It Appears you have nothing pending"  
-                        >
-                        <template v-slot:item.actions="{ item }">
-                        <v-btn
-                            small
-                            color = "error"
-                            class="mr-2"
-                            @click="delete_enrollment(item)"
-                        >
-                        Delete  
-                        </v-btn>
-                        </template>
-                        </v-data-table>
-                    
-
-                        <h2> Available Course </h2>
-                          <v-data-table
-                            :headers="headers"
-                            :items="course_list"
-                            class="elevation-1"
-                            loading
-                            loading-text="Oh It Appears you have no Course"
-                            
-                        >
-                        <template v-slot:item.actions="{ item }">
-                        <v-btn
-                            small
-                            color = "primary"
-                            class="mr-2"
-                            @click="select_class(item)"
-                        >
-                        Enroll  
+                        Assign Instructor
                         </v-btn>
                         </template>
                         </v-data-table>
                     </v-container>
                 </v-main>
 
-
-                <v-app-bar color="deep-blue accent-4" dark app v-if = "!mode">
-                    <v-toolbar-title>Class Enrollment</v-toolbar-title>
-                </v-app-bar>
-
-
-                <v-main v-if="!mode">
-
+                <v-main v-if="instructor_display">
                     <v-container>
-                        <h1> Classessss </h1>
+                        <h1> Instructors </h1>
 
                         <v-data-table
-                            :headers="headers_class"
-                            :items="class_list"
+                            :headers="headers_instructor"
+                            :items="instructor_list"
                             class="elevation-1"
                             loading
                             loading-text="Oh It Appears you have no Course"
@@ -125,14 +60,39 @@
                             small
                             color = "primary"
                             class="mr-2"
-                            @click="enroll_complete(item)"
+                            @click="choose_this_instructor(item)"
                         >
-                        Enroll to Course
+                        Choose Me!
                         </v-btn>
                         </template>
                         </v-data-table>
                     </v-container>
+                </v-main>
+                
+                
+                <v-main v-if="class_display">
+                    <v-container>
+                        <h1> This Students has Applied for these Courses </h1>
 
+                        <v-data-table
+                            :headers="headers_enrollment"
+                            :items="enrollment_list"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have no Course"
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            v-on:click="student_acceptance(item)"
+                        >
+                        Accept Enrollment
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                    </v-container>
                 </v-main>
 
 
@@ -148,7 +108,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="js/course_enrolment_page.js"></script>
+    <script src="js/HR_webpage.js"></script>
 
 </body>
 

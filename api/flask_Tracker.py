@@ -67,9 +67,6 @@ def retrieve_user_track():
 @app.route("/create_tracker/<string:username>/<int:course_id>/<int:class_id>")
 def create_tracker(username, course_id, class_id):
     json_track = json.dumps({'sections_cleared': 0, 'quiz_cleared': 0})
-    print(username)
-    print(course_id)
-    print()
     tracker = Tracker(Username=username, Course_ID=course_id, Class_ID=class_id, Section_Object=json_track)
     db.session.add(tracker)
 

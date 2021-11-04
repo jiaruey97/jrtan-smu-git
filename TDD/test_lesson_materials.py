@@ -73,13 +73,6 @@ class test_retrieve_materials(unittest.TestCase):
         self.assertEqual(response.status_code, 300)
         self.assertDictEqual(test_lesson_materials, result['data'])
 
-if __name__ == '__main__':
-    ############# Add these lines #############
-    import xmlrunner
-    runner = xmlrunner.XMLTestRunner(output='test-reports')
-    unittest.main(testRunner=runner)
-    ###########################################
-    unittest.main()
 
 
 #{'Course_ID': 5, 'Lesson_Materials': [{'section_no': '1', 'materials': [{'material_title': 'History of Cliva', 'material_path': 'upload/Clivian_files.pdf'}, {'material_title': 'The Axiom Group', 'material_path': 'upload/Clivian_files.pdf'}, {'material_title': 'The Grid Palistia', 'material_path': 'upload/Clivian_files.pdf'}]}, {'section_no': '2', 'materials': [{'material_title': 'The History of Void', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'The Perculiarities of Corrupt Magic', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'Idol vs Self', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}]}, {'section_no': '3', 'materials': [{'material_title': 'Introduction to Espers', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'The Gauntlet', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'Mana', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}]}], 'Lesson_Materials_ID': 5}

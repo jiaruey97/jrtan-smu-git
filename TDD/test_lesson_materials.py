@@ -70,7 +70,7 @@ class test_retrieve_materials(unittest.TestCase):
         result = response.json()
         result['data']['Lesson_Materials'] = json.loads(result['data']['Lesson_Materials'])
         
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 300)
         self.assertDictEqual(test_lesson_materials, result['data'])
 
 

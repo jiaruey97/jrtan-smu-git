@@ -27,10 +27,10 @@ class Quiz(db.Model):
     Quiz_ID = db.Column(db.Integer, primary_key=True)
     Course_ID = db.Column(db.Integer)
     Instructor_ID = db.Column(db.Integer)
-    Section = db.Column(db.Integer, nullable=False)
+    Section = db.Column(db.String(255), nullable=False)
     Question_Object = db.Column(db.Text, nullable=False)
     Class_ID = db.Column(db.Integer)
-    Time = db.Column(db.String(30), nullable=False)
+    Time = db.Column(db.String(255), nullable=False)
 
 
     def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Time):
@@ -60,7 +60,7 @@ def get_all_quiz():
             {
                 "code": 200,
                 "data": {
-                    "course": [quiz_i.json() for quiz_i in quiz]
+                    "quiz": [quiz_i.json() for quiz_i in quiz]
                 }
             }
         ), 200

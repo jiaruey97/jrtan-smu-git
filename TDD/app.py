@@ -575,10 +575,10 @@ class Quiz(db.Model):
     Quiz_ID = db.Column(db.Integer, primary_key=True)
     Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
     Instructor_ID = db.Column(db.Integer, db.ForeignKey('Instructor.Instructor_ID'))
-    Section = db.Column(db.Integer, nullable=False)
+    Section = db.Column(db.String(255), nullable=False)
     Question_Object = db.Column(db.Text, nullable=False)
     Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
-    Timing = db.Column(db.String(30), nullable=False)
+    Timing = db.Column(db.String(255), nullable=False)
 
 
     def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Timing):

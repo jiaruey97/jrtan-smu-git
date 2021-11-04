@@ -64,6 +64,7 @@ class test_retrieve_materials(unittest.TestCase):
     def test_update_class_materials(self):
         response = requests.post("http://3.131.65.207:5344/update_materials/5", json=test_lesson_materials)
         self.assertEqual(response.status_code, 200)
+
     
     def test_retrieve_class_materials(self):
         response = requests.get("http://3.131.65.207:5344/spm/materials/5")

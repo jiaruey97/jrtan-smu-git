@@ -24,17 +24,19 @@ class Tracker(db.Model):
     Username = db.Column(db.String(50))
     Course_ID = db.Column(db.Integer)
     Class_ID = db.Column(db.Integer)
-    Section_Object = db.Column(db.Text)
+    Sections_cleared = db.Column(db.Integer)
+    Quiz_cleared = db.Column(db.Integer)
 
-    def __init__(self, Username, Course_ID, Class_ID, Section_Object):
+    def __init__(self, Username, Course_ID, Class_ID, Sections_cleared, Quiz_cleared):
         #self.Tracker_ID = Tracker_ID
         self.Username = Username
         self.Course_ID = Course_ID
         self.Class_ID = Class_ID
-        self.Section_Object = Section_Object
+        self.Sections_cleared = Sections_cleared
+        self.Quiz_cleared = Quiz_cleared
 
     def json(self):
-        return {"Tracker_ID": self.Tracker_ID, "Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Section_Object": self.Section_Object}
+        return {"Tracker_ID": self.Tracker_ID, "Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Sections_cleared": self.Sections_cleared, "Quiz_cleared": self.Quiz_cleared}
 
 
 @app.route("/spm/tracker")
@@ -64,8 +66,7 @@ def retrieve_user_tracking_details(username, course_id, class_id):
         Course_ID=course_id,
         Class_ID=class_id
     ).first()
-    print(tracker.json())
-    print(tracker.json()["Section_Object"])
+
     if tracker:
         return jsonify(
             {
@@ -82,15 +83,12 @@ def retrieve_user_tracking_details(username, course_id, class_id):
         }
     ), 404
 
-{"sections_cleared": 0, "quiz_cleared": 0}
+
 # Initialize the tracker for user
-
-
 @app.route("/create_tracker/<string:username>/<int:course_id>/<int:class_id>")
 def create_tracker(username, course_id, class_id):
-    json_track = json.dumps({'sections_cleared': 0, 'quiz_cleared': 0})
     tracker = Tracker(Username=username, Course_ID=course_id,
-                      Class_ID=class_id, Section_Object=json_track)
+                      Class_ID=class_id, Sections_clear=0, Quiz_clear=0)
     db.session.add(tracker)
 
     try:
@@ -109,6 +107,43 @@ def create_tracker(username, course_id, class_id):
             'message': "Unique tracking id created!"
         }
     ), 200
+
+# Instead of JUST updating, we also need to return the tracker to update
+
+
+@app.route("/spm/update_tracker/<string:username>/<int:course_id>/<int:class_id>/<int:section_number>")
+def update_user_section_cleared(username, course_id, class_id, section_number):
+    tracker = Tracker.query.filter_by(
+        Username=username,
+        Course_ID=course_id,
+        Class_ID=class_id
+    ).first()
+
+    print(tracker.json())
+    tracker.Sections_cleared = section_number
+    db.session.add(tracker)
+
+    try:
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "There's an issue updating the tracker with your completed section"
+            }
+        )
+
+    # Return the section cleared and quiz cleared
+    return jsonify(
+        {
+            "code": 200,
+            "data": {
+                "Sections_cleared": tracker.Sections_cleared,
+                "Quiz_cleared": tracker.Quiz_cleared
+            },
+            "message": "Section update has been successful"
+        }
+    )
 
 
 if __name__ == '__main__':

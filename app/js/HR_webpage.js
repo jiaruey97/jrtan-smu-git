@@ -262,9 +262,6 @@ const quiz_app = new Vue({
                 console.log(error)
             })
             
-            
-
-
         }
 
     }

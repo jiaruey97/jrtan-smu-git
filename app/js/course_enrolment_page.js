@@ -385,7 +385,7 @@ enter_class: function (course_item) {
     class_id = course_item.Class
     course_id = course_item.Course_ID
     course_name = course_item.Course_Name
-    url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id=" + course_id.toString() + "&course_name=" + course_name + "&user=" + vueApp.user.toString()
+    url_to_visit = "course_page_learner.html?class=" + class_id.toString() + "&course_id=" + course_id.toString() + "&course_name=" + course_name + "&user=" + quiz_app.user.toString()
     window.open(url_to_visit, '_blank')
 }
 

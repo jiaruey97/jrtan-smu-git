@@ -88,7 +88,7 @@
                     <v-list>
                       <v-list-item>
                         <v-list-item-action>
-                          <v-btn depressed large class="ma-2" outlined color="indigo" href="quiz.html">
+                          <v-btn depressed large class="ma-2" @click="go_to_quiz(lesson.section_no)" outlined color="indigo">
                             Quiz 1
                           </v-btn>
                         </v-list-item-action>

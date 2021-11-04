@@ -122,8 +122,10 @@ const vueApp = new Vue({
         .catch(function(error){
           console.log(error)
         })
-
-
+    },
+    go_to_quiz: function(section_id){
+      url = "quiz.html?course_id=" + this.course_id + "&section_id=" + section_id + "&course_name=" + vueApp.chosen_course_name + "&user=" + vueApp.student
+      window.open(url, "_blank")
     }
   },
 })

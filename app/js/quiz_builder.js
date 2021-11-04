@@ -109,10 +109,10 @@ const vueApp = new Vue({
     initialize: function() {
       typo = Array()
       axios.get(`http://${addressQuiz}/spm/quiz/` + this.instructor_ID)
-      // axios.get("http://3.131.65.207:5244/spm/quiz/12")
       .then(function (response) {
+        console.log(response.data)
         quiz = response.data.data.quiz
-        console.log(quiz)
+        //console.log(quiz)
         for (let i = 0; i < quiz.length; i++) {
           placehold = {
             Quiz_ID:quiz[i].Quiz_ID,

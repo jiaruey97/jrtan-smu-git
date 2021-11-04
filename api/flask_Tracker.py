@@ -150,7 +150,38 @@ def update_user_section_cleared(username, course_id, class_id, section_number):
         }
     )
 
+@app.route("/spm/update_quiz_tracker/<string:username>/<int:course_id>/<int:class_id>")
+def update_user_quiz_cleared(username, course_id, class_id):
+    tracker = Tracker.query.filter_by(
+        Username=username,
+        Course_ID=course_id,
+        Class_ID=class_id
+    ).first()
 
+    tracker.Quiz_cleared += 1
+    db.session.add(tracker)
+
+    try:
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "There's an issue updating the tracker with your completed section"
+            }
+        )
+
+    # Return the section cleared and quiz cleared
+    return jsonify(
+        {
+            "code": 200,
+            "data": {
+                "Sections_cleared": tracker.Sections_cleared,
+                "Quiz_cleared": tracker.Quiz_cleared
+            },
+            "message": "Section update has been successful"
+        }
+    )
 
     
 

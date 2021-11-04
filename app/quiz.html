@@ -77,7 +77,7 @@
                             <div id='submission' v-if="quiz_section == false">
                                 {{submit_msg}}</br>
                                 Your score: {{score}} </br>
-                                <v-btn tile color="success">
+                                <v-btn @click="return_to_course_page" tile color="success">
                                     Return
                                 </v-btn>
                             </div>

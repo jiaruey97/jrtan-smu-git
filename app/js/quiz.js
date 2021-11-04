@@ -1,5 +1,6 @@
 const addressQuiz = "3.131.65.207:5544"
 const addressQuizResult = "3.131.65.207:5444"
+const trackerAddress = '3.131.65.207:5644'
 
 const urlSearchParams = new URLSearchParams(window.location.search)
 const params = Object.fromEntries(urlSearchParams.entries())
@@ -56,9 +57,9 @@ const quiz_app = new Vue({
             return None
         },
         return_to_course_page: function () {
-            url = "course_page_learner.html&class=" 
+            url = "course_page_learner.html?class=" + quiz_app.class_id + "&course_id=" + quiz_app.course_id + "&course_name=" + quiz_app.course_name + "&user=" + quiz_app.student
+            window.open(url)
         }
-        //?class=6&course_id=2&course_name=Studies%20on%20the%20Xerox%20Printer&user=Tommy
     }
 })
 
@@ -111,16 +112,22 @@ function quiz_submit() {
         "Marks": quiz_app.score,
         "Pass": pass_or_fail
     }
-
+    startTimer(60, false)
     //Submit user score into the database
     axios.post(`http://${addressQuizResult}/create_results`, post_result)
-    .then(function(response){
-        alert("Your results have been successfully submitted!")
-    })
-    .catch(function(error){
-        alert("Something went wrong with the submission!")
-    })
-
+        .then(function (response) {
+            alert("Your results have been successfully submitted!")
+            axios.get(`http://${trackerAddress}/spm/update_quiz_tracker/${quiz_app.student}/${quiz_app.course_id}/${quiz_app.class_id}`)
+                .then(function (response) {
+                    alert("Your quiz results are successfully recorded!")
+                })
+                .catch(function (response){
+                    alert("The tracker did not successfully update!")
+                })
+        })
+        .catch(function (error) {
+            alert("Something went wrong with the submission!")
+        })
 
     quiz_app.submit_msg = "You've successfully submitted your quiz! You've attained " + percentage_score.toString() + "%!"
 
@@ -129,7 +136,8 @@ function quiz_submit() {
 
 }
 
-function startTimer(duration) {
+function startTimer(duration, timer_run = true) {
+    
     var timer = duration, minutes, seconds;
     var interval = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
@@ -137,6 +145,12 @@ function startTimer(duration) {
 
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        if (timer_run == false){
+            quiz_app.timer_text = "Done!"
+            clearInterval(interval)
+        }
+
         if (minutes == "00" && seconds == "00") {
             quiz_app.timer_text = "Time's up~!"
             quiz_submit()

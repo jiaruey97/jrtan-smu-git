@@ -43,7 +43,7 @@ class TestRetrieveCourse(TestApp):
         db.session.add(c1)
         db.session.commit()
         response = self.client.get("spm/course_retrieve/{0}".format(c1.Course_ID))
-        self.assertEqual(response.status_code, 600)
+        self.assertEqual(response.status_code, 200)
  
 
 

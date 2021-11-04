@@ -16,16 +16,15 @@
         <v-app-bar color=#455A64 dense dark>
           <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-          <v-toolbar-title>Circuit Theory Course</v-toolbar-title>
+          <v-toolbar-title>{{chosen_course_name}}</v-toolbar-title>
 
           <v-spacer></v-spacer>
-
-          <v-btn icon>
-            <v-icon>mdi-home-city</v-icon>
+          <v-select :items="all_courses" v-model='chosen_course' label="Select Course" dense item-text="Course_Name"
+          item-value="Course_ID"></v-select>
+          <v-btn @click='load_course_content' icon>
+            <v-icon>mdi-plus-thick</v-icon>
           </v-btn>
-          <v-btn icon>
-            <v-icon>mdi-account</v-icon>
-          </v-btn>
+          <v-btn depressed large class="ma-2" @click='update_course_material' :disabled='lock_course_update_button' color="success">Update Course</v-btn>
         </v-app-bar>
       </div>
 
@@ -37,7 +36,7 @@
           <!-- This is the uploader interface for them to upload stuff! -->
           <!-- https://stackoverflow.com/questions/43013858/how-to-post-a-file-from-a-form-with-axios -->
 
-          <v-card style="margin-bottom: 15px;">
+          <v-card style="margin-bottom: 15px;" :disabled='lock_upload_materials_interface'>
             <v-toolbar flat color=#607D8B dark>
               <v-toolbar-title>Upload Material Interface</v-toolbar-title>
             </v-toolbar>
@@ -53,10 +52,17 @@
                   <v-card-title>
                     Upload Material List
                   </v-card-title>
-                  <v-text-field type='number' label="Section Number:"></v-text-field>
-                  <v-text-field label="Material Name:"></v-text-field>
-                  <v-file-input show-size label="File input"></v-file-input>
-                  <v-btn depressed large class="ma-2" outlined color="indigo">Upload</v-btn>
+                  <v-radio-group v-model="new_old_section_choice">
+                    <v-radio label="New Section" value="new"></v-radio>
+                    <v-radio label="Old Section" value="old"></v-radio>
+                  </v-radio-group>
+                  <v-text-field type='number' min="1" v-model='chosen_section' :max="current_sections"
+                    label="Section Number:"></v-text-field>
+                  <v-text-field v-model="new_material" label="Material Name:"></v-text-field>
+                  <!-- <v-file-input show-size v-model="material_path" @change='selectFile' label="File input"></v-file-input> -->
+                  <v-file-input show-size @change='selectFile' label="File input"></v-file-input>
+                  <v-btn depressed large class="ma-2" onclick="file_upload()" outlined color="indigo">Upload File</v-btn>
+                  <v-btn depressed large class="ma-2" @click='append_material' outlined color="indigo">Update Materials</v-btn>
                 </v-card>
               </v-tab-item>
             </v-tabs>
@@ -65,7 +71,8 @@
           <!-- This is the uploader interface for them to upload stuff! -->
 
           <!-- This entire section would be V-FORED!! -->
-          <div v-for='(lesson, index) in lesson_materials' :keys="lesson_materials.materials">
+          <div v-for='(lesson, index) in lesson_materials.Lesson_Materials'
+            :keys="lesson_materials.Lesson_Materials.materials">
             <v-card style="margin-bottom: 15px;">
               <v-toolbar flat color=#607D8B dark>
                 <v-toolbar-title>Section {{lesson.section_no}}</v-toolbar-title>
@@ -102,7 +109,7 @@
                           <v-list-item-title>{{material.material_title}}</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
-                          <v-btn icon>
+                          <v-btn @click='download_materials(material.material_path)' icon>
                             <v-icon>mdi-download</v-icon>
                           </v-btn>
                         </v-list-item-action>

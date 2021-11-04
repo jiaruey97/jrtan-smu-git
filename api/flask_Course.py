@@ -15,7 +15,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-
 class Course(db.Model):
     __tablename__ = 'Course'
 
@@ -23,23 +22,23 @@ class Course(db.Model):
     Course_Name = db.Column(db.String(255), nullable=False)
     Course_Details = db.Column(db.String(255), nullable=False)
     Duration = db.Column(db.String(255), nullable=False)
-    Prerequestic = db.Column(db.String(255), nullable=False)
+    Prerequisite = db.Column(db.String(255), nullable=False)
     Start_Time = db.Column(db.DateTime, nullable=False)
     End_Time = db.Column(db.DateTime, nullable=False)
     Sections = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, Course_ID, Course_Name, Course_Details, Duration, Prerequestic, Start_Time, End_Time, Sections):
+    def __init__(self, Course_ID, Course_Name, Course_Details, Duration, Prerequisite, Start_Time, End_Time, Sections):
         self.Course_ID = Course_ID
         self.Course_Name = Course_Name
         self.Course_Details = Course_Details
         self.Duration = Duration
-        self.Prerequestic = Prerequestic
+        self.Prerequisite = Prerequisite
         self.Start_Time = Start_Time
         self.End_Time = End_Time
         self.Sections = Sections
 
     def json(self):
-        return {"Course_ID": self.Course_ID, "Course_Name": self.Course_Name, "Course_Details": self.Course_Details, "Duration": self.Duration, "Prerequestic": self.Prerequestic, "Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections}
+        return {"Course_ID": self.Course_ID, "Course_Name": self.Course_Name, "Course_Details": self.Course_Details, "Duration": self.Duration, "Prerequisite": self.Prerequisite, "Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections}
 
 
 @app.route("/spm/course")
@@ -62,24 +61,24 @@ def get_all_course():
     ), 404
 
 
-@app.route("/spm/course/<id:course_id>")
-def get_all_course(course_id):
-    course = Course.query.filter_by(course_id=course_id).one()
-    if len(course):
+@app.route("/spm/course_retrieve/<int:Course_ID>")
+def get_course_for_learner(Course_ID):
+    course = Course.query.filter_by(Course_ID=Course_ID).one()
+    if course != None:
         return jsonify(
             {
                 "code": 200,
-                "data": {
-                    course
-                }
+                "data": course.json()      
             }
         )
     return jsonify(
         {
             "code": 404,
-            "message": "Course information Not Found."
+            "message": "Course Not Found not found."
         }
     ), 404
+
+
 
 
 if __name__ == '__main__':

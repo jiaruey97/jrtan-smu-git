@@ -9,7 +9,7 @@ create table if not EXISTS Course (
   Course_Name varchar(255)  NOT NULL,
   Course_Details varchar(255)  NOT NULL,
   Duration varchar(255)  NOT NULL, 
-  Prerequestic varchar(255)  NOT NULL, 
+  Prerequisite varchar(255)  NOT NULL, 
   Start_Time DATETIME  NOT NULL, 
   End_Time DATETIME  NOT NULL, 
   Sections int NOT NULL, 
@@ -19,7 +19,7 @@ create table if not EXISTS Course (
 /*Course can have as many class as it needs*/
 
 create table if not EXISTS Class (
-  Class_ID int  NOT NULL,
+  Class_ID int NOT NULL,
   Class_Name varchar(255)  NOT NULL,
   Class_Details varchar(255)  NOT NULL,
   Size int  NOT NULL,
@@ -97,11 +97,11 @@ Quiz_Results_ID needed for Flask
 
 create table if not EXISTS Tracker(
   
-  Tracker_ID int NOT NULL,
+  Tracker_ID int auto_increment,
   Username varchar(50) NOT NULL,
   Course_ID int  NOT NULL,
   Class_ID int NOT NULL,
-  Section_Object varchar(255) NOT NULL,
+  Section_Object json NOT NULL,
   PRIMARY KEY (Tracker_ID),
   FOREIGN KEY (Course_ID) REFERENCES Course(Course_ID),
   FOREIGN KEY (Class_ID) REFERENCES Class(Class_ID),
@@ -115,10 +115,9 @@ Tracker_ID needed for Flask
 create table if not EXISTS Lesson_Materials(
   Lesson_Materials_ID int NOT NULL,
   Course_ID int NOT NULL,
-  Section int NOT NULL,
-  Lesson_Materials varchar(255) NOT NULL,
+  Lesson_Materials json NOT NULL,
   PRIMARY KEY (Lesson_Materials_ID),
-  FOREIGN KEY (Course_ID) REFERENCES Class(Course_ID)
+  FOREIGN KEY (Course_ID) REFERENCES Course(Course_ID)
 );
 
 /*Material Generated will be based on Current Sections*/

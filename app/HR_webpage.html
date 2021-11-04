@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+
+<body>
+    <div id="app">
+
+        <div id="app">
+
+            <v-app>
+
+                <v-app-bar color="#4CAF50" dark app>
+                    <v-toolbar-title>HR WebPage</v-toolbar-title>
+                </v-app-bar>
+
+
+                <v-main v-if="class_display">
+                    <v-container >
+                        <h1> Classes </h1>
+                        <v-data-table
+                            :headers="headers_class"
+                            :items="class_details"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have no Course"
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            @click="assign_instructor(item)"
+                        >
+                        Assign Instructor
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                    </v-container>
+                </v-main>
+
+                <v-main v-if="instructor_display">
+                    <v-container>
+                        <h1> Instructors </h1>
+
+                        <v-data-table
+                            :headers="headers_instructor"
+                            :items="instructor_list"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have no Course"
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            @click="choose_this_instructor(item)"
+                        >
+                        Choose Me!
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                    </v-container>
+                </v-main>
+                
+                
+                <v-main v-if="class_display">
+                    <v-container>
+                        <h1> This Students has Applied for these Courses </h1>
+
+                        <v-data-table
+                            :headers="headers_enrollment"
+                            :items="enrollment_list"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have no Course"
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            v-on:click="student_acceptance(item)"
+                        >
+                        Accept Enrollment
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                    </v-container>
+                </v-main>
+
+
+
+            </v-app>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/HR_webpage.js"></script>
+
+</body>
+
+</html>

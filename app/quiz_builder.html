@@ -47,7 +47,7 @@
         <v-toolbar-title>Quiz Builder</v-toolbar-title>
         <v-col class="text-right">
         <!-- This is to commit to the Server the changes made-->
-        <v-btn elevation="2" v-on:click='submit_database' v-if="show_quiz"> Submit </v-btn>
+        <v-btn elevation="2" v-on:click='trigger_dialog' v-if="show_quiz"> Submit </v-btn>
         </v-col>
         
       </v-app-bar>
@@ -57,63 +57,76 @@
 
       <v-main v-if ="!show_quiz">
 
-      <h1> Edit your Quiz </h1>
+        <v-container>
+          <h1> Edit your Quiz </h1>
+          <v-data-table
+            :headers="headers"
+            :items="quiz_list"
+            class="elevation-1"
+            loading
+            loading-text="Oh It Appears you have no Quiz"
+            
+          >
+          <template v-slot:item.actions="{ item }">
 
-      <v-data-table
-        :headers="headers"
-        :items="quiz_list"
-        class="elevation-1"
-        loading
-        loading-text="Oh It Appears you have no Quiz"
-        
-      >
-      <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editQuiz(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteExistingQuiz(item)"
-      >
-        mdi-delete
-      </v-icon>
-      </template>
-      </v-data-table>
+            <v-btn
+              small
+              color = "primary"
+              class="mr-2"
+              @click="editQuiz(item)"
+            >
+            Edit  
+            </v-btn>
+          
+            <v-btn
+              small
+              color = "danger"
+              class="mr-2"
+              @click="deleteExistingQuiz(item)"
+            >
+            Delete  
+            </v-btn>
+
+          </template>
+          </v-data-table>
 
 
-      <h1> Or you can start a new quiz </h1>
+          <h1> Or you can start a new quiz </h1>
 
-        <v-data-table
-        :headers="headers2"
-        :items="course_list"
-        class="elevation-1"
-        loading
-        loading-text="Oh It Appears you have no Class"
-        
-      >
-      <template v-slot:item.act="{ item }">
+            <v-data-table
+            :headers="headers2"
+            :items="course_list"
+            class="elevation-1"
+            loading
+            loading-text="Oh It Appears you have no Class"
+            
+          >
 
-        <v-select
-          v-model = "selected_section"
-          :items="items"
-          label="Standard"
-          width="20px"
-        ></v-select>
+            <template v-slot:item.sec>
 
-      <v-icon
-        small
-        class="mr-2"
-        @click="newQuiz(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      </template>
-      
-      </v-data-table>
+            <v-text-field type = "number" v-model.number="selected_section" color="blue darken-2" label="Type a Section Number" outlined
+            required></v-text-field>
+
+            </template>
+
+
+          <template v-slot:item.act="{ item }">
+
+            <v-btn
+              small
+              color = "primary"
+              class="mr-2"
+              @click="newQuiz(item)"
+            >
+            Create Quiz  
+            </v-btn>
+
+          </template>
+          
+          </v-data-table>
+        </v-container>
+
+
 
 
       </v-main>
@@ -121,6 +134,41 @@
 
       <v-main v-if="show_quiz">
         <v-container>
+
+        <v-dialog v-model="dialog">
+          <v-card>
+            <v-card-title class="text-h5 grey lighten-2">
+              Duration of the Quiz
+            </v-card-title>
+
+            <v-divider></v-divider>
+
+            <v-card-text>
+              Please Type the hours here
+            </v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-text-field type= "number" v-model="timing" color="blue darken-2" label="Hours" outlined
+            required></v-text-field>
+
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                text
+                v-on:click="submit_database"
+              >
+                Submit to Database
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+
+
           <v-row style="margin-bottom: 3px">
             <!-- Button grouping to specify if users want to see results by Market of Protection/ -->
             <v-col cols="12" md="12">
@@ -243,8 +291,13 @@
             </v-form>
           </v-card>
 
-        </v-container>
 
+
+
+
+
+        </v-container>
+        
       </v-main>
     </v-app>
 

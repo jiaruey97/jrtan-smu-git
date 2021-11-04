@@ -1,9 +1,8 @@
 
 const courseAddress = '3.131.65.207:5144'
 const materialAddress = '3.131.65.207:5344'
-const classAddress = '3.131.65.207:5044'
-const userAddress = '3.131.65.207:5744'
-const trackerAddress = '3.131.65.207:5644'
+const classAddress='3.131.65.207:5044'
+const userAddress='3.131.65.207:5744'
 // -> Section -> Lesson -> Materials
 
 //Get parameter query
@@ -16,9 +15,9 @@ const vueApp = new Vue({
   el: '#app',
   vuetify: new Vuetify(),
   data: {
-    student: params.user,
-    class_id: params.class,
-    course_id: params.course_id,
+    student:params.user,
+    class_id:params.class,
+    course_id:params.course_id,
     current_sections: 0,
     lesson_materials: [],
     chosen_course_name: params.course_name,
@@ -73,7 +72,7 @@ const vueApp = new Vue({
   },
   methods: {
     load_course_content: function () {
-
+      
       this.chosen_course_id = this.chosen_course
       axios.get(`http://${materialAddress}/spm/materials/${this.course_id}`)
         .then(function (response) {
@@ -139,14 +138,14 @@ function update_section_unlock() {
 }
 
 //Find course name to display
-function display_class_content(class_id) {
-  class_obj = vueApp.all_classes.find(course => course.Class_ID == vueApp.chosen_class)
-  // vueApp.chosen_course_name = course_obj.Course_Name
-  vueApp.class_id = class_obj.Class_ID
-  vueApp.student = class_obj.Students
+function display_class_content(class_id){
+    class_obj = vueApp.all_classes.find(course => course.Class_ID == vueApp.chosen_class)
+    // vueApp.chosen_course_name = course_obj.Course_Name
+    vueApp.class_id=class_obj.Class_ID
+    vueApp.student=class_obj.Students
 }
 
-//We create a course prototype
+// //We create a course prototype
 function Course(course_id, course_name, course_details, duration, prerequisite, start_time, end_time) {
   this.course_info = {
     'course_id': course_id,

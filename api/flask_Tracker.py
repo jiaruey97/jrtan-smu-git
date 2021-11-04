@@ -6,10 +6,10 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-# local flask
+#local flask
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
 
-# bitnami flask
+#bitnami flask
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:t2AlF2wAibZH@127.0.0.1:3306/SPM'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -21,6 +21,9 @@ class Tracker(db.Model):
     __tablename__ = 'Tracker'
 
     Tracker_ID = db.Column(db.Integer, primary_key=True)
+    # Username = db.Column(db.String(50), db.ForeignKey('User_Database.Username'))
+    # Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
+    # Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
     Username = db.Column(db.String(50))
     Course_ID = db.Column(db.Integer)
     Class_ID = db.Column(db.Integer)
@@ -37,7 +40,6 @@ class Tracker(db.Model):
 
     def json(self):
         return {"Tracker_ID": self.Tracker_ID, "Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Sections_cleared": self.Sections_cleared, "Quiz_cleared": self.Quiz_cleared}
-
 
 @app.route("/spm/tracker")
 def get_all_tracker():
@@ -58,6 +60,9 @@ def get_all_tracker():
         }
     ), 404
 
+@app.route("/spm/get_tracker/<string:username>")
+def retrieve_user_track():
+    data = request.get_json()
 
 @app.route("/spm/get_tracker/<string:username>/<int:course_id>/<int:class_id>")
 def retrieve_user_tracking_details(username, course_id, class_id):
@@ -100,7 +105,7 @@ def create_tracker(username, course_id, class_id):
                 "message": "An error occurred creating unique tracking id for user."
             }
         ), 500
-
+    
     return jsonify(
         {
             'code': 200,
@@ -145,6 +150,9 @@ def update_user_section_cleared(username, course_id, class_id, section_number):
         }
     )
 
+
+
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5644, debug=True)

@@ -124,7 +124,7 @@ const vueApp = new Vue({
         })
     },
     go_to_quiz: function(section_id){
-      url = "quiz.html?course_id=" + this.course_id + "&section_id=" + section_id + "&course_name=" + vueApp.chosen_course_name + "&user=" + vueApp.student
+      url = "quiz.html?course_id=" + this.course_id + "&section_id=" + section_id + "&class_id=" + this.class_id + "&course_name=" + vueApp.chosen_course_name + "&user=" + vueApp.student
       window.open(url, "_blank")
     }
   },
@@ -141,7 +141,7 @@ function update_section_unlock() {
 }
 
 //Find course name to display
-function display_class_content(class_id){
+function display_class_content(){
     class_obj = vueApp.all_classes.find(course => course.Class_ID == vueApp.chosen_class)
     // vueApp.chosen_course_name = course_obj.Course_Name
     vueApp.class_id=class_obj.Class_ID

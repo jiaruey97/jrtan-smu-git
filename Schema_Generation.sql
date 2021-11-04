@@ -78,7 +78,7 @@ create table if not EXISTS Quiz (
 
 create table if not EXISTS Quiz_Results(
 
-  Quiz_Results_ID int NOT NULL,
+  Quiz_Results_ID int auto_increment,
   Username varchar(50) NOT NULL,
   Quiz_ID int NOT NULL,
   Course_ID int  NOT NULL,

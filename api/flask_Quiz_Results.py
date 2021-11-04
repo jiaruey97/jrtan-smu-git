@@ -28,8 +28,7 @@ class Quiz_Results(db.Model):
     Pass = db.Column(db.Boolean, nullable=False)
 
 
-    def __init__(self,  Quiz_Results_ID, Username, Quiz_ID, Course_ID, Section, Marks, Pass):
-        self.Quiz_Results_ID = Quiz_Results_ID
+    def __init__(self, Username, Quiz_ID, Course_ID, Section, Marks, Pass):
         self.Username = Username
         self.Quiz_ID = Quiz_ID
         self.Course_ID = Course_ID
@@ -63,10 +62,11 @@ def get_all_results():
 def create_results():
 
     data = request.get_json()
-    results = Quiz_Results(**data)
+    #print(data.Username)
+    results = Quiz_Results(Username=data['Username'], Quiz_ID=data['Quiz_ID'], Course_ID=data['Course_ID'], Section=data['Section'], Marks=data['Marks'], Pass=data['Marks'])
+    db.session.add(results)
 
     try:
-        db.session.add(results)
         db.session.commit()
     except:
         return jsonify(

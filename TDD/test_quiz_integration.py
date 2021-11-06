@@ -61,7 +61,7 @@ class TestCreateQuiz(TestApp):
         response = self.client.post("/create_quiz",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 202)
         self.assertEqual(response.json, {
             "code": 201,
             "data": {

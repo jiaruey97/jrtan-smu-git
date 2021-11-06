@@ -46,7 +46,6 @@ class TestResultRetrieve(TestApp):
         
         r1 = Quiz_Results(Quiz_Results_ID= 1,Username="UKM123",Quiz_ID = 1, Course_ID = 1, Section = 1, Marks = 12, Pass = False )
 
-
         db.session.add(u1)
         db.session.add(c1)
         db.session.add(q1)
@@ -61,23 +60,23 @@ class TestResultRetrieve(TestApp):
             "code": 200,
             "data": {
                         "results": [{"Quiz_Results_ID": 1,
-                                    "Username":"UKM123",
-                                    "Quiz_ID": 1, 
-                                    "Course_ID" : 1, 
-                                    "Section" : 1, 
-                                    "Marks" : 12, 
-                                    "Pass" : False}]
+                                    "Username": "UKM123",
+                                    "Quiz_ID": 1,
+                                    "Course_ID": 1,
+                                    "Section": 1,
+                                    "Marks": 12,
+                                    "Pass": False}]
             }
                     })
 
 class TestResultsCreate(TestApp):
-    def test_create_result(self):   
+    def test_create_result(self):
         date_object = datetime.datetime.now()
         u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
                     Course_Completed="date_object", Course_Pending="Course_Pending")
 
-        q1 = Quiz(Course_ID=1, Instructor_ID=1, 
+        q1 = Quiz(Course_ID=1, Instructor_ID=1,
                 Section=1, Question_Object='Chickensds', Class_ID=1,
                 Timing="23")
 
@@ -184,7 +183,6 @@ class TestResultsCreate(TestApp):
         c1 = Course(Course_ID=1, Course_Name='Ducky',
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
-
 
         db.session.add(u1)
         db.session.add(c1)

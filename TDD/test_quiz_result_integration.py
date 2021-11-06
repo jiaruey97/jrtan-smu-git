@@ -122,20 +122,20 @@ class TestResultsCreate(TestApp):
             "data": {
                     "Quiz_Results_ID": 1,
                     "Username":"UKM123",
-                    "Quiz_ID": 1, 
-                    "Course_ID" : 1, 
-                    "Section": 1, 
-                    "Marks": 12, 
+                    "Quiz_ID": 1,
+                    "Course_ID": 1,
+                    "Section": 1,
+                    "Marks": 12,
                     "Pass": False}
                     })
 
-    def test_create_result_invalid_Course(self):   
+    def test_create_result_invalid_Course(self):
         date_object = datetime.datetime.now()
         u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
                         Department='UKM123', Current_Position='hello', Course_Assigned='123',
                         Course_Completed="date_object", Course_Pending="Course_Pending")
 
-        q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
+        q1 = Quiz(Course_ID=1, Instructor_ID=1,
                 Section=1, Question_Object='Chickensds', Class_ID=1,
                 Timing="23")
 

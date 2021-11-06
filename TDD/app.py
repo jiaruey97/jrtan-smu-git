@@ -112,7 +112,6 @@ class Class(db.Model):
         return {"Class_ID": self.Class_ID, "Class_Name": self.Class_Name, "Class_Details": self.Class_Details, "Size": self.Size, "Current_Size": self.Current_Size, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID,"Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections, "Students": self.Students}
 
 
-
 @app.route("/spm/class")
 def get_all_class():
     class_list = Class.query.all()
@@ -131,6 +130,7 @@ def get_all_class():
             "message": "There are no class."
         }
     ), 404
+
 
 @app.route("/create_class", methods=['POST'])
 def create_class():
@@ -230,7 +230,7 @@ def update_class(Class_ID):
 
 # Class section update
 @app.route("/spm/class/update_section/<int:Course_ID>/<int:section>")
-def update_sections_for_course(Course_ID,section):
+def update_sections_for_course(Course_ID, section):
     class_list = Class.query.filter_by(Course_ID=Course_ID).all()
     if len(class_list):
         for class_item in class_list:
@@ -240,12 +240,12 @@ def update_sections_for_course(Course_ID,section):
     try:
         db.session.commit()
     except:
-            return jsonify(
-                {
-                    "code": 500,
-                    "message": "An error occurred updating the sections."
-                }
-            ), 500 
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred updating the sections."
+            }
+        ), 500
 
     return jsonify(
         {
@@ -318,6 +318,7 @@ def get_all_user():
         }
     ), 404
 
+
 @app.route("/user_database/<string:Username>")
 def get_user_name(Username):
     user_Database = User_Database.query.filter_by(Username=Username).all()
@@ -378,7 +379,6 @@ class Instructor(db.Model):
         return {"Instructor_ID": self.Instructor_ID, "Actual_Name": self.Actual_Name, "Username": self.Username}
 
 
-
 @app.route("/spm/instructor")
 def get_all_instructor():
     instructor_list = Instructor.query.all()
@@ -403,7 +403,6 @@ def get_all_instructor():
 @app.route("/create_instructor", methods=['POST'])
 def create_instructor():
     data = request.get_json()
-    
 
     # Validate User
     user = User_Database.query.filter_by(Username=data['Username']).first()
@@ -623,6 +622,7 @@ def get_all_quiz():
         }
     ), 404
 
+
 @app.route("/spm/quiz_retrieve/<int:Quiz_ID>")
 def get_quiz_for_learner(Quiz_ID):
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
@@ -680,7 +680,7 @@ def delete_quiz(Quiz_ID):
             "message": "Oops somethign went wrong"
         }
     ), 404
-    
+
 
 # Create Quiz
 @app.route("/create_quiz", methods=['POST'])
@@ -731,6 +731,7 @@ def create_quiz():
             "data": quiz.json()
         }
     ), 201
+
 
 @app.route('/quiz/<int:Quiz_ID>/update',methods = ['POST'])
 def update(Quiz_ID):
@@ -787,6 +788,7 @@ class Quiz_Results(db.Model):
     def json(self):
         return {"Quiz_Results_ID": self.Quiz_Results_ID, "Username": self.Username, "Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Section": self.Section, "Marks": self.Marks, "Pass": self.Pass}
 
+
 @app.route("/spm/results")
 def get_all_results():
     results = Quiz_Results.query.all()
@@ -805,6 +807,7 @@ def get_all_results():
             "message": "There are no results."
         }
     ), 404
+
 
 @app.route("/create_results", methods=['POST'])
 def create_results():
@@ -873,6 +876,7 @@ class Tracker(db.Model):
 
     def json(self):
         return {"Tracker_ID": self.Tracker_ID, "Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Section_Object": self.Section_Object}
+
 
 @app.route("/spm/tracker")
 def get_all_tracker():

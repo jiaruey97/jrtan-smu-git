@@ -242,7 +242,7 @@ class TestQuizRetrieveByID(TestApp):
 class TestQuizRetrieve(TestApp):
     def test_retrieve_all_quiz(self):
         date_object = datetime.datetime.now()
-        q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
+        q1 = Quiz(Course_ID=1, Instructor_ID=1, 
                 Section=1, Question_Object='Chickensds', Class_ID=1,
                 Timing="23")
         c1 = Course(Course_ID=1, Course_Name='Ducky',
@@ -454,6 +454,7 @@ class TestQuizUpdate(TestApp):
             "code": 500,
             "message": "No Such Quiz Exist!"
         })
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -65,7 +65,7 @@ def get_all_course():
 @app.route("/spm/course_retrieve/<int:Course_ID>")
 def get_course_for_learner(Course_ID):
     course = Course.query.filter_by(Course_ID=Course_ID).one()
-    if course != None:
+    if course is not None:
         return jsonify(
             {
                 "code": 200,
@@ -582,7 +582,6 @@ class Quiz(db.Model):
     Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
     Timing = db.Column(db.String(30), nullable=False)
 
-
     def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Timing):
         self.Class_ID = Class_ID
         self.Course_ID = Course_ID
@@ -624,7 +623,7 @@ def get_all_quiz():
 @app.route("/spm/quiz_retrieve/<int:Quiz_ID>")
 def get_quiz_for_learner(Quiz_ID):
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
-    if quiz != None:
+    if quiz is not None:
         return jsonify(
             {
                 "code": 200,

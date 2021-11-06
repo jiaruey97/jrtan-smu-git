@@ -592,7 +592,7 @@ class Quiz(db.Model):
         self.Timing = Timing
 
     def json(self):
-        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Timing":self.Timing}
+        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Timing": self.Timing}
 
 
 ###################################################################################################################################################################################################################
@@ -628,7 +628,7 @@ def get_quiz_for_learner(Quiz_ID):
         return jsonify(
             {
                 "code": 200,
-                "data": quiz.json() 
+                "data": quiz.json()
             }
         ), 200
     return jsonify(
@@ -639,6 +639,7 @@ def get_quiz_for_learner(Quiz_ID):
     ), 404
 
 #
+
 
 @app.route("/spm/quiz/<int:Instructor_ID>")
 def find_by_isbn13(Instructor_ID):
@@ -775,8 +776,7 @@ class Quiz_Results(db.Model):
     Marks = db.Column(db.Integer, nullable=False)
     Pass = db.Column(db.Boolean, nullable=False)
 
-
-    def __init__(self,  Quiz_Results_ID, Username, Quiz_ID, Course_ID, Section, Marks, Pass):
+    def __init__(self, Quiz_Results_ID, Username, Quiz_ID, Course_ID, Section, Marks, Pass):
         self.Quiz_Results_ID = Quiz_Results_ID
         self.Username = Username
         self.Quiz_ID = Quiz_ID

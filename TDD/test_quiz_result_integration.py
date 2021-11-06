@@ -124,16 +124,16 @@ class TestResultsCreate(TestApp):
                     "Username":"UKM123",
                     "Quiz_ID": 1, 
                     "Course_ID" : 1, 
-                    "Section" : 1, 
-                    "Marks" : 12, 
-                    "Pass" : False}
+                    "Section": 1, 
+                    "Marks": 12, 
+                    "Pass": False}
                     })
 
     def test_create_result_invalid_Course(self):   
         date_object = datetime.datetime.now()
         u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
-                    Department='UKM123', Current_Position='hello', Course_Assigned='123',
-                    Course_Completed="date_object", Course_Pending="Course_Pending")
+                        Department='UKM123', Current_Position='hello', Course_Assigned='123',
+                        Course_Completed="date_object", Course_Pending="Course_Pending")
 
         q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
                 Section=1, Question_Object='Chickensds', Class_ID=1,
@@ -144,7 +144,7 @@ class TestResultsCreate(TestApp):
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
-                     Username='UKM123')
+                    Username='UKM123')
 
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
@@ -177,7 +177,7 @@ class TestResultsCreate(TestApp):
             "code": 500,
             "message": "Course not valid."
                     })
- 
+
     def test_create_result_invalid_Quiz(self):   
         date_object = datetime.datetime.now()
         u1 = User_Database(Username="UKM123", Actual_Name='Ducky',

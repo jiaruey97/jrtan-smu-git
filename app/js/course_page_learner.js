@@ -19,13 +19,14 @@ const vueApp = new Vue({
     student:params.user,
     class_id:params.class,
     course_id:params.course_id,
-    current_sections: 0,
+    current_sections: 0, //the number of sections in this course
     lesson_materials: [],
     chosen_course_name: params.course_name,
     finished_material: [], //store all the materials the person has completed
     tracking_section: [],
     section_cleared: 0,
-    quiz_cleared: 0
+    quiz_cleared: 0,
+    final_quiz_lock: true
   },
   created() {
 
@@ -57,7 +58,7 @@ const vueApp = new Vue({
             vueApp.quiz_cleared = return_response.Quiz_cleared
 
             update_section_unlock()
-
+            final_quiz_section_unlock()
 
           })
           .catch(function (error) {
@@ -117,6 +118,7 @@ const vueApp = new Vue({
           vueApp.sections_cleared = result.Sections_cleared
 
           update_section_unlock()
+          final_quiz_section_unlock()
 
         })
         .catch(function(error){
@@ -137,6 +139,13 @@ function update_section_unlock() {
   for (i = 0; i < this.min_clear; i++) {
     //vueApp.tracking_section.set()
     Vue.set(vueApp.tracking_section, i, false)
+  }
+}
+
+function final_quiz_section_unlock() {
+  min_clear = Math.min(vueApp.section_cleared, vueApp.quiz_cleared)
+  if (min_clear == vueApp.current_sections){
+    vueApp.final_quiz_lock = false
   }
 }
 

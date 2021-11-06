@@ -29,17 +29,19 @@ class Tracker(db.Model):
     Class_ID = db.Column(db.Integer)
     Sections_cleared = db.Column(db.Integer)
     Quiz_cleared = db.Column(db.Integer)
+    Final_Quiz_cleared = db.Column(db.Integer)
 
-    def __init__(self, Username, Course_ID, Class_ID, Sections_cleared, Quiz_cleared):
+    def __init__(self, Username, Course_ID, Class_ID, Sections_cleared, Quiz_cleared, Final_Quiz_cleared):
         #self.Tracker_ID = Tracker_ID
         self.Username = Username
         self.Course_ID = Course_ID
         self.Class_ID = Class_ID
         self.Sections_cleared = Sections_cleared
         self.Quiz_cleared = Quiz_cleared
+        self.Final_Quiz_cleared = Final_Quiz_cleared
 
     def json(self):
-        return {"Tracker_ID": self.Tracker_ID, "Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Sections_cleared": self.Sections_cleared, "Quiz_cleared": self.Quiz_cleared}
+        return {"Tracker_ID": self.Tracker_ID, "Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Sections_cleared": self.Sections_cleared, "Quiz_cleared": self.Quiz_cleared, "Final_Quiz_cleared": self.Final_Quiz_cleared}
 
 @app.route("/spm/tracker")
 def get_all_tracker():
@@ -59,10 +61,6 @@ def get_all_tracker():
             "message": "There are no track."
         }
     ), 404
-
-@app.route("/spm/get_tracker/<string:username>")
-def retrieve_user_track():
-    data = request.get_json()
 
 @app.route("/spm/get_tracker/<string:username>/<int:course_id>/<int:class_id>")
 def retrieve_user_tracking_details(username, course_id, class_id):
@@ -159,6 +157,46 @@ def update_user_quiz_cleared(username, course_id, class_id):
     ).first()
 
     tracker.Quiz_cleared += 1
+    db.session.add(tracker)
+
+    try:
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "There's an issue updating the tracker with your completed section"
+            }
+        )
+
+    # Return the section cleared and quiz cleared
+    return jsonify(
+        {
+            "code": 200,
+            "data": {
+                "Sections_cleared": tracker.Sections_cleared,
+                "Quiz_cleared": tracker.Quiz_cleared
+            },
+            "message": "Section update has been successful"
+        }
+    )
+
+@app.route("/spm/update_final_quiz_tracker/<string:username>/<int:course_id>/<int:class_id>/<int:pass_fail>")
+def update_user_final_quiz_cleared(username, course_id, class_id, pass_fail):
+    tracker = Tracker.query.filter_by(
+        Username=username,
+        Course_ID=course_id,
+        Class_ID=class_id
+    ).first()
+
+    #2 means final quiz completed, but user failed
+    #1 means final quiz completed, user passed
+
+    if pass_fail == 0:
+        tracker.Final_Quiz_cleared = 2
+    else:
+        tracker.Final_Quiz_cleared = 1
+
     db.session.add(tracker)
 
     try:

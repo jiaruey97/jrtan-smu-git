@@ -71,7 +71,7 @@ def get_all_quiz():
         }
     ), 404
 
-@app.route("/spm/quiz_retrieve/<int:course_id>/<int:class_id>/<int:section>")
+@app.route("/spm/quiz_retrieve/<int:course_id>/<int:class_id>/<section>")
 def get_quiz_for_learner(course_id, section, class_id):
     quiz = Quiz.query.filter_by(Course_ID=course_id, Class_ID=class_id, Section=section).first()
     if quiz != None:

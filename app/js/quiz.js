@@ -1,6 +1,7 @@
 const addressQuiz = "3.131.65.207:5544"
 const addressQuizResult = "3.131.65.207:5444"
 const trackerAddress = '3.131.65.207:5644'
+const userAddress='3.131.65.207:5744'
 
 const urlSearchParams = new URLSearchParams(window.location.search)
 const params = Object.fromEntries(urlSearchParams.entries())
@@ -39,7 +40,6 @@ const quiz_app = new Vue({
                 //Time is on hourly basis, convert to seconds
                 time_seconds = quiz_app.time * 60 * 60
                 startTimer(time_seconds)
-
             })
             .catch(function (error) {
                 console.log(error)
@@ -117,13 +117,29 @@ function quiz_submit() {
     axios.post(`http://${addressQuizResult}/create_results`, post_result)
         .then(function (response) {
             alert("Your results have been successfully submitted!")
-            axios.get(`http://${trackerAddress}/spm/update_quiz_tracker/${quiz_app.student}/${quiz_app.course_id}/${quiz_app.class_id}`)
-                .then(function (response) {
-                    alert("Your quiz results are successfully recorded!")
-                })
-                .catch(function (response){
-                    alert("The tracker did not successfully update!")
-                })
+
+            if (quiz_app.section_id != 'final') {
+
+                update_quiz_tracker()
+
+            } else {
+
+                //If it's the final quiz, need to update more things
+                update_final_quiz_tracker(pass_or_fail)
+
+                //If user pass, can considered course complete!
+                if (pass_or_fail == 1) {
+                    axios.get(`http://${userAddress}/user_database/mark_user_course_complete/${quiz_app.student}/${quiz_app.course_id}/${quiz_app.class_id}`)
+                        .then(function (response) {
+                            alert("Congratulations! You've successfully finished the course!")
+                        })
+                        .catch(function (response) {
+                            alert("Something went wrong with updating the course!!")
+                        })
+                }
+
+
+            }
         })
         .catch(function (error) {
             alert("Something went wrong with the submission!")
@@ -136,8 +152,28 @@ function quiz_submit() {
 
 }
 
+function update_quiz_tracker() {
+    axios.get(`http://${trackerAddress}/spm/update_quiz_tracker/${quiz_app.student}/${quiz_app.course_id}/${quiz_app.class_id}`)
+        .then(function (response) {
+            alert("Your quiz results are successfully recorded!")
+        })
+        .catch(function (response) {
+            alert("The tracker did not successfully update!")
+        })
+}
+
+function update_final_quiz_tracker(pass_or_fail) {
+    axios.get(`http://${trackerAddress}/spm/update_final_quiz_tracker/${quiz_app.student}/${quiz_app.course_id}/${quiz_app.class_id}/${pass_or_fail}`)
+        .then(function (response) {
+            alert("Your final quiz results are successfully recorded!")
+        })
+        .catch(function (response) {
+            alert("The tracker did not successfully update!")
+        })
+}
+
 function startTimer(duration, timer_run = true) {
-    
+
     var timer = duration, minutes, seconds;
     var interval = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
@@ -146,7 +182,7 @@ function startTimer(duration, timer_run = true) {
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
-        if (timer_run == false){
+        if (timer_run == false) {
             quiz_app.timer_text = "Done!"
             clearInterval(interval)
         }

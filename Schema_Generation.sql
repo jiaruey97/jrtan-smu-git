@@ -65,7 +65,7 @@ create table if not EXISTS Quiz (
   Quiz_ID int auto_increment,
   Course_ID int  NOT NULL,
   Instructor_ID int NOT NULL,
-  Section int NOT NULL,
+  Section varchar(255) NOT NULL,
   Question_Object varchar(255),
   Class_ID int  NOT NULL,
   PRIMARY KEY (Quiz_ID),
@@ -82,12 +82,12 @@ create table if not EXISTS Quiz_Results(
   Username varchar(50) NOT NULL,
   Quiz_ID int NOT NULL,
   Course_ID int  NOT NULL,
-  Section int NOT NULL,
+  Section varchar(255) NOT NULL,
   Marks int NOT NULL,
   Pass BOOLEAN NOT NULL,
   PRIMARY KEY (Quiz_Results_ID),
   FOREIGN KEY (Course_ID) REFERENCES Course(Course_ID),
-  FOREIGN KEY (Quiz_ID) REFERENCES Quiz(Instructor_ID),
+  FOREIGN KEY (Quiz_ID) REFERENCES Quiz(Quiz_ID),
   FOREIGN KEY (Username) REFERENCES User_Database(Username)
 );
 

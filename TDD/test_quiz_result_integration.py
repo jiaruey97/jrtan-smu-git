@@ -216,8 +216,8 @@ class TestResultsCreate(TestApp):
                     Course_Completed="date_object", Course_Pending="Course_Pending")
 
         q1 = Quiz(Course_ID=1, Instructor_ID=1,
-                    Section=1, Question_Object='Chickensds', Class_ID=1,
-                    Timing="23")
+                Section=1, Question_Object='Chickensds', Class_ID=1,
+                Timing="23")
 
         c1 = Course(Course_ID=1, Course_Name='Ducky',
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',

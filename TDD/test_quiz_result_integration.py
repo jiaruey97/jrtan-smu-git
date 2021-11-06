@@ -37,7 +37,7 @@ class TestResultRetrieve(TestApp):
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
-                     Username='UKM123')
+                    Username='UKM123')
 
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
@@ -85,7 +85,7 @@ class TestResultsCreate(TestApp):
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
-                     Username='UKM123')
+                    Username='UKM123')
 
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
@@ -172,7 +172,7 @@ class TestResultsCreate(TestApp):
         self.assertEqual(response.json, {
             "code": 500,
             "message": "Course not valid."
-                    })
+        })
 
     def test_create_result_invalid_Quiz(self):
         date_object = datetime.datetime.now()
@@ -205,7 +205,7 @@ class TestResultsCreate(TestApp):
         self.assertEqual(response.json, {
             "code": 500,
             "message": "Quiz not valid."
-                    })
+        })
 
     def test_create_result_invalid_User(self):
         date_object = datetime.datetime.now()
@@ -254,7 +254,7 @@ class TestResultsCreate(TestApp):
         self.assertEqual(response.json, {
             "code": 500,
             "message": "User not valid."
-                    })
+        })
 
 
 if __name__ == '__main__':

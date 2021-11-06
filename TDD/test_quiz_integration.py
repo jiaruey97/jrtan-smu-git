@@ -23,7 +23,7 @@ class TestApp(flask_testing.TestCase):
 
 class TestCreateQuiz(TestApp):
     def test_create_quiz(self):
-        
+
         date_object = datetime.datetime.now()
         c1 = Course(Course_ID=1, Course_Name='Ducky',
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
@@ -31,17 +31,16 @@ class TestCreateQuiz(TestApp):
 
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
-                    Course_ID = 1, Instructor_ID = 1,
-                    Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
+                    Course_ID=1, Instructor_ID=1,
+                    Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
-                     Username='UKM123')
+                    Username='UKM123')
 
         u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
                     Course_Completed="date_object", Course_Pending="Course_Pending")
-        
-        
+
         db.session.add(c1)
         db.session.add(i1)
         db.session.add(u1)
@@ -50,10 +49,10 @@ class TestCreateQuiz(TestApp):
         db.session.commit()
 
         request_body = {
-            "Course_ID":c1.Course_ID,
+            "Course_ID": c1.Course_ID,
             "Instructor_ID": i1.Instructor_ID,
             "Section":12,
-            "Question_Object":"Chickeasd",
+            "Question_Object": "Chickeasd",
             "Class_ID": cl1.Class_ID,
             "Timing": "1.5hr"
         }
@@ -76,17 +75,15 @@ class TestCreateQuiz(TestApp):
 
 
     def test_create_quiz_invalid_Instructor(self):
-        
         date_object = datetime.datetime.now()
         c1 = Course(Course_ID=1, Course_Name='Ducky',
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
-        
 
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
-                    Course_ID = 1, Instructor_ID = 1,
-                    Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
+                    Course_ID=1, Instructor_ID=1,
+                    Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
 
         db.session.add(c1)
         db.session.add(cl1)
@@ -203,7 +200,7 @@ class TestQuizRetrieveByID(TestApp):
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
                     Course_Completed="date_object", Course_Pending="Course_Pending")
 
-        cl1 = Class(Class_ID = 1, Class_Name='Ducky',
+        cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID=1, Instructor_ID=1,
                     Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")

@@ -4,7 +4,7 @@ import json
 from app import app, db, Course
 
 import datetime
-
+ 
 
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"

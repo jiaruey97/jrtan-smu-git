@@ -809,7 +809,7 @@ def create_results():
     results = Quiz_Results(**data)
 
     # Validate Course
-    course = Course.query.filter_by(Course_ID = data['Course_ID']).first()
+    course = Course.query.filter_by(Course_ID=data['Course_ID']).first()
     if not course:
         return jsonify({
             "code": 500,
@@ -851,7 +851,6 @@ def create_results():
     ), 201
 
 
-
 class Tracker(db.Model):
     __tablename__ = 'Tracker'
 
@@ -860,7 +859,6 @@ class Tracker(db.Model):
     Course_ID = db.Column(db.Integer, db.ForeignKey('Course.Course_ID'))
     Class_ID = db.Column(db.Integer, db.ForeignKey('Class.Class_ID'))
     Section_Object = db.Column(db.String(255), nullable=False)
-
 
     def __init__(self, Tracker_ID, Username, Course_ID, Class_ID, Section_Object):
         self.Tracker_ID = Tracker_ID
@@ -891,6 +889,7 @@ def get_all_tracker():
         }
     ), 404
 
+
 @app.route("/create_tracker", methods=['POST'])
 def create_tracker():
 
@@ -914,6 +913,7 @@ def create_tracker():
             "data": tracker.json()
         }
     ), 201
+
 
 @app.route("/spm/get_tracker/<string:username>")
 def retrieve_user_track():

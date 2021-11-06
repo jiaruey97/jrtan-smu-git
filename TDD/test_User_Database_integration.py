@@ -5,6 +5,7 @@ from app import app, db, User_Database
 
 import datetime
 
+
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
@@ -22,7 +23,7 @@ class TestApp(flask_testing.TestCase):
 
 
 class TestRetrieveUser(TestApp):
-    def test_retrieve_user(self):     
+    def test_retrieve_user(self):
         c1 = User_Database(Username="Timmy", Actual_Name='Ducky',
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
                     Course_Completed="date_object", Course_Pending="Course_Pending")
@@ -35,16 +36,16 @@ class TestRetrieveUser(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                        "user": [{
-                            "Username":"Timmy",
-                            "Actual_Name":"Ducky",
-                            "Department":'UKM123',
-                            "Current_Position":"hello",
-                            "Course_Assigned": '123',
-                            "Course_Completed":"date_object",
-                            "Course_Pending": "Course_Pending"
-                        }]
-                    }
+                "user": [{
+                    "Username": "Timmy",
+                    "Actual_Name": "Ducky",
+                    "Department": 'UKM123',
+                    "Current_Position": "hello",
+                    "Course_Assigned":  '123',
+                    "Course_Completed": "date_object",
+                    "Course_Pending": "Course_Pending"
+                }]
+            }
         })
 
     def test_retrieve_user_by_ID(self):     
@@ -60,21 +61,21 @@ class TestRetrieveUser(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                        "user": [{
-                            "Username":"Timmy",
-                            "Actual_Name":"Ducky",
-                            "Department":'UKM123',
-                            "Current_Position":"hello",
-                            "Course_Assigned": '123',
-                            "Course_Completed":"date_object",
-                            "Course_Pending": "Course_Pending"
-                        }]
-                    }
+                "user": [{
+                    "Username": "Timmy",
+                    "Actual_Name": "Ducky",
+                    "Department": 'UKM123',
+                    "Current_Position": "hello",
+                    "Course_Assigned": '123',
+                    "Course_Completed": "date_object",
+                    "Course_Pending": "Course_Pending"
+                }]
+            }
         })
- 
+
 
 class TestUpdateUser(TestApp):
-     def test_retrieve_user_by_ID(self):     
+    def test_retrieve_user_by_ID(self):
         c1 = User_Database(Username="Timmy", Actual_Name='Ducky',
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
                     Course_Completed="date_object", Course_Pending="Course_Pending")
@@ -83,7 +84,7 @@ class TestUpdateUser(TestApp):
         db.session.commit()
 
         request_body = {
-            "Course_Pending":"Ducky",
+            "Course_Pending": "Ducky",
         }
 
         response = self.client.post("/user_database/{0}/update".format(c1.Username), 

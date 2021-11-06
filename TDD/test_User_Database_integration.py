@@ -48,7 +48,7 @@ class TestRetrieveUser(TestApp):
             }
         })
 
-    def test_retrieve_user_by_ID(self):     
+    def test_retrieve_user_by_ID(self):
         c1 = User_Database(Username="Timmy", Actual_Name='Ducky',
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
                     Course_Completed="date_object", Course_Pending="Course_Pending")

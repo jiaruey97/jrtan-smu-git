@@ -135,8 +135,8 @@ class TestResultsCreate(TestApp):
                         Course_Completed="date_object", Course_Pending="Course_Pending")
 
         q1 = Quiz(Course_ID=1, Instructor_ID=1,
-                        Section=1, Question_Object='Chickensds', Class_ID=1,
-                        Timing="23")
+                Section=1, Question_Object='Chickensds', Class_ID=1,
+                Timing="23")
 
         c1 = Course(Course_ID=1, Course_Name='Ducky',
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
@@ -159,13 +159,13 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                "Quiz_Results_ID": 1,
-                "Username": u1.Username,
-                "Quiz_ID": 1,
-                "Course_ID": 20,
-                "Section": 1,
-                "Marks": 12,
-                "Pass": False
+            "Quiz_Results_ID": 1,
+            "Username": u1.Username,
+            "Quiz_ID": 1,
+            "Course_ID": 20,
+            "Section": 1,
+            "Marks": 12,
+            "Pass": False
         }
         response = self.client.post("/create_results",
                                     data=json.dumps(request_body),
@@ -191,13 +191,13 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                    "Quiz_Results_ID": 1,
-                    "Username": u1.Username,
-                    "Quiz_ID": 1,
-                    "Course_ID": c1.Course_ID,
-                    "Section": 1,
-                    "Marks": 12,
-                    "Pass": False
+            "Quiz_Results_ID": 1,
+            "Username": u1.Username,
+            "Quiz_ID": 1,
+            "Course_ID": c1.Course_ID,
+            "Section": 1,
+            "Marks": 12,
+            "Pass": False
         }
 
         response = self.client.post("/create_results",
@@ -240,13 +240,13 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                    "Quiz_Results_ID": 1,
-                    "Username": "asadsadsa",
-                    "Quiz_ID": 1,
-                    "Course_ID": c1.Course_ID,
-                    "Section": 1,
-                    "Marks": 12,
-                    "Pass": False
+            "Quiz_Results_ID": 1,
+            "Username": "asadsadsa",
+            "Quiz_ID": 1,
+            "Course_ID": c1.Course_ID,
+            "Section": 1,
+            "Marks": 12,
+            "Pass": False
         }
 
         response = self.client.post("/create_results",

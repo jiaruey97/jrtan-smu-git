@@ -40,8 +40,8 @@ class TestInstructorRetrieve(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                "instructor": [{"Instructor_ID":1,
-                "Actual_Name":"Ducky",
+                "instructor": [{"Instructor_ID": 1,
+                "Actual_Name": "Ducky",
                 "Username": "UKM123"}]
             }
         })
@@ -57,7 +57,7 @@ class TestInstructorCreate(TestApp):
         db.session.commit()
 
         request_body = {
-            "Instructor_ID" :1,
+            "Instructor_ID": 1,
             "Actual_Name": "Ducky",
             "Username": "UKM123"
         }
@@ -75,12 +75,12 @@ class TestInstructorCreate(TestApp):
             }
         })
 
-    def test_create_instructor_no_user(self):   
+    def test_create_instructor_no_user(self):
 
         request_body = {
-                "Instructor_ID": 1,
-                "Actual_Name": "Ducky",
-                "Username": "UKM123"
+            "Instructor_ID": 1,
+            "Actual_Name": "Ducky",
+            "Username": "UKM123"
         }
 
         response = self.client.post("/create_instructor",

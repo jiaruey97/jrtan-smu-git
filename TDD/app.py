@@ -139,7 +139,7 @@ def create_class():
     results = Class(**data)
 
     # Validate Course
-    course = Course.query.filter_by(Course_ID = data['Course_ID']).first()
+    course = Course.query.filter_by(Course_ID=data['Course_ID']).first()
     if not course:
         return jsonify({
             "code": 500,
@@ -164,6 +164,7 @@ def create_class():
         }
     ), 201
 
+
 @app.route("/spm/class/<string:Instructor_ID>")
 def find_by_instructor_class(Instructor_ID):
     class_list = Class.query.filter_by(Instructor_ID=Instructor_ID).all()
@@ -182,6 +183,7 @@ def find_by_instructor_class(Instructor_ID):
             "message": "Class Not Found not found."
         }
     ), 404
+
 
 @app.route("/spm/search_class_course/<int:Course_ID>")
 def find_by_course_class(Course_ID):
@@ -202,7 +204,8 @@ def find_by_course_class(Course_ID):
         }
     ), 404
 
-@app.route('/class/<int:Class_ID>/update',methods = ['POST'])
+
+@app.route('/class/<int:Class_ID>/update', methods=['POST'])
 def update_class(Class_ID):
     class_details = Class.query.filter_by(Class_ID=Class_ID)
     if request.method == 'POST':
@@ -216,7 +219,7 @@ def update_class(Class_ID):
                 "message": "Update Successful"
             }
         ), 200
-    
+
     return jsonify(
         {
             "code": 404,
@@ -224,7 +227,8 @@ def update_class(Class_ID):
         }
     ), 404
 
-#Class section update
+
+# Class section update
 @app.route("/spm/class/update_section/<int:Course_ID>/<int:section>")
 def update_sections_for_course(Course_ID,section):
     class_list = Class.query.filter_by(Course_ID=Course_ID).all()
@@ -270,6 +274,7 @@ def find_by_class(Class_ID):
         }
     ), 404
 
+
 class User_Database(db.Model):
     __tablename__ = 'User_Database'
 
@@ -280,7 +285,6 @@ class User_Database(db.Model):
     Course_Assigned = db.Column(db.String(255), nullable=False)
     Course_Completed = db.Column(db.String(255), nullable=False)
     Course_Pending = db.Column(db.String(255), nullable=False)
-
 
     def __init__(self, Username, Actual_Name, Department, Current_Position, Course_Assigned, Course_Completed, Course_Pending):
         self.Username = Username
@@ -684,7 +688,7 @@ def create_quiz():
     data = request.get_json()
     
     # Validate Course
-    course = Course.query.filter_by(Course_ID = data['Course_ID']).first()
+    course = Course.query.filter_by(Course_ID=data['Course_ID']).first()
     if not course:
         return jsonify({
             "code": 500,

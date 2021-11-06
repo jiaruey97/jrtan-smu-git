@@ -87,7 +87,7 @@ class TestUpdateUser(TestApp):
             "Course_Pending": "Ducky",
         }
 
-        response = self.client.post("/user_database/{0}/update".format(c1.Username), 
+        response = self.client.post("/user_database/{0}/update".format(c1.Username),
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -95,7 +95,6 @@ class TestUpdateUser(TestApp):
             "code": 200,
             "message": "Update Successful"
                     })
-                          
 
 
 if __name__ == '__main__':

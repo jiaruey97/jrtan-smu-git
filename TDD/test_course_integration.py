@@ -23,7 +23,7 @@ class TestApp(flask_testing.TestCase):
 
 
 class TestRetrieveCourse(TestApp):
-    def test_retrieve_course(self):     
+    def test_retrieve_course(self):
         date_object = datetime.datetime.now()
         c1 = Course(Course_ID=1, Course_Name='Ducky',
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',

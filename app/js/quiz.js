@@ -1,10 +1,12 @@
 const addressQuiz = "3.131.65.207:5544"
 const addressQuizResult = "3.131.65.207:5444"
 const trackerAddress = '3.131.65.207:5644'
-const userAddress='3.131.65.207:5744'
+const userAddress = '3.131.65.207:5744'
 
 const urlSearchParams = new URLSearchParams(window.location.search)
 const params = Object.fromEntries(urlSearchParams.entries())
+
+var intervalTimer;
 
 const quiz_app = new Vue({
     el: '#app',
@@ -27,7 +29,8 @@ const quiz_app = new Vue({
         course_name: params.course_name,
         banner_flag: false,
         banner_flag_msg: "",
-        submit_msg: ""
+        submit_msg: "",
+        is_repeat: false,
     },
     created() {
 
@@ -37,6 +40,7 @@ const quiz_app = new Vue({
                 quiz_app.questions = loaded_question
                 quiz_app.time = response.data.data.Time
                 quiz_app.quiz_id = response.data.data.Quiz_ID
+                check_if_user_has_attempted_quiz()
                 //Time is on hourly basis, convert to seconds
                 time_seconds = quiz_app.time * 60 * 60
                 startTimer(time_seconds)
@@ -83,6 +87,8 @@ function quiz_submit() {
     //     return
     // }
 
+    clearInterval(intervalTimer)
+
     number_of_questions = quiz_app.questions.length
 
     for (i = 0; i < quiz_app.questions.length; i++) {
@@ -112,7 +118,6 @@ function quiz_submit() {
         "Marks": quiz_app.score,
         "Pass": pass_or_fail
     }
-    startTimer(60, false)
     //Submit user score into the database
     axios.post(`http://${addressQuizResult}/create_results`, post_result)
         .then(function (response) {
@@ -152,14 +157,46 @@ function quiz_submit() {
 
 }
 
-function update_quiz_tracker() {
-    axios.get(`http://${trackerAddress}/spm/update_quiz_tracker/${quiz_app.student}/${quiz_app.course_id}/${quiz_app.class_id}`)
+function check_if_user_has_attempted_quiz() {
+    axios.get(`http://${addressQuizResult}/spm/check_if_quiz_completed/${quiz_app.quiz_id}/${quiz_app.course_id}/${quiz_app.section_id}/${quiz_app.student}`)
         .then(function (response) {
-            alert("Your quiz results are successfully recorded!")
+            check_repeat = response.data.result
+            
+            if (quiz_app.section_id == 'final') {
+                //Finals treated differently, user can try until they pass, but if they passed, lock them out!
+                console.log(response.data.pass)
+                if (response.data.pass == true) {
+                    clearInterval(intervalTimer)
+                    quiz_app.timer_text = "You've completed!"
+                    quiz_app.quiz_section = false
+                    quiz_app.score = response.data.marks
+                    quiz_app.submit_msg = "You've already completed and passed your quiz!"
+                }
+
+
+            } else {
+                quiz_app.is_repeat = check_repeat
+                if (check_repeat == true) {
+                    quiz_app.banner_flag = true
+                    quiz_app.banner_flag_msg = "You've done this quiz before!"
+                }
+            }
         })
-        .catch(function (response) {
-            alert("The tracker did not successfully update!")
+        .catch(function (error) {
+            alert("Something went wrong when checking if user has quiz completed!")
         })
+}
+
+function update_quiz_tracker() {
+    if (quiz_app.is_repeat == false) {
+        axios.get(`http://${trackerAddress}/spm/update_quiz_tracker/${quiz_app.student}/${quiz_app.course_id}/${quiz_app.class_id}`)
+            .then(function (response) {
+                alert("Your quiz results are successfully recorded!")
+            })
+            .catch(function (response) {
+                alert("The tracker did not successfully update!")
+            })
+    }
 }
 
 function update_final_quiz_tracker(pass_or_fail) {
@@ -172,25 +209,19 @@ function update_final_quiz_tracker(pass_or_fail) {
         })
 }
 
-function startTimer(duration, timer_run = true) {
+function startTimer(duration) {
 
     var timer = duration, minutes, seconds;
-    var interval = setInterval(function () {
+    intervalTimer = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
 
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
-        if (timer_run == false) {
-            quiz_app.timer_text = "Done!"
-            clearInterval(interval)
-        }
-
         if (minutes == "00" && seconds == "00") {
             quiz_app.timer_text = "Time's up~!"
             quiz_submit()
-            clearInterval(interval)
         } else {
             quiz_app.timer_text = minutes + ":" + seconds;
         }

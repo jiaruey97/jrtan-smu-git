@@ -58,6 +58,29 @@ def get_all_results():
         }
     ), 404
 
+@app.route("/spm/check_if_quiz_completed/<int:quiz_id>/<int:course_id>/<section>/<string:username>")
+def check_if_quiz_completed(quiz_id, course_id, section, username):
+    result = Quiz_Results.query.filter_by(
+        Username=username,
+        Quiz_ID=quiz_id,
+        Course_ID=course_id,
+        Section=section
+    ).first()
+
+    if result:
+        return jsonify ({
+            'code': 200,
+            'result': True,
+            'section': section,
+            'pass': result.json()['Pass'],
+            'marks': result.json()['Marks']
+        })
+    else:
+        return jsonify({
+            'code': 200,
+            'result': False
+        })
+
 @app.route("/create_results", methods=['POST'])
 def create_results():
 

@@ -368,7 +368,7 @@ class TestQuizDelete(TestApp):
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
-                     Username='UKM123')
+                    Username='UKM123')
 
         u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
@@ -377,15 +377,14 @@ class TestQuizDelete(TestApp):
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID = 1, Instructor_ID = 1,
-                    Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
-        
+                    Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
+
         db.session.add(q1)
         db.session.add(u1)
         db.session.add(c1)
         db.session.add(i1)
         db.session.add(cl1)
         db.session.commit()
-
 
         id = q1.Quiz_ID
         response = self.client.post("/quiz/delete/{0}".format(id))
@@ -403,12 +402,13 @@ class TestQuizDelete(TestApp):
         self.assertEqual(response.json, {
             "code": 404,
             "message": "Oops somethign went wrong"
-                    })
+        })
+
 
 class TestQuizUpdate(TestApp):
     def test_quiz_update(self):
         date_object = datetime.datetime.now()
-        q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
+        q1 = Quiz(Course_ID=1, Instructor_ID=1, 
                 Section=1, Question_Object='Chickensds', Class_ID=1,
                 Timing="23")
         c1 = Course(Course_ID=1, Course_Name='Ducky',
@@ -422,11 +422,11 @@ class TestQuizUpdate(TestApp):
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
                     Course_Completed="date_object", Course_Pending="Course_Pending")
 
-        cl1 = Class(Class_ID = 1, Class_Name='Ducky',
+        cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
-                    Course_ID = 1, Instructor_ID = 1,
-                    Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
-        
+                    Course_ID=1, Instructor_ID=1,
+                    Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
+
         db.session.add(q1)
         db.session.add(u1)
         db.session.add(c1)
@@ -437,10 +437,10 @@ class TestQuizUpdate(TestApp):
         id = q1.Quiz_ID
 
         request_body = {
-            "Question_Object":"Ducky",
+            "Question_Object": "Ducky",
         }
 
-        response = self.client.post("/quiz/{0}/update".format(id), 
+        response = self.client.post("/quiz/{0}/update".format(id),
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -448,7 +448,6 @@ class TestQuizUpdate(TestApp):
             "code": 200,
             "message": "Update Successful"
                     })
-                            
 
     def test_quiz_update_fail(self):
         id = 10
@@ -456,7 +455,7 @@ class TestQuizUpdate(TestApp):
         request_body = {
             "Question_Object":"Ducky",
         }
-        response = self.client.post("/quiz/{0}/update".format(id), 
+        response = self.client.post("/quiz/{0}/update".format(id),
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 500)

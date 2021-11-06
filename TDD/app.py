@@ -15,6 +15,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+
 class Course(db.Model):
     __tablename__ = 'Course'
 
@@ -68,7 +69,7 @@ def get_course_for_learner(Course_ID):
         return jsonify(
             {
                 "code": 200,
-                "data": course.json()      
+                "data": course.json()
             }
         )
     return jsonify(
@@ -94,7 +95,7 @@ class Class(db.Model):
     Sections = db.Column(db.Integer, nullable=False)
     Students = db.Column(db.Text, nullable=False)
 
-    def __init__(self, Class_ID, Class_Name, Class_Details, Size, Current_Size, Course_ID,Instructor_ID,Start_Time, End_Time, Sections, Students):
+    def __init__(self, Class_ID, Class_Name, Class_Details, Size, Current_Size, Course_ID, Instructor_ID, Start_Time, End_Time, Sections, Students):
         self.Class_ID = Class_ID
         self.Class_Name = Class_Name
         self.Class_Details = Class_Details
@@ -106,10 +107,9 @@ class Class(db.Model):
         self.End_Time = End_Time
         self.Sections = Sections
         self.Students = Students
-        
 
     def json(self):
-        return {"Class_ID": self.Class_ID, "Class_Name": self.Class_Name, "Class_Details": self.Class_Details, "Size": self.Size, "Current_Size": self.Current_Size, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID,"Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections, "Students": self.Students}
+        return {"Class_ID": self.Class_ID, "Class_Name": self.Class_Name, "Class_Details": self.Class_Details, "Size": self.Size, "Current_Size": self.Current_Size, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections, "Students": self.Students}
 
 
 @app.route("/spm/class")
@@ -339,7 +339,7 @@ def get_user_name(Username):
     ), 404
 
 
-@app.route('/user_database/<string:Username>/update',methods = ['POST'])
+@app.route('/user_database/<string:Username>/update', methods=['POST'])
 def update_user(Username):
     users = User_Database.query.filter_by(Username=Username)
     if request.method == 'POST':
@@ -353,7 +353,7 @@ def update_user(Username):
                 "message": "Update Successful"
             }
         ), 200
-    
+
     return jsonify(
         {
             "code": 404,
@@ -373,7 +373,6 @@ class Instructor(db.Model):
         self.Instructor_ID = Instructor_ID
         self.Actual_Name = Actual_Name
         self.Username = Username
-
 
     def json(self):
         return {"Instructor_ID": self.Instructor_ID, "Actual_Name": self.Actual_Name, "Username": self.Username}
@@ -432,6 +431,7 @@ def create_instructor():
         }
     ), 201
 
+
 class Lesson_Materials(db.Model):
     __tablename__ = 'Lesson_Materials'
 
@@ -473,6 +473,7 @@ def get_all_materials():
             "message": "There are no results."
         }
     ), 404
+
 
 # Retrieve specific material
 @app.route("/spm/materials/<int:course_id>")
@@ -523,9 +524,6 @@ def upload_materials_to_server():
                 "message": "File upload is a success"
             }
         )
-
-    
-
 # This one is only updating/creating new lesson information
 
 
@@ -572,6 +570,7 @@ def update_materials(Lesson_Materials_ID):
         }
     ), 200
 
+
 class Quiz(db.Model):
     __tablename__ = 'Quiz'
 
@@ -591,7 +590,6 @@ class Quiz(db.Model):
         self.Section = Section
         self.Question_Object = Question_Object
         self.Timing = Timing
-
 
     def json(self):
         return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Timing":self.Timing}
@@ -641,6 +639,7 @@ def get_quiz_for_learner(Quiz_ID):
     ), 404
 
 #
+
 @app.route("/spm/quiz/<int:Instructor_ID>")
 def find_by_isbn13(Instructor_ID):
     quiz = Quiz.query.filter_by(Instructor_ID=Instructor_ID).all()
@@ -660,6 +659,7 @@ def find_by_isbn13(Instructor_ID):
         }
     ), 404
 
+
 @app.route('/quiz/delete/<int:Quiz_ID>', methods=['POST'])
 def delete_quiz(Quiz_ID):
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
@@ -673,7 +673,7 @@ def delete_quiz(Quiz_ID):
                 "message": "Delete Successful"
             }
         ), 200
-    
+
     return jsonify(
         {
             "code": 404,
@@ -686,7 +686,7 @@ def delete_quiz(Quiz_ID):
 @app.route("/create_quiz", methods=['POST'])
 def create_quiz():
     data = request.get_json()
-    
+
     # Validate Course
     course = Course.query.filter_by(Course_ID=data['Course_ID']).first()
     if not course:
@@ -712,7 +712,7 @@ def create_quiz():
         }), 500
 
     quiz = Quiz(**data)
-    
+
     try:
         db.session.add(quiz)
         db.session.commit()
@@ -733,9 +733,9 @@ def create_quiz():
     ), 201
 
 
-@app.route('/quiz/<int:Quiz_ID>/update',methods = ['POST'])
+@app.route('/quiz/<int:Quiz_ID>/update', methods=['POST'])
 def update(Quiz_ID):
-    
+
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
     if not quiz:
         return jsonify({
@@ -755,7 +755,7 @@ def update(Quiz_ID):
                 "message": "Update Successful"
             }
         ), 200
-    
+
     return jsonify(
         {
             "code": 404,

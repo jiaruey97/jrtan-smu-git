@@ -41,7 +41,7 @@ class TestRetrieveUser(TestApp):
                     "Actual_Name": "Ducky",
                     "Department": 'UKM123',
                     "Current_Position": "hello",
-                    "Course_Assigned":  '123',
+                    "Course_Assigned": '123',
                     "Course_Completed": "date_object",
                     "Course_Pending": "Course_Pending"
                 }]
@@ -94,7 +94,7 @@ class TestUpdateUser(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "message": "Update Successful"
-                    })
+        })
 
 
 if __name__ == '__main__':

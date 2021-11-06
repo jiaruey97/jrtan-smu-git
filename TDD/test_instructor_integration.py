@@ -67,17 +67,17 @@ class TestInstructorCreate(TestApp):
         self.assertEqual(response.json, {
             "code": 201,
             "data": {
-                    "Instructor_ID":1,
-                    "Actual_Name":"Ducky",
+                    "Instructor_ID": 1,
+                    "Actual_Name": "Ducky",
                     "Username": "UKM123"
             }
-                    })
+        })
 
     def test_create_instructor_no_user(self):   
 
         request_body = {
-                "Instructor_ID":1,
-                "Actual_Name":"Ducky",
+                "Instructor_ID": 1,
+                "Actual_Name": "Ducky",
                 "Username": "UKM123"
         }
 
@@ -88,8 +88,7 @@ class TestInstructorCreate(TestApp):
         self.assertEqual(response.json, {
             "code": 500,
             "message": "User not valid."
-                    })
- 
+        })
 
 
 if __name__ == '__main__':

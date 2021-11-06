@@ -5,6 +5,7 @@ from app import app, db, Instructor, User_Database, Quiz, Quiz_Results, Class, C
 
 import datetime
 
+
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
@@ -22,7 +23,7 @@ class TestApp(flask_testing.TestCase):
 
 
 class TestResultRetrieve(TestApp):
-    def test_retrieve_result(self):   
+    def test_retrieve_result(self):
         date_object = datetime.datetime.now()
         u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
@@ -44,7 +45,7 @@ class TestResultRetrieve(TestApp):
                     Course_ID=1, Instructor_ID=1,
                     Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
         
-        r1 = Quiz_Results(Quiz_Results_ID=1,Username="UKM123",Quiz_ID=1, Course_ID=1, Section=1, Marks=12, Pass=False )
+        r1 = Quiz_Results(Quiz_Results_ID=1, Username="UKM123", Quiz_ID=1, Course_ID=1, Section=1, Marks=12, Pass=False)
 
         db.session.add(u1)
         db.session.add(c1)
@@ -68,6 +69,7 @@ class TestResultRetrieve(TestApp):
                             "Pass": False}]
             }
         })
+
 
 class TestResultsCreate(TestApp):
     def test_create_result(self):
@@ -124,7 +126,7 @@ class TestResultsCreate(TestApp):
                     "Section": 1,
                     "Marks": 12,
                     "Pass": False}
-                    })
+        })
 
     def test_create_result_invalid_Course(self):
         date_object = datetime.datetime.now()

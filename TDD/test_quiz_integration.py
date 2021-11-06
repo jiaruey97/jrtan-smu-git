@@ -5,6 +5,7 @@ from app import app, db, Quiz, Course, Instructor, Class, User_Database
 
 import datetime
 
+
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
@@ -29,7 +30,7 @@ class TestCreateQuiz(TestApp):
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
-        cl1 = Class(Class_ID = 1, Class_Name='Ducky',
+        cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID=1, Instructor_ID=1,
                     Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
@@ -45,13 +46,13 @@ class TestCreateQuiz(TestApp):
         db.session.add(i1)
         db.session.add(u1)
         db.session.add(cl1)
-        
+
         db.session.commit()
 
         request_body = {
             "Course_ID": c1.Course_ID,
             "Instructor_ID": i1.Instructor_ID,
-            "Section":12,
+            "Section": 12,
             "Question_Object": "Chickeasd",
             "Class_ID": cl1.Class_ID,
             "Timing": "1.5hr"
@@ -64,15 +65,14 @@ class TestCreateQuiz(TestApp):
         self.assertEqual(response.json, {
             "code": 201,
             "data": {
-                "Course_ID":1,
-                "Instructor_ID":1,
-                "Section":12,
-                "Question_Object":"Chickeasd",
+                "Course_ID": 1,
+                "Instructor_ID": 1,
+                "Section": 12,
+                "Question_Object": "Chickeasd",
                 "Class_ID": 1,
-                "Quiz_ID":1,
+                "Quiz_ID": 1,
                 "Timing": "1.5hr"}
         })
-
 
     def test_create_quiz_invalid_Instructor(self):
         date_object = datetime.datetime.now()
@@ -80,7 +80,7 @@ class TestCreateQuiz(TestApp):
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
-        cl1 = Class(Class_ID = 1, Class_Name='Ducky',
+        cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID=1, Instructor_ID=1,
                     Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
@@ -120,7 +120,7 @@ class TestCreateQuiz(TestApp):
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID=1, Instructor_ID=1,
-                    Start_Time=date_object, End_Time=date_object, Sections=4, Students ="Hello")
+                    Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
 
         db.session.add(i1)
         db.session.add(cl1)
@@ -204,7 +204,7 @@ class TestQuizRetrieveByID(TestApp):
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID=1, Instructor_ID=1,
                     Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
-        
+
         db.session.add(q1)
         db.session.add(u1)
         db.session.add(c1)

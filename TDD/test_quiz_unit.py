@@ -9,17 +9,14 @@ class TestQuiz(unittest.TestCase):
                 Timing="23")
         self.assertEqual(q1.json(), {
             "Quiz_ID": None,
-            "Course_ID":1,
-            "Instructor_ID":1,
-            "Section":1,
-            "Question_Object":"Chickensds",
+            "Course_ID": 1,
+            "Instructor_ID": 1,
+            "Section": 1,
+            "Question_Object": "Chickensds",
             "Class_ID": 1,
             "Timing": "23"
         }
         )
-
-        
-        
 
 if __name__ == "__main__":
     unittest.main()

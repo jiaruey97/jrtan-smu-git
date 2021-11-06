@@ -5,6 +5,7 @@ from app import app, db, Course
 
 import datetime
 
+
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
@@ -44,6 +45,7 @@ class TestRetrieveCourse(TestApp):
         db.session.commit()
         response = self.client.get("spm/course_retrieve/{0}".format(c1.Course_ID))
         self.assertEqual(response.status_code, 200)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -34,7 +34,7 @@ class TestRetrieveCourse(TestApp):
         response = self.client.get("/spm/course")
         self.assertEqual(response.status_code, 200)
 
-    def test_retrieve_course_by_ID(self):     
+    def test_retrieve_course_by_ID(self):
         date_object = datetime.datetime.now()
         c1 = Course(Course_ID=1, Course_Name='Ducky',
                     Course_Details='UKM123', Duration='3hr', Prerequestic='123',
@@ -44,8 +44,6 @@ class TestRetrieveCourse(TestApp):
         db.session.commit()
         response = self.client.get("spm/course_retrieve/{0}".format(c1.Course_ID))
         self.assertEqual(response.status_code, 200)
- 
-
 
 if __name__ == '__main__':
     unittest.main()

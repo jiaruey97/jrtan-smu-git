@@ -2,6 +2,7 @@ const courseAddress = '3.131.65.207:5144'
 const materialAddress = '3.131.65.207:5344'
 const classAddress='3.131.65.207:5044'
 const userAddress='3.131.65.207:5744'
+const instructAddress = "3.131.65.207:5244"
 
 const urlSearchParams = new URLSearchParams(window.location.search)
 const params = Object.fromEntries(urlSearchParams.entries())
@@ -28,17 +29,6 @@ new Vue({
     },
     created() {
       // axios.get(`http://${materialAddress}/spm/materials/${this.course_id}`)
-      axios.get(`http://${userAddress}/spm/user_database/${this.Username}`)
-          .then(function (response) {
-            return_response = response.data.data
-            // console.log(course_id)
-            console.log(Username)
-  
-            vueApp.validate()
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
   
     },
     methods: {
@@ -55,15 +45,41 @@ new Vue({
       },
       redirect() {
         // this.$router.push({name: ''})
-        if("[user_database.Current_Position]" == "Instructor"){
-          window.location = "instructor_assign.html";
-          }
-        else if ("[user_database.Current_Position]" == "HR"){
-          window.location = "HR_webpage.html";
-          }
-        else{
-          window.location = "course_enrolment_page.html?user=Tommy";
-          }
+
+        axios.get(`http://${userAddress}/user_database/${this.Username}`)
+          .then(function (response) {
+            redirect = response.data.data.user[0]
+            console.log(redirect)
+            if (redirect.Current_Position == "Learner") {
+              window.location.href = './course_enrolment_page.html?user=' + redirect.Username
+            }
+            if (redirect.Current_Position == "HR") {
+              window.location.href = './HR_webpage.html'
+            }
+            if (redirect.Current_Position == "Instructor") {
+              axios.get(`http://${instructAddress}/spm/instructor`)
+              .then(function (response) {
+                
+                instruct = response.data.data.instructor
+                console.log(instruct)
+                for (let index = 0; index < instruct.length; index++) {
+                  console.log(this.Username)
+                  if (instruct[index].Username == redirect.Username) {
+                    window.location.href = './course_page_trainer.html?instructor=' + instruct[index].Instructor_ID
+                  }
+                }
+
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+
+
       }
     },
     data: () => ({
@@ -71,31 +87,10 @@ new Vue({
       tab: 0,
       tabs: [
           {name:"Login", icon:"mdi-account"},
-          
       ],
       valid: true,
-      
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      verify: "",
-      loginPassword: "",
-      loginEmail: "",
-      loginEmailRules: [
-        v => !!v || "Required",
-        // v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-      ],
-      emailRules: [
-        v => !!v || "Required",
-        // v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-      ],
-  
-      show1: false,
-      rules: {
-        required: value => !!value || "Required.",
-        // min: v => (v && v.length >= 8) || "Min 8 characters"
-      }
+      Username:"",
+
     })
   });
 

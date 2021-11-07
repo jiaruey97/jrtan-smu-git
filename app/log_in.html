@@ -24,7 +24,7 @@
                                     <v-form ref="loginForm" v-model="valid" lazy-validation>
                                         <v-row>
                                             <v-col cols="12">
-                                                <v-text-field v-model="Username" :rules="loginEmailRules" label="UserName" required>{{Username}}</v-text-field>
+                                                <v-text-field v-model="Username" label="UserName" required>}</v-text-field>
                                             </v-col>
                                             <!-- <v-col cols="12">
                                                 <v-text-field v-model="loginPassword" :append-icon="show1?'eye':'eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
@@ -33,7 +33,7 @@
                                             </v-col>
                                             <v-spacer></v-spacer>
                                             <v-col class="d-flex" cols="12" sm="3" xsm="12" align-end>
-                                                <v-btn x-large block :disabled="!valid" color="success" @click="redirect"> Login </v-btn>
+                                                <v-btn x-large block color="success" @click="redirect"> Login </v-btn>
                                             </v-col>
                                         </v-row>
                                     </v-form>

@@ -25,7 +25,7 @@ class Quiz_Results(db.Model):
     Course_ID = db.Column(db.Integer)
     Section = db.Column(db.String(255), nullable=False)
     Marks = db.Column(db.Integer, nullable=False)
-    Pass = db.Column(db.Boolean, nullable=False)
+    Pass = db.Column(db.Integer, nullable=False)
 
 
     def __init__(self, Username, Quiz_ID, Course_ID, Section, Marks, Pass):

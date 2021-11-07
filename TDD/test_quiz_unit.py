@@ -15,7 +15,7 @@ class TestQuiz(unittest.TestCase):
             "Section": 1,
             "Question_Object": "Chickensds",
             "Class_ID": 1,
-            "Timing": "23"
+            "Time": "23"
         }
         )
 

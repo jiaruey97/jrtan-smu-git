@@ -27,7 +27,7 @@ class TestCreateQuiz(TestApp):
 
         date_object = datetime.datetime.now()
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
@@ -52,11 +52,12 @@ class TestCreateQuiz(TestApp):
         request_body = {
             "Course_ID": c1.Course_ID,
             "Instructor_ID": i1.Instructor_ID,
-            "Section": 12,
-            "Question_Object": "Chickeasd",
+            "Section":"12",
+            "Question_Object":"Hello",
             "Class_ID": cl1.Class_ID,
-            "Timing": "1.5hr"
+            "Time": "1.5"
         }
+
 
         response = self.client.post("/create_quiz",
                                     data=json.dumps(request_body),
@@ -65,19 +66,20 @@ class TestCreateQuiz(TestApp):
         self.assertEqual(response.json, {
             "code": 201,
             "data": {
-                "Course_ID": 1,
-                "Instructor_ID": 1,
-                "Section": 12,
-                "Question_Object": "Chickeasd",
-                "Class_ID": 1,
-                "Quiz_ID": 1,
-                "Timing": "1.5hr"}
-        })
+                        "Course_ID":1,
+                        "Instructor_ID":1,
+                        "Section":"12",
+                        "Question_Object":"Hello",
+                        "Class_ID": 1,
+                        "Quiz_ID":1,
+                        "Time": "1.5"}
+                    })
+
 
     def test_create_quiz_invalid_Instructor(self):
         date_object = datetime.datetime.now()
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
@@ -95,7 +97,7 @@ class TestCreateQuiz(TestApp):
             "Section": 12,
             "Question_Object": "Chickeasd",
             "Class_ID": cl1.Class_ID,
-            "Timing": "1.5hr"
+            "Time": "1.5"
         }
 
         response = self.client.post("/create_quiz",
@@ -103,7 +105,6 @@ class TestCreateQuiz(TestApp):
                                     content_type='application/json')
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json, {
-            "code": 500,
             "message": "Instructor not valid."
         })
 
@@ -133,7 +134,7 @@ class TestCreateQuiz(TestApp):
             "Section": 12,
             "Question_Object": "Chickeasd",
             "Class_ID": cl1.Class_ID,
-            "Timing": "1.5hr"
+            "Time": "1.5"
         }
 
         response = self.client.post("/create_quiz",
@@ -141,7 +142,6 @@ class TestCreateQuiz(TestApp):
                                     content_type='application/json')
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json, {
-            "code": 500,
             "message": "Course not valid."
         })
 
@@ -153,8 +153,8 @@ class TestCreateQuiz(TestApp):
                     Username='UKM123')
 
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
-                    Start_Time=date_object, End_Time=date_object, Sections=4)
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
+                    Start_Time=date_object, End_Time=date_object, Sections="4")
 
         u1 = User_Database(Username="UKM123", Actual_Name='Ducky',
                     Department='UKM123', Current_Position='hello', Course_Assigned='123',
@@ -166,12 +166,12 @@ class TestCreateQuiz(TestApp):
         db.session.commit()
 
         request_body = {
-            "Course_ID": c1.Course_ID,
-            "Instructor_ID": i1.Instructor_ID,
-            "Section": 12,
-            "Question_Object": "Chickeasd",
+            "Course_ID":c1.Course_ID,
+            "Instructor_ID":i1.Instructor_ID,
+            "Section":"12",
+            "Question_Object":"Chickeasd",
             "Class_ID": 2,
-            "Timing": "1.5hr"
+            "Time": "1.5"
         }
 
         response = self.client.post("/create_quiz",
@@ -179,7 +179,6 @@ class TestCreateQuiz(TestApp):
                                     content_type='application/json')
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json, {
-            "code": 500,
             "message": "Class not valid."
         })
 
@@ -187,12 +186,12 @@ class TestCreateQuiz(TestApp):
 class TestQuizRetrieveByID(TestApp):
     def test_retrieve_quiz_id(self):
         date_object = datetime.datetime.now()
-        q1 = Quiz(Course_ID=1, Instructor_ID=1,
-                Section=1, Question_Object='Chickensds', Class_ID=1,
-                Timing="23")
+        q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
+                Section="1", Question_Object='Chickensds', Class_ID=1,
+                Time="23")
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
-                    Start_Time=date_object, End_Time=date_object, Sections=4)
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
+                    Start_Time=date_object, End_Time=date_object, Sections="1")
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
                     Username='UKM123')
@@ -202,9 +201,9 @@ class TestQuizRetrieveByID(TestApp):
 
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
-                    Course_ID=1, Instructor_ID=1,
-                    Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
-
+                    Course_ID = 1, Instructor_ID = 1,
+                    Start_Time=date_object, End_Time=date_object, Sections= "1", Students = "Hello")
+        
         db.session.add(q1)
         db.session.add(u1)
         db.session.add(c1)
@@ -212,26 +211,31 @@ class TestQuizRetrieveByID(TestApp):
         db.session.add(cl1)
         db.session.commit()
 
-        id = i1.Instructor_ID
+        course_id = c1.Course_ID
+        class_id = cl1.Class_ID
+        section = cl1.Sections
 
-        response = self.client.get("/spm/quiz_retrieve/{0}".format(id))
+        url = "/spm/quiz_retrieve/{0}/{0}/4".format(course_id)
+
+        response = self.client.get("/spm/quiz_retrieve/{0}/{0}/1".format(course_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                "Course_ID": 1,
-                "Instructor_ID": 1,
-                "Section": 1,
-                "Question_Object": "Chickensds",
+                "Course_ID":1,
+                "Instructor_ID":1,
+                "Section":"1",
+                "Question_Object":"Chickensds",
                 "Class_ID": 1,
-                "Quiz_ID": 1,
-                "Timing": "23"
-            }
+                "Quiz_ID":1,
+                "Time": "23"
+                    }
+                            
         })
 
     def test_retrieve_quiz_id_nothing(self):
         id = 1
-        response = self.client.get("/spm/quiz_retrieve/{0}".format(id))
+        response = self.client.get("/spm/quiz_retrieve/{0}/{0}/1".format(id))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json, {
             "code": 404,
@@ -244,9 +248,9 @@ class TestQuizRetrieve(TestApp):
         date_object = datetime.datetime.now()
         q1 = Quiz(Course_ID=1, Instructor_ID=1,
                 Section=1, Question_Object='Chickensds', Class_ID=1,
-                Timing="23")
+                Time="23")
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
@@ -271,17 +275,17 @@ class TestQuizRetrieve(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                "quiz": [{
-                    "Course_ID": 1,
-                    "Instructor_ID": 1,
-                    "Section": 1,
-                    "Question_Object": "Chickensds",
-                    "Class_ID": 1,
-                    "Quiz_ID": 1,
-                    "Timing": "23"
-                }]
-            }
-        })
+                        "quiz": [{
+                            "Course_ID":1,
+                            "Instructor_ID":1,
+                            "Section":"1",
+                            "Question_Object":"Chickensds",
+                            "Class_ID": 1,
+                            "Quiz_ID":1,
+                            "Time": "23"
+                        }]
+                    }
+                    })
 
     def test_retrieve_all_quiz_nothing(self):
         response = self.client.get("spm/quiz")
@@ -297,10 +301,10 @@ class TestQuizRetrieveByInstructor(TestApp):
         date_object = datetime.datetime.now()
         q1 = Quiz(Course_ID=1, Instructor_ID=1,
                 Section=1, Question_Object='Chickensds', Class_ID=1,
-                Timing="23")
+                Time="23")
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
-                    Start_Time=date_object, End_Time=date_object, Sections=4)
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
+                    Start_Time=date_object, End_Time=date_object, Sections="4")
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
                     Username='UKM123')
@@ -311,9 +315,9 @@ class TestQuizRetrieveByInstructor(TestApp):
 
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
-                    Course_ID=1, Instructor_ID=1,
-                    Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
-
+                    Course_ID = 1, Instructor_ID = 1,
+                    Start_Time=date_object, End_Time=date_object, Sections= "4", Students = "Hello")
+        
         db.session.add(q1)
         db.session.add(u1)
         db.session.add(c1)
@@ -327,17 +331,18 @@ class TestQuizRetrieveByInstructor(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                "quiz": [{
-                    "Course_ID": 1,
-                    "Instructor_ID": 1,
-                    "Section": 1,
-                    "Question_Object": "Chickensds",
-                    "Class_ID": 1,
-                    "Quiz_ID": 1,
-                    "Timing": "23"
-                }]
-            }
-        })
+                        "quiz": [{
+                            "Course_ID":1,
+                            "Instructor_ID":1,
+                            "Section":"1",
+                            "Question_Object":"Chickensds",
+                            "Class_ID": 1,
+                            "Quiz_ID":1,
+                            "Time": "23"
+                        }]
+                    }
+                    })
+                            
 
     def test_retrieve_quiz_instructor_nothing(self):
         id = 1
@@ -354,9 +359,9 @@ class TestQuizDelete(TestApp):
         date_object = datetime.datetime.now()
         q1 = Quiz(Course_ID=1, Instructor_ID=1,
                 Section=1, Question_Object='Chickensds', Class_ID=1,
-                Timing="23")
+                Time="23")
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
@@ -401,9 +406,9 @@ class TestQuizUpdate(TestApp):
         date_object = datetime.datetime.now()
         q1 = Quiz(Course_ID=1, Instructor_ID=1,
                 Section=1, Question_Object='Chickensds', Class_ID=1,
-                Timing="23")
+                Time="23")
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
@@ -454,7 +459,6 @@ class TestQuizUpdate(TestApp):
             "code": 500,
             "message": "No Such Quiz Exist!"
         })
-
 
 if __name__ == '__main__':
     unittest.main()

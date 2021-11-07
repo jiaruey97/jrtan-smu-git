@@ -244,6 +244,7 @@ def get_all_class():
         }
     ), 404
 
+
 @app.route("/create_class", methods=['POST'])
 def create_class():
 
@@ -308,7 +309,7 @@ def find_by_class_id(Class_ID):
 
 #Class section update
 @app.route("/spm/class/update_section/<int:Course_ID>/<int:section>")
-def update_sections_for_course(Course_ID,section):
+def update_sections_for_course(Course_ID, section):
     class_list = Class.query.filter_by(Course_ID=Course_ID).all()
     if len(class_list):
         for class_item in class_list:
@@ -524,6 +525,7 @@ def get_all_materials():
         }
     ), 404
 
+
 # Retrieve specific material
 @app.route("/spm/materials/<int:course_id>")
 def get_materials_by_course_id(course_id):
@@ -573,9 +575,6 @@ def upload_materials_to_server():
                 "message": "File upload is a success"
             }
         )
-
-    
-
 # This one is only updating/creating new lesson information
 
 
@@ -740,7 +739,7 @@ def get_quiz_for_learner(course_id, section, class_id):
         return jsonify(
             {
                 "code": 200,
-                "data": quiz.json() 
+                "data": quiz.json()
             }
         ), 200
     return jsonify(
@@ -770,6 +769,7 @@ def find_by_isbn13(Instructor_ID):
         }
     ), 404
 
+
 @app.route('/quiz/delete/<int:Quiz_ID>', methods=['POST'])
 def delete_quiz(Quiz_ID):
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
@@ -783,22 +783,22 @@ def delete_quiz(Quiz_ID):
                 "message": "Delete Successful"
             }
         ), 200
-    
+
     return jsonify(
         {
             "code": 404,
             "message": "Oops somethign went wrong"
         }
     ), 404
-    
+
 
 # Create Quiz
 @app.route("/create_quiz", methods=['POST'])
 def create_quiz():
     data = request.get_json()
-    
+
     # Validate Course
-    course = Course.query.filter_by(Course_ID = data['Course_ID']).first()
+    course = Course.query.filter_by(Course_ID=data['Course_ID']).first()
     if not course:
         return jsonify({
             "message": "Course not valid."
@@ -819,7 +819,7 @@ def create_quiz():
         }), 500
 
     quiz = Quiz(**data)
-    
+
     try:
         db.session.add(quiz)
         db.session.commit()
@@ -839,7 +839,8 @@ def create_quiz():
         }
     ), 201
 
-@app.route('/quiz/<int:Quiz_ID>/update',methods = ['POST'])
+
+@app.route('/quiz/<int:Quiz_ID>/update', methods=['POST'])
 def update(Quiz_ID):
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
     if not quiz:
@@ -860,7 +861,7 @@ def update(Quiz_ID):
                 "message": "Update Successful"
             }
         ), 200
-    
+
     return jsonify(
         {
             "code": 404,

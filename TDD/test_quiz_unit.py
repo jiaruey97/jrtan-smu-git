@@ -2,6 +2,7 @@ import unittest
 
 from app import Quiz
 
+
 class TestQuiz(unittest.TestCase):
     def test_to_dict(self):
         q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
@@ -18,8 +19,6 @@ class TestQuiz(unittest.TestCase):
         }
         )
 
-        
-        
 
 if __name__ == "__main__":
     unittest.main()

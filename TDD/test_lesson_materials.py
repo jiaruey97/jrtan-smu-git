@@ -1,7 +1,7 @@
 import unittest
 import flask_testing
 import json
-from app import app, db, Lesson_Materials, Course
+from app import app, db, Lesson_Materials
 
 import datetime
 

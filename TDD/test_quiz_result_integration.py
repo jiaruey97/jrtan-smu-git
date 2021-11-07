@@ -47,7 +47,7 @@ class TestResultRetrieve(TestApp):
         
         r1 = Quiz_Results(Username="UKM123",Quiz_ID = 1, Course_ID = 1, Section = "1", Marks = 12, Pass = False )
 
-        r1 = Quiz_Results(Quiz_Results_ID=1, Username="UKM123", Quiz_ID=1, Course_ID=1, Section=1, Marks=12, Pass=False)
+        r1 = Quiz_Results(Username="UKM123", Quiz_ID=1, Course_ID=1, Section=1, Marks=12, Pass=False)
 
         db.session.add(u1)
         db.session.add(c1)

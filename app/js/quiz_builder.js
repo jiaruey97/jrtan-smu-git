@@ -71,17 +71,41 @@ const vueApp = new Vue({
   methods: {
     
     newQuiz: function(item){
-      console.log(item)
-      if (this.selected_section > item.Section){
-        alert("Please Select a Section Lower than the Section")
+
+      checker = Number(this.selected_section)
+
+      console.log(checker)
+
+      if(isNaN(checker)){
+        
+        alert("ducky")
+
+        console.log(this.selected_section)
+
+        if (this.selected_section != "final") {
+          alert("Please ensure that you type the word: final")
+        } else{
+          this.Course_ID = item.Course_ID
+          this.Section = item.selected_section
+          this.Class_ID = item.Class_ID
+          this.show_quiz = true
+        }
+
       } else{
-        this.Course_ID = item.Course_ID
-        this.Section = item.selected_section
-        this.Class_ID = item.Class_ID
-        this.show_quiz = true
+
+        alert("Robot")
+
+        if (Number(this.selected_section) > item.Section){
+          alert("Please Indicate a Section Lower than the Section")
+        } else{
+          this.Course_ID = item.Course_ID
+          this.Section = item.selected_section
+          this.Class_ID = item.Class_ID
+          this.show_quiz = true
+        }
+
       }
     },
-
 
     editQuiz: function(item) {
       console.log(item)
@@ -109,10 +133,10 @@ const vueApp = new Vue({
     initialize: function() {
       typo = Array()
       axios.get(`http://${addressQuiz}/spm/quiz/` + this.instructor_ID)
-      // axios.get("http://3.131.65.207:5244/spm/quiz/12")
       .then(function (response) {
+        console.log(response.data)
         quiz = response.data.data.quiz
-        console.log(quiz)
+        //console.log(quiz)
         for (let i = 0; i < quiz.length; i++) {
           placehold = {
             Quiz_ID:quiz[i].Quiz_ID,

@@ -28,7 +28,7 @@
                             :items="class_details"
                             class="elevation-1"
                             loading
-                            loading-text="Oh It Appears you have no Course"
+                            loading-text="Oh It Appears there is no classes to manage"
                         >
                         <template v-slot:item.actions="{ item }">
                         <v-btn
@@ -90,6 +90,15 @@
                         >
                         Accept Enrollment
                         </v-btn>
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            v-on:click="student_rejection(item)"
+                        >
+                        Accept Enrollment
+                        </v-btn>
+
                         </template>
                         </v-data-table>
                     </v-container>

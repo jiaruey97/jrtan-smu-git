@@ -129,7 +129,7 @@ const quiz_app = new Vue({
                         for (course of courses) {
                             id = course.course
                             console.log(id)
-                            class_id = course.class
+                            const class_id = course.class
                             axios.get(`http://${addressCourse}/spm/course_retrieve/` + id)
                                 .then(function (response) {
                                     retreived_courses = response.data.data

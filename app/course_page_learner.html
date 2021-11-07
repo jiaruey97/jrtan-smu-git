@@ -32,11 +32,12 @@
           <!-- This entire section would be V-FORED!! -->
           <div v-for='(lesson, index) in lesson_materials.Lesson_Materials'
             :keys="lesson_materials.Lesson_Materials.materials">
-            <v-card style="margin-bottom: 15px;" disabled='lock_course_update_button'>
+            <v-card style="margin-bottom: 15px;" :disabled='tracking_section[lesson.section_no - 1]'>
               <v-toolbar flat color=#607D8B dark>
                 <v-toolbar-title>Section {{lesson.section_no}}</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn depressed large class="ma-2" color="success">Section Complete!</v-btn>
+                <v-btn depressed large class="ma-2" :disabled="section_cleared != (lesson.section_no - 1)"
+                  @click='update_section()' color="success">Section Complete!</v-btn>
               </v-toolbar>
               <v-tabs vertical>
                 <v-tab>
@@ -71,9 +72,9 @@
                           </v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
-                            <v-btn @click='download_materials(material.material_path)' icon>
-                              <v-icon>mdi-download</v-icon>
-                            </v-btn>
+                          <v-btn @click='download_materials(material.material_path)' icon>
+                            <v-icon>mdi-download</v-icon>
+                          </v-btn>
                         </v-list-item-action>
                       </v-list-item>
                     </v-list>
@@ -88,7 +89,8 @@
                     <v-list>
                       <v-list-item>
                         <v-list-item-action>
-                          <v-btn depressed large class="ma-2" outlined color="indigo" href="quiz.html">
+                          <v-btn depressed large class="ma-2" @click="go_to_quiz(lesson.section_no)" outlined
+                            color="indigo">
                             Quiz 1
                           </v-btn>
                         </v-list-item-action>
@@ -99,7 +101,38 @@
             </v-card>
           </div>
 
-          <!-- Section 1 end -->
+          <!-- Section end -->
+
+          <!-- Final Quiz -->
+          <v-card style="margin-bottom: 15px;" :disabled="final_quiz_lock">
+            <v-toolbar flat color=#607D8B dark>
+              <v-toolbar-title>Final Quiz</v-toolbar-title>
+            </v-toolbar>
+            <v-tabs vertical>
+              <v-tab>
+                <v-icon left>
+                  mdi-numeric-1-box
+                </v-icon>
+                Final Quiz
+              </v-tab>
+            <!-- Quiz Tab -->
+            <v-tab-item>
+              <v-card flat>
+                <v-card-title>
+                  Final Quiz
+                </v-card-title>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-action>
+                      <v-btn depressed large class="ma-2" outlined color="indigo" @click="go_to_quiz('final')">
+                       Final Quiz
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+              </v-card>
+            </v-tab-item>
+            </v-tabs>
+          </v-card>
         </v-container>
       </v-main>
     </v-app>

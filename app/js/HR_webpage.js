@@ -262,10 +262,31 @@ const quiz_app = new Vue({
                 console.log(error)
             })
             
-            
+        },
 
-
-        }
+        student_rejection: function (stuff) {
+            course_pending_list = stuff.Course_Pending
+            course_delete = stuff.Course_ID
+        
+            for (let index = 0; index < course_pending_list.length; index++) {
+                pending_item = course_pending_list[index]
+                if (pending_item.course == course_delete) {
+                    course_pending_list.splice(index, 1)
+                }
+            }
+        
+            post_object_3 = {
+                'Course_Pending': JSON.stringify(course_pending_list)
+            }
+        
+            axios.post(`http://${addressUser}/user_database/` + stuff.Username + `/update`, post_object_3)
+                .then(function (response) {
+                    alert("Update to User successful")
+                })
+                .catch(function (error) {
+                    alert("Something when wrong with the Update")
+                })
+        },
 
     }
 })

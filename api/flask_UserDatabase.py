@@ -1,19 +1,21 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import json
 
 app = Flask(__name__)
 CORS(app)
 
-#local flask
+# local flask
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
 
-#bitnami flask
+# bitnami flask
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:t2AlF2wAibZH@127.0.0.1:3306/SPM'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
 
 class User_Database(db.Model):
     __tablename__ = 'User_Database'
@@ -25,7 +27,6 @@ class User_Database(db.Model):
     Course_Assigned = db.Column(db.String(255))
     Course_Completed = db.Column(db.String(255))
     Course_Pending = db.Column(db.String(255))
-
 
     def __init__(self, Username, Actual_Name, Department, Current_Position, Course_Assigned, Course_Completed, Course_Pending):
         self.Username = Username
@@ -59,6 +60,7 @@ def get_all_user():
         }
     ), 404
 
+
 @app.route("/user_database/<string:Username>")
 def get_user_name(Username):
     user_Database = User_Database.query.filter_by(Username=Username).all()
@@ -79,7 +81,7 @@ def get_user_name(Username):
     ), 404
 
 
-@app.route('/user_database/<string:Username>/update',methods = ['POST'])
+@app.route('/user_database/<string:Username>/update', methods=['POST'])
 def update_user(Username):
     users = User_Database.query.filter_by(Username=Username)
     if request.method == 'POST':
@@ -88,18 +90,61 @@ def update_user(Username):
             users.update(data)
             db.session.commit()
             return jsonify(
-            {
-                "code": 200,
-                "message": "Update Successful"
-            }
-        ), 200
-    
+                {
+                    "code": 200,
+                    "message": "Update Successful"
+                }
+            ), 200
+
     return jsonify(
         {
             "code": 404,
             "message": "Oops somethign went wrong"
         }
     ), 404
+
+
+@app.route("/user_database/mark_user_course_complete/<string:username>/<int:course_id>/<int:class_id>")
+def update_course_completion(username, course_id, class_id):
+    user = User_Database.query.filter_by(Username=username).first()
+    course_dict = {'course': course_id, 'class': class_id}
+    if user:
+        #Course assigned
+        course_assigned = json.loads(user.json()['Course_Assigned'])
+        removed_course_list = []
+        removed_course_list[:] = [item for item in course_assigned if item['course'] != course_id and item['class'] != class_id]
+        user.Course_Assigned = json.dumps(removed_course_list)
+
+        #Course completed
+        new_course_complete = []
+        course_completed = user.json()['Course_Completed']
+
+        if course_completed != "":
+            new_course_complete.extend(json.loads(course_completed))
+
+        new_course_complete.append(course_dict)
+        user.Course_Completed = json.dumps(new_course_complete)
+
+        db.session.add(user)
+        db.session.commit()
+
+        try:
+            #db.session.commit()
+            print('te')
+        except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred updating for user."
+                }
+            ), 500
+
+    return jsonify(
+        {
+            'code': 200,
+            'message': "Course completion successfully updated!~"
+        }
+    ), 200
 
 
 if __name__ == '__main__':

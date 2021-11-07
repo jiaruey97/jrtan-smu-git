@@ -26,7 +26,7 @@ class TestRetrieveCourse(TestApp):
     def test_retrieve_course(self):
         date_object = datetime.datetime.now()
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         db.session.add(c1)
@@ -38,7 +38,7 @@ class TestRetrieveCourse(TestApp):
     def test_retrieve_course_by_ID(self):
         date_object = datetime.datetime.now()
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         db.session.add(c1)

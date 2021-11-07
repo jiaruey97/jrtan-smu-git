@@ -9,10 +9,10 @@ app = Flask(__name__)
 CORS(app)
 
 #local flask
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/spm'
 
 #bitnami flask
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:t2AlF2wAibZH@127.0.0.1:3306/SPM'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:t2AlF2wAibZH@127.0.0.1:3306/SPM'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -27,23 +27,23 @@ class Quiz(db.Model):
     Quiz_ID = db.Column(db.Integer, primary_key=True)
     Course_ID = db.Column(db.Integer)
     Instructor_ID = db.Column(db.Integer)
-    Section = db.Column(db.Integer, nullable=False)
+    Section = db.Column(db.String(255), nullable=False)
     Question_Object = db.Column(db.Text, nullable=False)
     Class_ID = db.Column(db.Integer)
-    Timing = db.Column(db.String(30), nullable=False)
+    Time = db.Column(db.String(255), nullable=False)
 
 
-    def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Timing):
+    def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Time):
         self.Class_ID = Class_ID
         self.Course_ID = Course_ID
         self.Instructor_ID = Instructor_ID
         self.Section = Section
         self.Question_Object = Question_Object
-        self.Timing = Timing
+        self.Time = Time
 
 
     def json(self):
-        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Timing":self.Timing}
+        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Time":self.Time}
 
 
 ###################################################################################################################################################################################################################
@@ -60,7 +60,7 @@ def get_all_quiz():
             {
                 "code": 200,
                 "data": {
-                    "course": [quiz_i.json() for quiz_i in quiz]
+                    "quiz": [quiz_i.json() for quiz_i in quiz]
                 }
             }
         ), 200
@@ -71,9 +71,9 @@ def get_all_quiz():
         }
     ), 404
 
-@app.route("/spm/quiz_retrieve/<int:Quiz_ID>")
-def get_quiz_for_learner(Quiz_ID):
-    quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
+@app.route("/spm/quiz_retrieve/<int:course_id>/<int:class_id>/<section>")
+def get_quiz_for_learner(course_id, section, class_id):
+    quiz = Quiz.query.filter_by(Course_ID=course_id, Class_ID=class_id, Section=section).first()
     if quiz != None:
         return jsonify(
             {

@@ -34,7 +34,7 @@ class Enrollment_Date(db.Model):
 
 
 @app.route("/spm/enrollment_date")
-def get_all_course():
+def get_enrollment_data():
     enrollment_list = Enrollment_Date.query.all()
     if len(enrollment_list):
         return jsonify(

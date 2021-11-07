@@ -30,10 +30,10 @@ class TestResultRetrieve(TestApp):
 
         q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
                 Section=1, Question_Object='Chickensds', Class_ID=1,
-                Timing="23")
+                Time="23")
 
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
@@ -44,7 +44,7 @@ class TestResultRetrieve(TestApp):
                     Course_ID = 1, Instructor_ID = 1,
                     Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
         
-        r1 = Quiz_Results(Quiz_Results_ID= 1,Username="UKM123",Quiz_ID = 1, Course_ID = 1, Section = 1, Marks = 12, Pass = False )
+        r1 = Quiz_Results(Username="UKM123",Quiz_ID = 1, Course_ID = 1, Section = "1", Marks = 12, Pass = False )
 
 
         db.session.add(u1)
@@ -60,11 +60,12 @@ class TestResultRetrieve(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                        "results": [{"Quiz_Results_ID": 1,
+                        "quiz_results": [{
+                                    "Quiz_Results_ID": 1,
                                     "Username":"UKM123",
                                     "Quiz_ID": 1, 
                                     "Course_ID" : 1, 
-                                    "Section" : 1, 
+                                    "Section" : "1", 
                                     "Marks" : 12, 
                                     "Pass" : False}]
             }
@@ -78,11 +79,11 @@ class TestResultsCreate(TestApp):
                     Course_Completed="date_object", Course_Pending="Course_Pending")
 
         q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
-                Section=1, Question_Object='Chickensds', Class_ID=1,
-                Timing="23")
+                Section="1", Question_Object='Chickensds', Class_ID=1,
+                Time="23")
 
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
@@ -103,11 +104,11 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                    "Quiz_Results_ID": 1,
+                    
                     "Username":u1.Username,
                     "Quiz_ID": 1, 
                     "Course_ID" : c1.Course_ID, 
-                    "Section" : 1, 
+                    "Section" : "1", 
                     "Marks" : 12, 
                     "Pass" : False
         }
@@ -124,7 +125,7 @@ class TestResultsCreate(TestApp):
                     "Username":"UKM123",
                     "Quiz_ID": 1, 
                     "Course_ID" : 1, 
-                    "Section" : 1, 
+                    "Section" : "1", 
                     "Marks" : 12, 
                     "Pass" : False}
                     })
@@ -137,10 +138,10 @@ class TestResultsCreate(TestApp):
 
         q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
                 Section=1, Question_Object='Chickensds', Class_ID=1,
-                Timing="23")
+                Time="23")
 
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
@@ -161,7 +162,7 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                    "Quiz_Results_ID": 1,
+                    
                     "Username":u1.Username,
                     "Quiz_ID": 1, 
                     "Course_ID" : 20, 
@@ -186,7 +187,7 @@ class TestResultsCreate(TestApp):
 
 
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
 
@@ -195,7 +196,7 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                    "Quiz_Results_ID": 1,
+                    
                     "Username":u1.Username,
                     "Quiz_ID": 1, 
                     "Course_ID" : c1.Course_ID, 
@@ -222,10 +223,10 @@ class TestResultsCreate(TestApp):
 
         q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
                 Section=1, Question_Object='Chickensds', Class_ID=1,
-                Timing="23")
+                Time="23")
 
         c1 = Course(Course_ID=1, Course_Name='Ducky',
-                    Course_Details='UKM123', Duration='3hr', Prerequestic='123',
+                    Course_Details='UKM123', Duration='3hr', Prerequisite='123',
                     Start_Time=date_object, End_Time=date_object, Sections=4)
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
@@ -247,7 +248,7 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                    "Quiz_Results_ID": 1,
+                    
                     "Username":"asadsadsa",
                     "Quiz_ID": 1, 
                     "Course_ID" : c1.Course_ID, 

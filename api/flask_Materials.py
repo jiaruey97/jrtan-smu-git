@@ -124,7 +124,7 @@ def upload_materials_to_server():
 @app.route("/update_materials/<int:Lesson_Materials_ID>", methods=['POST'])
 def update_materials(Lesson_Materials_ID):
     lesson_materials = Lesson_Materials.query.filter_by(
-        Lesson_Materials_ID=Lesson_Materials_ID).one()
+        Lesson_Materials_ID=Lesson_Materials_ID).first()
     if lesson_materials:
         data = request.get_json()
         print(data)

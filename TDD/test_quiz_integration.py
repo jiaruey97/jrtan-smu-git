@@ -197,7 +197,7 @@ class TestQuizRetrieveByID(TestApp):
                 Time="23")
         c1 = Course(Course_ID=1, Course_Name='Ducky',
                     Course_Details='UKM123', Duration='3hr', Prerequisite='123',
-                    Start_Time=date_object, End_Time=date_object, Sections="4")
+                    Start_Time=date_object, End_Time=date_object, Sections="1")
 
         i1 = Instructor(Instructor_ID=1, Actual_Name='Ducky',
                      Username='UKM123')
@@ -208,7 +208,7 @@ class TestQuizRetrieveByID(TestApp):
         cl1 = Class(Class_ID = 1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID = 1, Instructor_ID = 1,
-                    Start_Time=date_object, End_Time=date_object, Sections= "4", Students = "Hello")
+                    Start_Time=date_object, End_Time=date_object, Sections= "1", Students = "Hello")
         
         db.session.add(q1)
         db.session.add(u1)
@@ -217,11 +217,13 @@ class TestQuizRetrieveByID(TestApp):
         db.session.add(cl1)
         db.session.commit()
 
-        course_id = "1"
-        class_id = "1"
-        section = "4"
+        course_id = c1.Course_ID
+        class_id = cl1.Class_ID
+        section = cl1.Sections
 
-        response = self.client.get("/spm/quiz_retrieve/1/1/'4'")
+        url = "/spm/quiz_retrieve/{0}/{0}/4".format(course_id)
+
+        response = self.client.get("/spm/quiz_retrieve/{0}/{0}/1".format(course_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, {
             "code": 200,
@@ -239,7 +241,7 @@ class TestQuizRetrieveByID(TestApp):
 
     def test_retrieve_quiz_id_nothing(self):
         id = 1
-        response = self.client.get("/spm/quiz_retrieve/{0}".format(id))
+        response = self.client.get("/spm/quiz_retrieve/{0}/{0}/1".format(id))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json, {
             "code": 404,
@@ -464,7 +466,6 @@ class TestQuizUpdate(TestApp):
             "code": 500,
             "message": "No Such Quiz Exist!"
                     })
-
 
 if __name__ == '__main__':
     unittest.main()

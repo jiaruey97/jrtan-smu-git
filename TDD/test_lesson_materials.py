@@ -1,79 +1,94 @@
-# import unittest
-# import requests
-# import json
+import unittest
+import flask_testing
+import json
+from app import app, db, Lesson_Materials, Course
 
-# test_lesson_materials = {
-#             'Course_ID': 5,
-#             'Lesson_Materials': [
-#                 {
-#                     "section_no": "1",
-#                     "materials": [
-#                         {
-#                             "material_title": "History of Cliva",
-#                             "material_path": "upload/Clivian_files.pdf"
-#                         },
-#                         {
-#                             "material_title": "The Axiom Group",
-#                             "material_path": "upload/Clivian_files.pdf"
-#                         },
-#                         {
-#                             "material_title": "The Grid Palistia",
-#                             "material_path": "upload/Clivian_files.pdf"
-#                         },
-#                     ]
-#                 },
-#                 {
-#                     "section_no": "2",
-#                     "materials": [
-#                         {
-#                             "material_title": "The History of Void",
-#                             "material_path": "upload/Session_10_Market_Basket_Analysis.pdf"
-#                         },
-#                         {
-#                             "material_title": "The Perculiarities of Corrupt Magic",
-#                             "material_path": "upload/Session_10_Market_Basket_Analysis.pdf"
-#                         },
-#                         {
-#                             "material_title": "Idol vs Self",
-#                             "material_path": "upload/Session_10_Market_Basket_Analysis.pdf"
-#                         }
-#                     ]
-#                 },
-#                 {
-#                     "section_no": "3",
-#                     "materials": [
-#                         {
-#                             "material_title": "Introduction to Espers",
-#                             "material_path": "upload/Session_10_Market_Basket_Analysis.pdf"
-#                         },
-#                         {
-#                             "material_title": "The Gauntlet",
-#                             "material_path": "upload/Session_10_Market_Basket_Analysis.pdf"
-#                         },
-#                         {
-#                             "material_title": "Mana",
-#                             "material_path": "upload/Session_10_Market_Basket_Analysis.pdf"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             'Lesson_Materials_ID': 5,
-#         }
-
-# class test_retrieve_materials(unittest.TestCase):
-#     def test_update_class_materials(self):
-#         response = requests.post("http://3.131.65.207:5344/update_materials/5", json=test_lesson_materials)
-#         self.assertEqual(response.status_code, 200)
-
-    
-#     def test_retrieve_class_materials(self):
-#         response = requests.get("http://3.131.65.207:5344/spm/materials/5")
-#         result = response.json()
-#         result['data']['Lesson_Materials'] = json.loads(result['data']['Lesson_Materials'])
-        
-#         self.assertEqual(response.status_code, 200)
-#         self.assertDictEqual(test_lesson_materials, result['data'])
+import datetime
 
 
-# #{'Course_ID': 5, 'Lesson_Materials': [{'section_no': '1', 'materials': [{'material_title': 'History of Cliva', 'material_path': 'upload/Clivian_files.pdf'}, {'material_title': 'The Axiom Group', 'material_path': 'upload/Clivian_files.pdf'}, {'material_title': 'The Grid Palistia', 'material_path': 'upload/Clivian_files.pdf'}]}, {'section_no': '2', 'materials': [{'material_title': 'The History of Void', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'The Perculiarities of Corrupt Magic', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'Idol vs Self', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}]}, {'section_no': '3', 'materials': [{'material_title': 'Introduction to Espers', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'The Gauntlet', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'Mana', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}]}], 'Lesson_Materials_ID': 5}
-# #{'Course_ID': 5, 'Lesson_Materials': [{'section_no': '1', 'materials': [{'material_title': 'History of Cliva', 'material_path': 'upload/Clivian_files.pdf'}, {'material_title': 'The Axiom Group', 'material_path': 'upload/Clivian_files.pdf'}, {'material_title': 'The Grid Palistia', 'material_path': 'upload/Clivian_files.pdf'}]}, {'section_no': '2', 'materials': [{'material_title': 'The History of Void', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'The Perculiarities of Corrupt Magic', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'Idol vs Self', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}]}, {'section_no': '3', 'materials': [{'material_title': 'Introduction to Espers', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'The Gauntlet', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}, {'material_title': 'Mana', 'material_path': 'upload/Session_10_Market_Basket_Analysis.pdf'}]}], 'Lesson_Materials_ID': 5}
+class TestApp(flask_testing.TestCase):
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
+    app.config['TESTING'] = True
+
+    def create_app(self):
+        return app
+
+    def setUp(self):
+        db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
+
+class TestLessonMaterials(TestApp):
+    def test_upload_course(self):
+        #lm1 = Lesson_Materials(Lesson_Materials_ID=6, Course_ID=1, Lesson_Materials="something")
+
+        # db.session.add(lm1)
+        # db.session.commit()
+
+        request_body = {
+            "Lesson_Materials_ID": 6,
+            "Course_ID": 1,
+            "Lesson_Materials": "something"
+        }
+        lesson_materials_id = 1
+        response = self.client.post("/update_materials/{0}".format(lesson_materials_id),
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {
+            "code": 200,
+            "message": "It's a success!",
+            "data": {
+                "Course_ID": 1,
+                "Lesson_Materials": "something",
+                "Lesson_Materials_ID": 6,
+            }
+
+        })
+
+    def test_retrieve_course(self):
+        lm1 = Lesson_Materials(Lesson_Materials_ID=6,
+                               Course_ID=1, Lesson_Materials="something")
+        db.session.add(lm1)
+        db.session.commit()
+
+        course_id = lm1.Course_ID
+
+        response = self.client.get("/spm/materials/{0}".format(course_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {
+            "code": 200,
+            "data": {
+                "Lesson_Materials_ID": 6,
+                "Course_ID": 1,
+                "Lesson_Materials": "something"
+            }
+
+        })
+
+    def test_update_course(self):
+        lm1 = Lesson_Materials(Lesson_Materials_ID=6,
+                               Course_ID=1, Lesson_Materials="something")
+        db.session.add(lm1)
+        db.session.commit()
+
+        course_id = lm1.Course_ID
+
+        response = self.client.get("/spm/materials/{0}".format(course_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {
+            "code": 200,
+            "data": {
+                "Lesson_Materials_ID": 6,
+                "Course_ID": 1,
+                "Lesson_Materials": "something"
+            }
+        })
+
+
+if __name__ == '__main__':
+    unittest.main()

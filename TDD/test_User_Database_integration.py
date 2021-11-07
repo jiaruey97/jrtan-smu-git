@@ -99,4 +99,3 @@ class TestUpdateUser(TestApp):
 
 if __name__ == '__main__':
     unittest.main()
-

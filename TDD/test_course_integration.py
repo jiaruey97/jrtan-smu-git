@@ -11,7 +11,7 @@ class TestApp(flask_testing.TestCase):
     app.config['TESTING'] = True
 
     def create_app(self):
-        return app
+        return app 
 
     def setUp(self):
         db.create_all()

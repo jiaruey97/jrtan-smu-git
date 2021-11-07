@@ -163,20 +163,20 @@ function check_if_user_has_attempted_quiz() {
             check_repeat = response.data.result
             
             if (quiz_app.section_id == 'final') {
-                //Finals treated differently, lock them out if user completed
-                clearInterval(intervalTimer)
-                quiz_app.timer_text = "You've completed!"
-                quiz_app.quiz_section = false
-                quiz_app.score = response.data.marks
-                quiz_app.submit_msg = "You've already attempted the quiz!"
+                // //Finals treated differently, lock them out if user completed
+                // clearInterval(intervalTimer)
+                // quiz_app.timer_text = "You've completed!"
+                // quiz_app.quiz_section = false
+                // quiz_app.score = response.data.marks
+                // quiz_app.submit_msg = "You've already attempted the quiz!"
 
-                // if (response.data.Pass == true) {
-                //     clearInterval(intervalTimer)
-                //     quiz_app.timer_text = "You've completed!"
-                //     quiz_app.quiz_section = false
-                //     quiz_app.score = response.data.marks
-                //     quiz_app.submit_msg = "You've already completed and passed your quiz!"
-                // }
+                if (check_repeat == true) {
+                    clearInterval(intervalTimer)
+                    quiz_app.timer_text = "You've completed!"
+                    quiz_app.quiz_section = false
+                    quiz_app.score = response.data.marks
+                    quiz_app.submit_msg = "You've already completed and passed your quiz!"
+                }
 
             } else {
                 quiz_app.is_repeat = check_repeat

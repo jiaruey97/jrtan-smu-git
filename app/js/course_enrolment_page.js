@@ -79,6 +79,7 @@ const quiz_app = new Vue({
 
         check_enrollment_period: function () {
             placehold_array_4 = Array()
+            date_placeholder = {}
             axios.get(`http://3.131.65.207:5944/spm/enrollment_date`)
                 .then(function (response) {
                     date_array = response.data.data.enroll

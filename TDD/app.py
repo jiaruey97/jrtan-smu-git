@@ -21,6 +21,7 @@ db = SQLAlchemy(app)
 
 #### --- CLASSES START --- ####
 
+
 class Class(db.Model):
     __tablename__ = 'Class'
 
@@ -36,7 +37,7 @@ class Class(db.Model):
     Sections = db.Column(db.Integer, nullable=False)
     Students = db.Column(db.Text)
 
-    def __init__(self, Class_ID, Class_Name, Class_Details, Size, Current_Size, Course_ID,Instructor_ID,Start_Time, End_Time, Sections, Students):
+    def __init__(self, Class_ID, Class_Name, Class_Details, Size, Current_Size, Course_ID, Instructor_ID, Start_Time, End_Time, Sections, Students):
         self.Class_ID = Class_ID
         self.Class_Name = Class_Name
         self.Class_Details = Class_Details
@@ -48,10 +49,10 @@ class Class(db.Model):
         self.End_Time = End_Time
         self.Sections = Sections
         self.Students = Students
-        
 
     def json(self):
-        return {"Class_ID": self.Class_ID, "Class_Name": self.Class_Name, "Class_Details": self.Class_Details, "Size": self.Size, "Current_Size": self.Current_Size, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID,"Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections, "Students": self.Students}
+        return {"Class_ID": self.Class_ID, "Class_Name": self.Class_Name, "Class_Details": self.Class_Details, "Size": self.Size, "Current_Size": self.Current_Size, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections, "Students": self.Students}
+
 
 class Course(db.Model):
     __tablename__ = 'Course'
@@ -78,22 +79,22 @@ class Course(db.Model):
     def json(self):
         return {"Course_ID": self.Course_ID, "Course_Name": self.Course_Name, "Course_Details": self.Course_Details, "Duration": self.Duration, "Prerequisite": self.Prerequisite, "Start_Time": self.Start_Time, "End_Time": self.End_Time, "Sections": self.Sections}
 
+
 class Enrollment_Date(db.Model):
     __tablename__ = 'Enrollment_Date'
 
-    Enrollment_ID  = db.Column(db.Integer, primary_key=True)
+    Enrollment_ID = db.Column(db.Integer, primary_key=True)
     Enrollment_Start = db.Column(db.Date)
     Enrollment_End = db.Column(db.Date)
-
 
     def __init__(self, Enrollment_ID, Enrollment_Start, Enrollment_End):
         self.Enrollment_ID = Enrollment_ID
         self.Enrollment_Start = Enrollment_Start
         self.Enrollment_End = Enrollment_End
-  
 
     def json(self):
         return {"Enrollment_ID": self.Enrollment_ID, "Enrollment_Start": self.Enrollment_Start, "Enrollment_End": self.Enrollment_End}
+
 
 class Instructor(db.Model):
     __tablename__ = 'Instructor'
@@ -102,14 +103,14 @@ class Instructor(db.Model):
     Actual_Name = db.Column(db.String(255), nullable=False)
     Username = db.Column(db.String(255), nullable=False)
 
-    def __init__(self, Instructor_ID, Actual_Name,Username):
+    def __init__(self, Instructor_ID, Actual_Name, Username):
         self.Instructor_ID = Instructor_ID
         self.Actual_Name = Actual_Name
         self.Username = Username
 
-
     def json(self):
         return {"Instructor_ID": self.Instructor_ID, "Actual_Name": self.Actual_Name, "Username": self.Username}
+
 
 class Lesson_Materials(db.Model):
     __tablename__ = 'Lesson_Materials'
@@ -125,6 +126,7 @@ class Lesson_Materials(db.Model):
 
     def json(self):
         return {"Lesson_Materials_ID": self.Lesson_Materials_ID, "Course_ID": self.Course_ID, "Lesson_Materials": self.Lesson_Materials}
+
 
 class Quiz_Results(db.Model):
     __tablename__ = 'Quiz_Results'
@@ -148,6 +150,7 @@ class Quiz_Results(db.Model):
     def json(self):
         return {"Quiz_Results_ID": self.Quiz_Results_ID, "Username": self.Username, "Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Section": self.Section, "Marks": self.Marks, "Pass": self.Pass}
 
+
 class Quiz(db.Model):
     __tablename__ = 'Quiz'
 
@@ -159,7 +162,6 @@ class Quiz(db.Model):
     Class_ID = db.Column(db.Integer)
     Time = db.Column(db.String(255), nullable=False)
 
-
     def __init__(self, Class_ID, Course_ID, Instructor_ID, Section, Question_Object, Time):
         self.Class_ID = Class_ID
         self.Course_ID = Course_ID
@@ -168,9 +170,9 @@ class Quiz(db.Model):
         self.Question_Object = Question_Object
         self.Time = Time
 
-
     def json(self):
-        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Time":self.Time}
+        return {"Quiz_ID": self.Quiz_ID, "Course_ID": self.Course_ID, "Instructor_ID": self.Instructor_ID, "Section": self.Section, "Question_Object": self.Question_Object, "Class_ID": self.Class_ID, "Time": self.Time}
+
 
 class Tracker(db.Model):
     __tablename__ = 'Tracker'
@@ -198,6 +200,7 @@ class Tracker(db.Model):
     def json(self):
         return {"Tracker_ID": self.Tracker_ID, "Username": self.Username, "Course_ID": self.Course_ID, "Class_ID": self.Class_ID, "Sections_cleared": self.Sections_cleared, "Quiz_cleared": self.Quiz_cleared, "Final_Quiz_cleared": self.Final_Quiz_cleared}
 
+
 class User_Database(db.Model):
     __tablename__ = 'User_Database'
 
@@ -222,7 +225,6 @@ class User_Database(db.Model):
         return {"Username": self.Username, "Actual_Name": self.Actual_Name, "Department": self.Department, "Current_Position": self.Current_Position, "Course_Assigned": self.Course_Assigned, "Course_Completed": self.Course_Completed, "Course_Pending": self.Course_Pending}
 
 #### --- CLASS OVER --- ####
-
 ### -- Class Methods -- ###
 
 @app.route("/spm/class")
@@ -269,6 +271,7 @@ def create_class():
         }
     ), 201
 
+
 @app.route("/spm/class/<int:Instructor_ID>")
 def find_by_instructor_class(Instructor_ID):
     class_list = Class.query.filter_by(Instructor_ID=Instructor_ID).all()
@@ -288,6 +291,7 @@ def find_by_instructor_class(Instructor_ID):
         }
     ), 404
 
+
 @app.route("/spm/class_id/<int:Class_ID>")
 def find_by_class_id(Class_ID):
     class_list = Class.query.filter_by(Class_ID=Class_ID).all()
@@ -306,6 +310,7 @@ def find_by_class_id(Class_ID):
             "message": "Class Not Found not found."
         }
     ), 404
+
 
 #Class section update
 @app.route("/spm/class/update_section/<int:Course_ID>/<int:section>")
@@ -334,7 +339,6 @@ def update_sections_for_course(Course_ID, section):
     ), 200
 
 
-
 @app.route("/spm/search_class_course/<int:Course_ID>")
 def find_by_course_class(Course_ID):
     class_list = Class.query.filter_by(Course_ID=Course_ID).all()
@@ -353,6 +357,7 @@ def find_by_course_class(Course_ID):
             "message": "Class Not Found not found."
         }
     ), 404
+
 
 @app.route('/class/<int:Class_ID>/update',methods = ['POST'])
 def update_class(Class_ID):
@@ -377,7 +382,6 @@ def update_class(Class_ID):
     ), 404
 
 ### -- END Class Methods -- ###
-
 ### -- Course Class Methods -- ###
 
 @app.route("/spm/course")
@@ -418,7 +422,6 @@ def get_course_for_learner(Course_ID):
     ), 404
 
 ### -- END Course Class Methods -- ###
-
 ## -- Enrollment Date -- ##
 
 @app.route("/spm/enrollment_date")
@@ -441,7 +444,6 @@ def get_enrollment_data():
     ), 404
 
 ## --  END Enrollment Date -- ##
-
 ## -- Instructor -- ##
 
 @app.route("/spm/instructor")
@@ -497,10 +499,7 @@ def create_instructor():
     ), 201
 
 ## -- End Instructor -- ##
-
-
 ## -- Materials -- ##
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -614,7 +613,6 @@ def update_materials(Lesson_Materials_ID):
     ), 200
 
 ## -- End Materials -- ##
-
 ## -- Quiz Results -- ##
 
 @app.route("/spm/results")
@@ -635,6 +633,7 @@ def get_all_results():
             "message": "There are no results."
         }
     ), 404
+
 
 @app.route("/spm/check_if_quiz_completed/<int:quiz_id>/<int:course_id>/<section>/<string:username>")
 def check_if_quiz_completed(quiz_id, course_id, section, username):
@@ -658,6 +657,7 @@ def check_if_quiz_completed(quiz_id, course_id, section, username):
             'code': 200,
             'result': False
         })
+
 
 @app.route("/create_results", methods=['POST'])
 def create_results():
@@ -710,7 +710,6 @@ def create_results():
 
 
 ## -- End Quiz Results -- ##
-
 ## -- Quiz -- ##
 
 @app.route("/spm/quiz")
@@ -732,6 +731,7 @@ def get_all_quiz():
         }
     ), 404
 
+
 @app.route("/spm/quiz_retrieve/<int:course_id>/<int:class_id>/<section>")
 def get_quiz_for_learner(course_id, section, class_id):
     quiz = Quiz.query.filter_by(Course_ID=course_id, Class_ID=class_id, Section=section).first()
@@ -749,7 +749,7 @@ def get_quiz_for_learner(course_id, section, class_id):
         }
     ), 404
 
-#
+
 @app.route("/spm/quiz/<string:Instructor_ID>")
 def find_by_isbn13(Instructor_ID):
     quiz = Quiz.query.filter_by(Instructor_ID=Instructor_ID).all()
@@ -870,8 +870,6 @@ def update(Quiz_ID):
     ), 404
 
 ## -- End Quiz -- ##
-
-
 ## -- Tracker -- ##
 
 @app.route("/spm/tracker")
@@ -892,6 +890,7 @@ def get_all_tracker():
             "message": "There are no track."
         }
     ), 404
+
 
 @app.route("/spm/get_tracker/<string:username>/<int:course_id>/<int:class_id>")
 def retrieve_user_tracking_details(username, course_id, class_id):
@@ -944,7 +943,6 @@ def create_tracker(username, course_id, class_id):
 
 # Instead of JUST updating, we also need to return the tracker to update
 
-
 @app.route("/spm/update_tracker/<string:username>/<int:course_id>/<int:class_id>/<int:section_number>")
 def update_user_section_cleared(username, course_id, class_id, section_number):
     tracker = Tracker.query.filter_by(
@@ -979,6 +977,7 @@ def update_user_section_cleared(username, course_id, class_id, section_number):
         }
     )
 
+
 @app.route("/spm/update_quiz_tracker/<string:username>/<int:course_id>/<int:class_id>")
 def update_user_quiz_cleared(username, course_id, class_id):
     tracker = Tracker.query.filter_by(
@@ -1011,6 +1010,7 @@ def update_user_quiz_cleared(username, course_id, class_id):
             "message": "Section update has been successful"
         }
     )
+
 
 @app.route("/spm/update_final_quiz_tracker/<string:username>/<int:course_id>/<int:class_id>/<int:pass_fail>")
 def update_user_final_quiz_cleared(username, course_id, class_id, pass_fail):
@@ -1053,7 +1053,6 @@ def update_user_final_quiz_cleared(username, course_id, class_id, pass_fail):
     )
 
 ## -- End Tracker -- ##
-
 ## -- User database -- ##
 
 @app.route("/spm/user_database")

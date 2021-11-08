@@ -151,7 +151,6 @@ function quiz_submit() {
         })
 
     quiz_app.submit_msg = "You've successfully submitted your quiz! You've attained " + percentage_score.toString() + "%!"
-
     //Flip user to the end of quiz!
     quiz_app.quiz_section = false
 
@@ -161,6 +160,7 @@ function check_if_user_has_attempted_quiz() {
     axios.get(`http://${addressQuizResult}/spm/check_if_quiz_completed/${quiz_app.quiz_id}/${quiz_app.course_id}/${quiz_app.section_id}/${quiz_app.student}`)
         .then(function (response) {
             check_repeat = response.data.result
+            quiz_app.is_repeat = check_repeat
             
             if (quiz_app.section_id == 'final') {
                 // //Finals treated differently, lock them out if user completed
@@ -179,7 +179,6 @@ function check_if_user_has_attempted_quiz() {
                 }
 
             } else {
-                quiz_app.is_repeat = check_repeat
                 if (check_repeat == true) {
                     quiz_app.banner_flag = true
                     quiz_app.banner_flag_msg = "You've done this quiz before!"

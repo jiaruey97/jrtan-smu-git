@@ -359,7 +359,7 @@ def find_by_course_class(Course_ID):
     ), 404
 
 
-@app.route('/class/<int:Class_ID>/update',methods=['POST'])
+@app.route('/class/<int:Class_ID>/update', methods=['POST'])
 def update_class(Class_ID):
     class_details = Class.query.filter_by(Class_ID=Class_ID)
     if request.method == 'POST':
@@ -412,7 +412,7 @@ def get_course_for_learner(Course_ID):
         return jsonify(
             {
                 "code": 200,
-                "data": course.json()      
+                "data": course.json()
             }
         )
     return jsonify(
@@ -447,6 +447,7 @@ def get_enrollment_data():
 
 ## --  END Enrollment Date -- ##
 ## -- Instructor -- ##
+
 
 @app.route("/spm/instructor")
 def get_all_instructor():
@@ -502,6 +503,7 @@ def create_instructor():
 
 ## -- End Instructor -- ##
 ## -- Materials -- ##
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -947,6 +949,7 @@ def create_tracker(username, course_id, class_id):
 
 # Instead of JUST updating, we also need to return the tracker to update
 
+
 @app.route("/spm/update_tracker/<string:username>/<int:course_id>/<int:class_id>/<int:section_number>")
 def update_user_section_cleared(username, course_id, class_id, section_number):
     tracker = Tracker.query.filter_by(
@@ -1059,6 +1062,7 @@ def update_user_final_quiz_cleared(username, course_id, class_id, pass_fail):
 ## -- End Tracker -- ##
 ## -- User database -- ##
 
+
 @app.route("/spm/user_database")
 def get_all_user():
     user_Database = User_Database.query.all()
@@ -1137,7 +1141,7 @@ def update_course_completion(username, course_id, class_id):
         new_course_complete = []
         course_completed = user.json()['Course_Completed']
 
-        if course_completed is not "":
+        if course_completed != "":
             new_course_complete.extend(json.loads(course_completed))
 
         new_course_complete.append(course_dict)

@@ -324,13 +324,13 @@ def update_sections_for_course(Course_ID, section):
     try:
         db.session.commit()
     except:
-            return jsonify(
-                {
-                    "code": 500,
-                    "message": "An error occurred updating the sections."
-                }
-            ), 500 
-    
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred updating the sections."
+            }
+        ), 500
+
     return jsonify(
         {
             'code': 200,
@@ -359,7 +359,7 @@ def find_by_course_class(Course_ID):
     ), 404
 
 
-@app.route('/class/<int:Class_ID>/update',methods = ['POST'])
+@app.route('/class/<int:Class_ID>/update',methods=['POST'])
 def update_class(Class_ID):
     class_details = Class.query.filter_by(Class_ID=Class_ID)
     if request.method == 'POST':
@@ -373,7 +373,7 @@ def update_class(Class_ID):
                 "message": "Update Successful"
             }
         ), 200
-    
+
     return jsonify(
         {
             "code": 404,
@@ -383,6 +383,7 @@ def update_class(Class_ID):
 
 ### -- END Class Methods -- ###
 ### -- Course Class Methods -- ###
+
 
 @app.route("/spm/course")
 def get_all_course():
@@ -407,7 +408,7 @@ def get_all_course():
 @app.route("/spm/course_retrieve/<int:Course_ID>")
 def get_course_for_learner(Course_ID):
     course = Course.query.filter_by(Course_ID=Course_ID).one()
-    if course != None:
+    if course is not None:
         return jsonify(
             {
                 "code": 200,
@@ -423,6 +424,7 @@ def get_course_for_learner(Course_ID):
 
 ### -- END Course Class Methods -- ###
 ## -- Enrollment Date -- ##
+
 
 @app.route("/spm/enrollment_date")
 def get_enrollment_data():
@@ -500,6 +502,7 @@ def create_instructor():
 
 ## -- End Instructor -- ##
 ## -- Materials -- ##
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -615,6 +618,7 @@ def update_materials(Lesson_Materials_ID):
 ## -- End Materials -- ##
 ## -- Quiz Results -- ##
 
+
 @app.route("/spm/results")
 def get_all_results():
     results = Quiz_Results.query.all()
@@ -645,7 +649,7 @@ def check_if_quiz_completed(quiz_id, course_id, section, username):
     ).first()
 
     if result:
-        return jsonify ({
+        return jsonify({
             'code': 200,
             'result': True,
             'section': section,
@@ -664,10 +668,9 @@ def create_results():
 
     data = request.get_json()
     results = Quiz_Results(Username=data['Username'], Quiz_ID=data['Quiz_ID'], Course_ID=data['Course_ID'], Section=data['Section'], Marks=data['Marks'], Pass=data['Pass'])
-    
 
     # Validate Course
-    course = Course.query.filter_by(Course_ID = data['Course_ID']).first()
+    course = Course.query.filter_by(Course_ID=data['Course_ID']).first()
     if not course:
         return jsonify({
             "code": 500,
@@ -735,7 +738,7 @@ def get_all_quiz():
 @app.route("/spm/quiz_retrieve/<int:course_id>/<int:class_id>/<section>")
 def get_quiz_for_learner(course_id, section, class_id):
     quiz = Quiz.query.filter_by(Course_ID=course_id, Class_ID=class_id, Section=section).first()
-    if quiz != None:
+    if quiz is not None:
         return jsonify(
             {
                 "code": 200,
@@ -872,6 +875,7 @@ def update(Quiz_ID):
 ## -- End Quiz -- ##
 ## -- Tracker -- ##
 
+
 @app.route("/spm/tracker")
 def get_all_tracker():
     tracker = Tracker.query.all()
@@ -933,7 +937,7 @@ def create_tracker(username, course_id, class_id):
                 "message": "An error occurred creating unique tracking id for user."
             }
         ), 500
-    
+
     return jsonify(
         {
             'code': 200,
@@ -1133,7 +1137,7 @@ def update_course_completion(username, course_id, class_id):
         new_course_complete = []
         course_completed = user.json()['Course_Completed']
 
-        if course_completed != "":
+        if course_completed is not "":
             new_course_complete.extend(json.loads(course_completed))
 
         new_course_complete.append(course_dict)

@@ -2,23 +2,9 @@ const courseAddress = '3.131.65.207:5144'
 const materialAddress = '3.131.65.207:5344'
 const classAddress = '3.131.65.207:5044'
 
-// -> Section -> Lesson -> Materials
-tracking_data = {
-  'course_id': 2,
-  'class_id': 1,
-  'section_track': [
-    {
-      'section_no': 1,
-      'section': false,
-      'quiz': false
-    },
-    {
-      'section_no': 2,
-      'section': false,
-      'quiz': false
-    },
-  ]
-}
+//Get parameter query
+const urlSearchParams = new URLSearchParams(window.location.search)
+const params = Object.fromEntries(urlSearchParams.entries())
 
 const vueApp = new Vue({
   el: '#app',
@@ -35,7 +21,7 @@ const vueApp = new Vue({
     chosen_section: 1, //Which section user choose if they want to update old sessions
     new_material: '',
     material_path: [],
-    //current_material: [],
+    instructor: params.instructor,
     lock_upload_materials_interface: true, //Loock the Upload Material Interface, only unlock once user choose course!
     lock_course_update_button: true, //Unlock only after user has selected and loaded a course
   },
@@ -139,6 +125,10 @@ const vueApp = new Vue({
       //window.location.href = file
       window.open(file, '_blank');
 
+    },
+    go_to_quiz_builder: function(){
+      url = "quiz_builder.html?instructor=" + this.instructor
+      window.open(url, "_blank")
     }
   },
 })

@@ -940,7 +940,7 @@ def create_tracker(username, course_id, class_id):
                 "message": "An error occurred creating unique tracking id for user."
             }
         ), 500
-    
+
     return jsonify(
         {
             'code': 200,

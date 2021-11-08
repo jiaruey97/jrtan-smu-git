@@ -52,12 +52,11 @@ class TestCreateQuiz(TestApp):
         request_body = {
             "Course_ID": c1.Course_ID,
             "Instructor_ID": i1.Instructor_ID,
-            "Section":"12",
+            "Section": "12",
             "Question_Object": "Hello",
             "Class_ID": cl1.Class_ID,
             "Time": "1.5"
         }
-
 
         response = self.client.post("/create_quiz",
                                     data=json.dumps(request_body),
@@ -74,7 +73,6 @@ class TestCreateQuiz(TestApp):
                 "Quiz_ID": 1,
                 "Time": "1.5"}
         })
-
 
     def test_create_quiz_invalid_Instructor(self):
         date_object = datetime.datetime.now()
@@ -186,7 +184,7 @@ class TestCreateQuiz(TestApp):
 class TestQuizRetrieveByID(TestApp):
     def test_retrieve_quiz_id(self):
         date_object = datetime.datetime.now()
-        q1 = Quiz(Course_ID=1, Instructor_ID = 1, 
+        q1 = Quiz(Course_ID=1, Instructor_ID=1,
                 Section="1", Question_Object='Chickensds', Class_ID=1,
                 Time="23")
         c1 = Course(Course_ID=1, Course_Name='Ducky',
@@ -203,7 +201,7 @@ class TestQuizRetrieveByID(TestApp):
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID=1, Instructor_ID=1,
                     Start_Time=date_object, End_Time=date_object, Sections="1", Students="Hello")
-        
+
         db.session.add(q1)
         db.session.add(u1)
         db.session.add(c1)
@@ -315,8 +313,8 @@ class TestQuizRetrieveByInstructor(TestApp):
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
                     Course_ID=1, Instructor_ID=1,
-                    Start_Time=date_object, End_Time=date_object, Sections="4", Students ="Hello")
-        
+                    Start_Time=date_object, End_Time=date_object, Sections="4", Students="Hello")
+
         db.session.add(q1)
         db.session.add(u1)
         db.session.add(c1)
@@ -457,6 +455,7 @@ class TestQuizUpdate(TestApp):
             "code": 500,
             "message": "No Such Quiz Exist!"
         })
+
 
 if __name__ == '__main__':
     unittest.main()

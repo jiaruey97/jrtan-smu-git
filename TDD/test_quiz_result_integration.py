@@ -42,10 +42,10 @@ class TestResultRetrieve(TestApp):
 
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
-                    Course_ID = 1, Instructor_ID = 1,
-                    Start_Time=date_object, End_Time=date_object, Sections= 4, Students = "Hello")
+                    Course_ID=1, Instructor_ID=1,
+                    Start_Time=date_object, End_Time=date_object, Sections=4, Students="Hello")
         
-        r1 = Quiz_Results(Username="UKM123",Quiz_ID = 1, Course_ID = 1, Section = "1", Marks = 12, Pass = False )
+        r1 = Quiz_Results(Username="UKM123",Quiz_ID=1, Course_ID=1, Section="1", Marks=12, Pass=False )
 
         r1 = Quiz_Results(Username="UKM123", Quiz_ID=1, Course_ID=1, Section=1, Marks=12, Pass=False)
 
@@ -62,14 +62,14 @@ class TestResultRetrieve(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                        "quiz_results": [{
-                                    "Quiz_Results_ID": 1,
-                                    "Username":"UKM123",
-                                    "Quiz_ID": 1, 
-                                    "Course_ID" : 1, 
-                                    "Section" : "1", 
-                                    "Marks" : 12, 
-                                    "Pass" : False}]
+                "quiz_results": [{
+                    "Quiz_Results_ID": 1,
+                    "Username":"UKM123",
+                    "Quiz_ID": 1, 
+                    "Course_ID" : 1, 
+                    "Section" : "1", 
+                    "Marks" : 12, 
+                    "Pass" : False}]
             }
         })
 
@@ -106,13 +106,12 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                    
-                    "Username":u1.Username,
-                    "Quiz_ID": 1, 
-                    "Course_ID" : c1.Course_ID, 
-                    "Section" : "1", 
-                    "Marks" : 12, 
-                    "Pass" : False
+            "Username":u1.Username,
+            "Quiz_ID": 1, 
+            "Course_ID" : c1.Course_ID, 
+            "Section" : "1", 
+            "Marks" : 12, 
+            "Pass" : False
         }
 
         response = self.client.post("/create_results",
@@ -123,12 +122,12 @@ class TestResultsCreate(TestApp):
             "code": 201,
             "data": {
                     "Quiz_Results_ID": 1,
-                    "Username":"UKM123",
+                    "Username": "UKM123",
                     "Quiz_ID": 1, 
-                    "Course_ID" : 1, 
-                    "Section" : "1", 
-                    "Marks" : 12, 
-                    "Pass" : False}
+                    "Course_ID": 1, 
+                    "Section": "1", 
+                    "Marks": 12, 
+                    "Pass": False}
                     })
 
     def test_create_result_invalid_Course(self):   
@@ -162,13 +161,12 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                    
-                    "Username":u1.Username,
-                    "Quiz_ID": 1, 
-                    "Course_ID" : 20, 
-                    "Section" : 1, 
-                    "Marks" : 12, 
-                    "Pass" : False
+            "Username":u1.Username,
+            "Quiz_ID": 1, 
+            "Course_ID" : 20, 
+            "Section" : 1, 
+            "Marks" : 12, 
+            "Pass" : False
         }
         response = self.client.post("/create_results",
                                     data=json.dumps(request_body),
@@ -194,13 +192,12 @@ class TestResultsCreate(TestApp):
         db.session.commit()
 
         request_body = {
-                    
-                    "Username":u1.Username,
-                    "Quiz_ID": 1, 
-                    "Course_ID" : c1.Course_ID, 
-                    "Section" : 1, 
-                    "Marks" : 12, 
-                    "Pass" : False
+            "Username":u1.Username,
+            "Quiz_ID": 1, 
+            "Course_ID" : c1.Course_ID, 
+            "Section" : 1, 
+            "Marks" : 12, 
+            "Pass" : False
         }
 
         response = self.client.post("/create_results",

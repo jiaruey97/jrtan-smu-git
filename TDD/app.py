@@ -227,6 +227,7 @@ class User_Database(db.Model):
 #### --- CLASS OVER --- ####
 ### -- Class Methods -- ###
 
+
 @app.route("/spm/class")
 def get_all_class():
     class_list = Class.query.all()

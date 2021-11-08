@@ -65,10 +65,10 @@ class TestResultRetrieve(TestApp):
                 "quiz_results": [{
                     "Quiz_Results_ID": 1,
                     "Username": "UKM123",
-                    "Quiz_ID": 1, 
-                    "Course_ID": 1, 
-                    "Section": "1", 
-                    "Marks": 12, 
+                    "Quiz_ID": 1,
+                    "Course_ID": 1,
+                    "Section": "1",
+                    "Marks": 12,
                     "Pass": False}]
             }
         })

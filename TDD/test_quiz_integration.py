@@ -53,7 +53,7 @@ class TestCreateQuiz(TestApp):
             "Course_ID": c1.Course_ID,
             "Instructor_ID": i1.Instructor_ID,
             "Section":"12",
-            "Question_Object":"Hello",
+            "Question_Object": "Hello",
             "Class_ID": cl1.Class_ID,
             "Time": "1.5"
         }
@@ -66,14 +66,14 @@ class TestCreateQuiz(TestApp):
         self.assertEqual(response.json, {
             "code": 201,
             "data": {
-                        "Course_ID":1,
-                        "Instructor_ID":1,
-                        "Section":"12",
-                        "Question_Object":"Hello",
-                        "Class_ID": 1,
-                        "Quiz_ID":1,
-                        "Time": "1.5"}
-                    })
+                "Course_ID": 1,
+                "Instructor_ID": 1,
+                "Section": "12",
+                "Question_Object": "Hello",
+                "Class_ID": 1,
+                "Quiz_ID": 1,
+                "Time": "1.5"}
+        })
 
 
     def test_create_quiz_invalid_Instructor(self):
@@ -166,10 +166,10 @@ class TestCreateQuiz(TestApp):
         db.session.commit()
 
         request_body = {
-            "Course_ID":c1.Course_ID,
-            "Instructor_ID":i1.Instructor_ID,
-            "Section":"12",
-            "Question_Object":"Chickeasd",
+            "Course_ID": c1.Course_ID,
+            "Instructor_ID": i1.Instructor_ID,
+            "Section": "12",
+            "Question_Object": "Chickeasd",
             "Class_ID": 2,
             "Time": "1.5"
         }
@@ -201,8 +201,8 @@ class TestQuizRetrieveByID(TestApp):
 
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
-                    Course_ID = 1, Instructor_ID = 1,
-                    Start_Time=date_object, End_Time=date_object, Sections= "1", Students = "Hello")
+                    Course_ID=1, Instructor_ID=1,
+                    Start_Time=date_object, End_Time=date_object, Sections="1", Students="Hello")
         
         db.session.add(q1)
         db.session.add(u1)
@@ -222,15 +222,14 @@ class TestQuizRetrieveByID(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                "Course_ID":1,
-                "Instructor_ID":1,
-                "Section":"1",
-                "Question_Object":"Chickensds",
+                "Course_ID": 1,
+                "Instructor_ID": 1,
+                "Section": "1",
+                "Question_Object": "Chickensds",
                 "Class_ID": 1,
-                "Quiz_ID":1,
+                "Quiz_ID": 1,
                 "Time": "23"
-                    }
-                            
+            }
         })
 
     def test_retrieve_quiz_id_nothing(self):
@@ -275,17 +274,17 @@ class TestQuizRetrieve(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                        "quiz": [{
-                            "Course_ID":1,
-                            "Instructor_ID":1,
-                            "Section":"1",
-                            "Question_Object":"Chickensds",
-                            "Class_ID": 1,
-                            "Quiz_ID":1,
-                            "Time": "23"
-                        }]
-                    }
-                    })
+                "quiz": [{
+                    "Course_ID": 1,
+                    "Instructor_ID": 1,
+                    "Section": "1",
+                    "Question_Object": "Chickensds",
+                    "Class_ID": 1,
+                    "Quiz_ID": 1,
+                    "Time": "23"
+                }]
+            }
+        })
 
     def test_retrieve_all_quiz_nothing(self):
         response = self.client.get("spm/quiz")
@@ -315,8 +314,8 @@ class TestQuizRetrieveByInstructor(TestApp):
 
         cl1 = Class(Class_ID=1, Class_Name='Ducky',
                     Class_Details='UKM123', Size=5, Current_Size=2,
-                    Course_ID = 1, Instructor_ID = 1,
-                    Start_Time=date_object, End_Time=date_object, Sections= "4", Students = "Hello")
+                    Course_ID=1, Instructor_ID=1,
+                    Start_Time=date_object, End_Time=date_object, Sections="4", Students ="Hello")
         
         db.session.add(q1)
         db.session.add(u1)
@@ -331,18 +330,17 @@ class TestQuizRetrieveByInstructor(TestApp):
         self.assertEqual(response.json, {
             "code": 200,
             "data": {
-                        "quiz": [{
-                            "Course_ID":1,
-                            "Instructor_ID":1,
-                            "Section":"1",
-                            "Question_Object":"Chickensds",
-                            "Class_ID": 1,
-                            "Quiz_ID":1,
-                            "Time": "23"
-                        }]
-                    }
-                    })
-                            
+                "quiz": [{
+                    "Course_ID": 1,
+                    "Instructor_ID": 1,
+                    "Section": "1",
+                    "Question_Object": "Chickensds",
+                    "Class_ID": 1,
+                    "Quiz_ID": 1,
+                    "Time": "23"
+                }]
+            }
+        })
 
     def test_retrieve_quiz_instructor_nothing(self):
         id = 1

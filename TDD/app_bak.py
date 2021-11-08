@@ -730,6 +730,7 @@ def create_quiz():
         }
     ), 201
 
+
 @app.route('/quiz/<int:Quiz_ID>/update', methods=['POST'])
 def update(Quiz_ID):
 

@@ -130,7 +130,6 @@ def get_all_class():
         }
     ), 404
 
-
 @app.route("/create_class", methods=['POST'])
 def create_class():
 
@@ -163,7 +162,6 @@ def create_class():
         }
     ), 201
 
-
 @app.route("/spm/class/<string:Instructor_ID>")
 def find_by_instructor_class(Instructor_ID):
     class_list = Class.query.filter_by(Instructor_ID=Instructor_ID).all()
@@ -182,7 +180,6 @@ def find_by_instructor_class(Instructor_ID):
             "message": "Class Not Found not found."
         }
     ), 404
-
 
 @app.route("/spm/search_class_course/<int:Course_ID>")
 def find_by_course_class(Course_ID):
@@ -218,7 +215,6 @@ def update_class(Class_ID):
                 "message": "Update Successful"
             }
         ), 200
-
     return jsonify(
         {
             "code": 404,
@@ -273,7 +269,10 @@ def find_by_class(Class_ID):
         }
     ), 404
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7c579483398a335ebf3b517b2d3cb1cd662dd9cd
 class User_Database(db.Model):
     __tablename__ = 'User_Database'
 
@@ -318,6 +317,10 @@ def get_all_user():
         }
     ), 404
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7c579483398a335ebf3b517b2d3cb1cd662dd9cd
 @app.route("/user_database/<string:Username>")
 def get_user_name(Username):
     user_Database = User_Database.query.filter_by(Username=Username).all()
@@ -626,7 +629,11 @@ def get_all_quiz():
 @app.route("/spm/quiz_retrieve/<int:Quiz_ID>")
 def get_quiz_for_learner(Quiz_ID):
     quiz = Quiz.query.filter_by(Quiz_ID=Quiz_ID).first()
+<<<<<<< HEAD
     if quiz is not None:
+=======
+    if quiz != None:
+>>>>>>> 7c579483398a335ebf3b517b2d3cb1cd662dd9cd
         return jsonify(
             {
                 "code": 200,

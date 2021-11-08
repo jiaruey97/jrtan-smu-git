@@ -163,9 +163,20 @@ function check_if_user_has_attempted_quiz() {
             check_repeat = response.data.result
             
             if (quiz_app.section_id == 'final') {
+<<<<<<< HEAD
                 //Finals treated differently, user can try until they pass, but if they passed, lock them out!
                 console.log(response.data.pass)
                 if (response.data.pass == true) {
+=======
+                // //Finals treated differently, lock them out if user completed
+                // clearInterval(intervalTimer)
+                // quiz_app.timer_text = "You've completed!"
+                // quiz_app.quiz_section = false
+                // quiz_app.score = response.data.marks
+                // quiz_app.submit_msg = "You've already attempted the quiz!"
+
+                if (check_repeat == true) {
+>>>>>>> 7c579483398a335ebf3b517b2d3cb1cd662dd9cd
                     clearInterval(intervalTimer)
                     quiz_app.timer_text = "You've completed!"
                     quiz_app.quiz_section = false
@@ -173,7 +184,10 @@ function check_if_user_has_attempted_quiz() {
                     quiz_app.submit_msg = "You've already completed and passed your quiz!"
                 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7c579483398a335ebf3b517b2d3cb1cd662dd9cd
             } else {
                 quiz_app.is_repeat = check_repeat
                 if (check_repeat == true) {

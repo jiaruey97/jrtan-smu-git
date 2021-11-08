@@ -928,7 +928,7 @@ def retrieve_user_tracking_details(username, course_id, class_id):
 @app.route("/create_tracker/<string:username>/<int:course_id>/<int:class_id>")
 def create_tracker(username, course_id, class_id):
     tracker = Tracker(Username=username, Course_ID=course_id,
-                      Class_ID=class_id, Sections_clear=0, Quiz_clear=0)
+                      Class_ID=class_id, Sections_cleared=0, Quiz_cleared=0, Final_Quiz_cleared=0)
     db.session.add(tracker)
 
     try:
@@ -940,7 +940,7 @@ def create_tracker(username, course_id, class_id):
                 "message": "An error occurred creating unique tracking id for user."
             }
         ), 500
-
+    
     return jsonify(
         {
             'code': 200,

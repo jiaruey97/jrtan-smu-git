@@ -155,7 +155,6 @@ const quiz_app = new Vue({
             placehold_array2 = Array()
             axios.get(`http://${addressUser}/spm/user_database`)
             .then(function (response) {
-                alert("hello")
                 user_list = response.data.data.user
                 console.log(user_list)
                 for (let index = 0; index < user_list.length; index++) {
@@ -186,7 +185,8 @@ const quiz_app = new Vue({
                                     Class_ID:course_details.class,
                                     Course_Remaining: remaing_array,
                                     Class_Current_Size: class_details.Current_Size,
-                                    Class_Students: class_details.Students 
+                                    Class_Students: class_details.Students,
+                                    Course_Pending: user.Course_Pending 
                                 }
                                 placehold_array2.push(course_placeholder)        
                             })
@@ -265,9 +265,10 @@ const quiz_app = new Vue({
         },
 
         student_rejection: function (stuff) {
+            console.log(stuff)
             course_pending_list = stuff.Course_Pending
             course_delete = stuff.Course_ID
-        
+                    
             for (let index = 0; index < course_pending_list.length; index++) {
                 pending_item = course_pending_list[index]
                 if (pending_item.course == course_delete) {
@@ -282,6 +283,7 @@ const quiz_app = new Vue({
             axios.post(`http://${addressUser}/user_database/` + stuff.Username + `/update`, post_object_3)
                 .then(function (response) {
                     alert("Update to User successful")
+                    location.reload();
                 })
                 .catch(function (error) {
                     alert("Something when wrong with the Update")

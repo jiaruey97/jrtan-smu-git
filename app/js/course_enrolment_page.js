@@ -298,10 +298,12 @@ delete_enrollment: function (stuff) {
     axios.post(`http://${addressUser}/user_database/` + this.user + `/update`, post_object_3)
         .then(function (response) {
             alert("Update to User successful")
+            location.reload();
         })
         .catch(function (error) {
             alert("Something when wrong with the Update")
         })
+    
 },
 
 
@@ -350,12 +352,19 @@ select_class: function (stuff) {
 
 enroll_complete: function (stuff) {
     console.log(stuff)
-    current_pending_course = stuff.Course_Pending
+
+    if(typeof(stuff.Course_Pending) == 'string'){
+        //parse it
+        current_pending_course = JSON.parse(stuff.Course_Pending)
+    } else {
+        current_pending_course = stuff.Course_Pending
+    }
 
     storage_object = {
         course: stuff.Course_ID,
         class: stuff.Class_ID
     }
+    
     current_pending_course.push(storage_object)
 
     post_object_2 = {
@@ -365,10 +374,13 @@ enroll_complete: function (stuff) {
     axios.post(`http://${addressUser}/user_database/` + user.Username + `/update`, post_object_2)
         .then(function (response) {
             alert("Update to User successful")
+            location.reload();
         })
         .catch(function (error) {
             alert("Something when wrong with the Update")
         })
+    
+    
 
 },
 

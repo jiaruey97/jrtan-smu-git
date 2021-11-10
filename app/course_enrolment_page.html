@@ -45,6 +45,29 @@
                         </v-data-table>
                     </v-container>
 
+                    <v-container>
+                    <h1> Completed Courses </h1>
+
+                        <v-data-table
+                            :headers="headers"
+                            :items="completed_course"
+                            class="elevation-1"
+                            loading
+                            loading-text="Oh It Appears you have no Course"
+                        >
+                        <template v-slot:item.actions="{ item }">
+                        <v-btn
+                            small
+                            color = "primary"
+                            class="mr-2"
+                            @click="enter_class(item)"
+                        >
+                        Enter Course Page
+                        </v-btn>
+                        </template>
+                        </v-data-table>
+                    </v-container>
+
 
                     <v-container v-if="enrollment_period">
                         <h1> Enrollment Admin </h1>

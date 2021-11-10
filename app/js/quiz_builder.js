@@ -215,7 +215,7 @@ const vueApp = new Vue({
 
           post_object = {
             'Course_ID': this.Course_ID,
-            'Instructor_ID': 12,
+            'Instructor_ID': this.instructor_ID,
             'Section': this.selected_section, //originally, this.section 
             'Question_Object': JSON.stringify(this.questions_store),
             'Class_ID': this.Class_ID,

@@ -175,7 +175,7 @@ function check_if_user_has_attempted_quiz() {
                     quiz_app.timer_text = "You've completed!"
                     quiz_app.quiz_section = false
                     quiz_app.score = response.data.marks
-                    quiz_app.submit_msg = "You've already completed and passed your quiz!"
+                    quiz_app.submit_msg = "You've already completed your quiz!"
                 }
 
             } else {

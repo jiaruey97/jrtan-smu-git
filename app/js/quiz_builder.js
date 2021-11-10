@@ -74,12 +74,10 @@ const vueApp = new Vue({
 
       checker = Number(this.selected_section)
 
-      console.log(checker)
+      console.log(checker == 0)
 
       if(isNaN(checker)){
         
-        alert("ducky")
-
         console.log(this.selected_section)
 
         if (this.selected_section != "final") {
@@ -93,10 +91,9 @@ const vueApp = new Vue({
 
       } else{
 
-        alert("Robot")
 
-        if (Number(this.selected_section) > item.Section){
-          alert("Please Indicate a Section Lower than the Section")
+        if (checker > item.Section | checker == 0){
+          alert("Please Indicate a Section Lower than the Section or a Section")
         } else{
           this.Course_ID = item.Course_ID
           this.Section = item.selected_section

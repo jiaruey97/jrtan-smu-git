@@ -58,6 +58,7 @@ const quiz_app = new Vue({
         course_list: [],
         enrolled_course: [],
         class_list: [],
+        completed_course: [],
         course_pending: [],
         enrollment_dates: [],
         mode: true,
@@ -68,6 +69,7 @@ const quiz_app = new Vue({
     created() {
         this.check_enrollment_period()
         this.initialise_enrolled_course()
+        this.initialise_completed_course()
         this.initialise_course_to_enroll()
         this.initialise_pending_course()
         console.log(this.enrollment_dates)
@@ -148,6 +150,48 @@ const quiz_app = new Vue({
 
             this.enrolled_course = placehold_array
         },
+
+        initialise_completed_course: function () {
+            placehold_array_9 = Array()
+            axios.get(`http://${addressUser}/user_database/` + this.user)
+                .then(function (response) {
+                    user = response.data.data.user[0]
+                    courses = user.Course_Completed
+                    console.log(courses)
+                    if (courses != "") {
+                        courses = JSON.parse(courses)
+                        console.log(courses)
+                        for (course of courses) {
+                            id = course.course
+                            console.log(id)
+                            const class_id = course.class
+                            axios.get(`http://${addressCourse}/spm/course_retrieve/` + id)
+                                .then(function (response) {
+                                    retreived_courses = response.data.data
+                                    placehold = {
+                                        Course_ID: retreived_courses.Course_ID,
+                                        Course_Name: retreived_courses.Course_Name,
+                                        Duration: retreived_courses.Duration,
+                                        Prerequisite: retreived_courses.Prerequisite,
+                                        Start_Time: retreived_courses.Start_Time,
+                                        End_Time: retreived_courses.End_Time,
+                                        Class: class_id,
+                                        Sections: retreived_courses.Sections
+                                    }
+                                    placehold_array_9.push(placehold)
+                                })
+                        }
+                    }
+                    console.log(placehold_array_9)
+
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+
+            this.completed_course = placehold_array_9
+        },
+
 
         initialise_course_to_enroll: function () {
             placehold_array_2 = Array()

@@ -374,7 +374,7 @@ enroll_complete: function (stuff) {
     axios.post(`http://${addressUser}/user_database/` + user.Username + `/update`, post_object_2)
         .then(function (response) {
             alert("Update to User successful")
-            location.reload();
+            location.reload()
         })
         .catch(function (error) {
             alert("Something when wrong with the Update")
